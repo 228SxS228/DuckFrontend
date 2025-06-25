@@ -1,0 +1,273 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
+@layer base {
+  :root {
+    /* Основные цвета */
+    --foreground-rgb: 51, 51, 51;
+    --background-rgb: 255, 255, 255;
+
+    /* Основной цвет - яркий голубой/синий */
+    --primary: 41, 149, 243;
+    --primary-light: 93, 174, 245;
+    --primary-dark: 25, 118, 210;
+
+    /* Вторичный цвет - теплый оранжево-желтый */
+    --secondary: 255, 180, 51;
+    --secondary-light: 255, 200, 102;
+    --secondary-dark: 230, 162, 30;
+
+    /* Акцентные цвета */
+    --accent-blue: 230, 244, 255;
+    --accent-yellow: 255, 245, 224;
+
+    /* Нейтральные цвета */
+    --neutral-50: 250, 250, 250;
+    --neutral-100: 245, 245, 245;
+    --neutral-200: 229, 229, 229;
+    --neutral-300: 212, 212, 212;
+    --neutral-400: 163, 163, 163;
+    --neutral-500: 115, 115, 115;
+    --neutral-600: 82, 82, 82;
+    --neutral-700: 64, 64, 64;
+    --neutral-800: 38, 38, 38;
+    --neutral-900: 23, 23, 23;
+
+    /* Отступы для контента */
+    --content-padding-mobile: 1rem;
+    --content-padding-tablet: 2rem;
+    --content-padding-desktop: 3rem;
+    --content-max-width: 1400px;
+
+    /* Радиусы скругления */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-2xl: 2rem;
+
+    /* Цвета для детского плавательного центра */
+    --primary-blue: 41, 149, 243;
+    --secondary-yellow: 255, 180, 51;
+    --white: 255, 255, 255;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 199 89% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @reference border-border;
+  }
+
+  body {
+    @reference bg-background text-foreground;
+    /* ДОБАВЛЕНО: Принудительная установка белого фона и темного текста для кроссбраузерности */
+    background-color: #ffffff !important;
+    color: #171717 !important;
+  }
+
+  /* ДОБАВЛЕНО: Дополнительные стили для обеспечения кроссбраузерности */
+  html {
+    background-color: #ffffff;
+  }
+
+  /* ДОБАВЛЕНО: Переопределение цветов текста для лучшей читаемости */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #0c4a6e;
+    /* Темно-синий для заголовков */
+  }
+
+  p,
+  span,
+  div {
+    color: #374151;
+    /* Темно-серый для основного текста */
+  }
+
+  /* ДОБАВЛЕНО: Стили для ссылок */
+  a {
+    color: #0369a1 ;
+    /* Синий для ссылок */
+  }
+
+  a:hover {
+    color: #0c4a6e ;
+    /* Темно-синий при наведении */
+  }
+
+  /* ДОБАВЛЕНО: Стили для кнопок */
+  button {
+    color: inherit ;
+  }
+
+  /* ДОБАВЛЕНО: Стили для форм */
+  input,
+  textarea,
+  select {
+    background-color: #ffffff ;
+    color: #374151 ;
+    border-color: #d1d5db ;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #0369a1;
+    outline-color: #0369a1;
+  }
+
+  /* ДОБАВЛЕНО: Стили для карточек и контейнеров */
+  .bg-white {
+    background-color: #ffffff;
+  }
+
+  .bg-sky-50 {
+    background-color: #f0f9ff;
+  }
+
+  .bg-sky-100 {
+    background-color: #e0f2fe;
+  }
+
+  /* ДОБАВЛЕНО: Стили для текста различных цветов */
+  .text-sky-800 {
+    color: #075985;
+  }
+
+  .text-sky-700 {
+    color: #0369a1;
+  }
+
+  .text-sky-600 {
+    color: #0284c7;
+  }
+
+  .text-gray-900 {
+    color: #111827;
+  }
+
+  .text-gray-800 {
+    color: #1f2937;
+  }
+
+  .text-gray-700 {
+    color: #374151;
+  }
+
+  .text-gray-600 {
+    color: #4b5563;
+  }
+
+  .text-gray-500 {
+    color: #6b7280;
+  }
+
+  /* Переопределение цветов Tailwind */
+  .bg-blue-700 {
+    background-color: rgb(var(--primary-blue)) !important;
+  }
+
+  .bg-blue-800 {
+    background-color: rgb(25, 118, 210) !important;
+  }
+
+  .bg-blue-900 {
+    background-color: rgb(13, 71, 161) !important;
+  }
+
+  .bg-yellow-400 {
+    background-color: rgb(var(--secondary-yellow)) !important;
+  }
+
+  .bg-yellow-500 {
+    background-color: rgb(230, 162, 30) !important;
+  }
+
+  .text-blue-700 {
+    color: rgb(var(--primary-blue)) ;
+  }
+
+  .text-blue-800 {
+    color: rgb(25, 118, 210) ;
+  }
+
+  .text-blue-900 {
+    color: rgb(13, 71, 161) ;
+  }
+
+  .text-yellow-400 {
+    color: rgb(var(--secondary-yellow)) ;
+  }
+
+  .text-yellow-500 {
+    color: rgb(230, 162, 30) ;
+  }
+
+  .border-blue-200 {
+    border-color: rgb(187, 222, 251) !important;
+  }
+
+  .border-yellow-400 {
+    border-color: rgb(var(--secondary-yellow)) !important;
+  }
+
+  /* Градиенты */
+  .bg-gradient-to-r.from-blue-900.to-blue-700 {
+    background: linear-gradient(to right, rgb(13, 71, 161), rgb(var(--primary-blue))) !important;
+  }
+
+  /* ДОБАВЛЕНО: Стили для обеспечения контрастности в разных браузерах */
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+
+    /* Webkit браузеры (Chrome, Safari) */
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+
+  @-moz-document url-prefix() {
+
+    /* Firefox специфичные стили */
+    body {
+      background-color: #ffffff !important;
+    }
+  }
+
+  /* ДОБАВЛЕНО: Internet Explorer и Edge совместимость */
+  @media screen and (-ms-high-contrast: active),
+  (-ms-high-contrast: none) {
+    body {
+      background-color: #ffffff !important;
+      color: #171717 !important;
+    }
+  }
+
+}

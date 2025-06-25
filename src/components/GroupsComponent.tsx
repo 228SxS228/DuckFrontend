@@ -1,0 +1,171 @@
+import { RouteNames } from "@/router";
+import { ArrowRight, Award, Clock, Shield, Users } from "lucide-react";
+import { FC } from "react";
+import { Link } from "react-router-dom";
+
+const GroupsComponent: FC = () => {
+  // const groups = [
+  //   {
+  //     icon: <Baby className="h-12 w-12 text-sky-600" />,
+  //     title: "Малыши (6 месяцев - 3 года)",
+  //     description:
+  //       "Занятия с участием родителей, направленные на адаптацию к воде, развитие координации и укрепление мышц.",
+  //     features: [
+  //       "Игровая форма обучения",
+  //       "Специальное оборудование для малышей",
+  //       "Тёплая вода (30-32°C)",
+  //       "Продолжительность: 30 минут",
+  //     ],
+  //   },
+  //   {
+  //     icon: <Child className="h-12 w-12 text-sky-600" />,
+  //     title: "Дошкольники (3-7 лет)",
+  //     description:
+  //       "Обучение базовым навыкам плавания, техникам дыхания и основам безопасного поведения на воде.",
+  //     features: [
+  //       "Группы до 6 человек",
+  //       "Обучение различным стилям плавания",
+  //       "Игровые элементы",
+  //       "Продолжительность: 45 минут",
+  //     ],
+  //   },
+  //   {
+  //     icon: <User className="h-12 w-12 text-sky-600" />,
+  //     title: "Школьники (7-14 лет)",
+  //     description:
+  //       "Совершенствование техники плавания, развитие выносливости и подготовка к соревнованиям.",
+  //     features: [
+  //       "Группы по уровню подготовки",
+  //       "Все стили плавания",
+  //       "Элементы спортивного плавания",
+  //       "Продолжительность: 60 минут",
+  //     ],
+  //   },
+  // ];
+  const programs = [
+    {
+      title: "Грудничковое плавание",
+      description: "Обучение младенцев плаванью",
+      schedule: "Пн-Пт: 10:00 - 21:00",
+      icon: <Users className="h-6 w-6 text-blue-700" />,
+    },
+    {
+      title: "Умеющие плавать от 5 до 8 лет",
+      description:
+        "Программы для детей разных возрастов, от начинающих до продвинутых пловцов",
+      schedule: "Пн-Пт: 7:00 - 9:00, 19:00 - 22:00",
+      icon: <Users className="h-6 w-6 text-blue-700" />,
+    },
+    {
+      title: "Индивидуальное занятие от 3 месяцев до 10 лет",
+      description: "Индивидуальное занятия для поддержания формы и здоровья",
+      schedule: "Пн-Пт: 10:00 - 21:00",
+      icon: <Award className="h-6 w-6 text-blue-700" />,
+    },
+    {
+      title: "Соляная пещера",
+      description:
+        "Оздоровительные сеансы в соляной пещере для укрепления иммунитета и релаксации",
+      schedule: "Ежедневно: 10:00 - 20:00",
+      icon: <Shield className="h-6 w-6 text-blue-700" />,
+    },
+  ];
+  return (
+    // <section className="bg-sky-50 py-16">
+    //   <div className="container mx-auto px-4">
+    //     <div className="mb-12 text-center">
+    //       <h2 className="mb-4 text-3xl font-bold text-sky-800 md:text-4xl">
+    //         Наши группы
+    //       </h2>
+    //       <p className="mx-auto max-w-2xl text-lg text-gray-600">
+    //         Мы предлагаем программы обучения плаванию для детей разных возрастов
+    //       </p>
+    //     </div>
+
+    //     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+    //       {groups.map((group, index) => (
+    //         <div
+    //           key={index}
+    //           className="rounded-lg bg-white p-6 shadow-md transition-transform hover:-translate-y-1"
+    //         >
+    //           <div className="mb-4 flex justify-center">{group.icon}</div>
+    //           <h3 className="mb-3 text-center text-xl font-bold text-sky-800">
+    //             {group.title}
+    //           </h3>
+    //           <p className="mb-4 text-center text-gray-600">
+    //             {group.description}
+    //           </p>
+
+    //           <ul className="space-y-2">
+    //             {group.features.map((feature, i) => (
+    //               <li key={i} className="flex items-center">
+    //                 <svg
+    //                   className="mr-2 h-5 w-5 text-sky-600"
+    //                   fill="none"
+    //                   viewBox="0 0 24 24"
+    //                   stroke="currentColor"
+    //                 >
+    //                   <path
+    //                     strokeLinecap="round"
+    //                     strokeLinejoin="round"
+    //                     strokeWidth={2}
+    //                     d="M5 13l4 4L19 7"
+    //                   />
+    //                 </svg>
+    //                 <span className="text-gray-700">{feature}</span>
+    //               </li>
+    //             ))}
+    //           </ul>
+    //         </div>
+    //       ))}
+    //     </div>
+    //   </div>
+    // </section>
+    <section className="py-10 bg-white">
+      <div className="container mx-auto px-4">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="inline-block px-4 py-1 mb-4 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+            Наши программы
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">
+            Программы для всех возрастов и уровней
+          </h2>
+          <p className="text-gray-600">
+            Мы предлагаем разнообразные программы обучения плаванию,
+            адаптированные под различные возрастные группы и уровни подготовки
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {programs.map((program, index) => (
+            <div
+              key={index}
+              className="bg-gray-50 rounded-2xl p-6 transition-all hover:shadow-lg hover:-translate-y-1"
+            >
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
+                {program.icon}
+              </div>
+              <h3 className="text-xl font-bold text-blue-900 mb-2">
+                {program.title}
+              </h3>
+              <p className="text-gray-600 mb-4">{program.description}</p>
+              <div className="flex items-center text-sm text-gray-500 mb-4">
+                <Clock className="h-4 w-4 mr-1 text-yellow-500" />
+                <span>{program.schedule}</span>
+              </div>
+              <Link
+                to={RouteNames.SCHEDULE}
+                className="inline-flex items-center text-blue-700 font-medium hover:text-blue-800 transition-colors text-sm"
+              >
+                Подробнее
+                <ArrowRight className="ml-1 h-3 w-3" />
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default GroupsComponent;
