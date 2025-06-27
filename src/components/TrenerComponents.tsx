@@ -6,6 +6,16 @@ import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 
+import bykreev from "@/static/trainers/bykreev.jpg";
+import kiryanov from "@/static/trainers/kiryanov.jpg";
+import lapshina from "@/static/trainers/lapshina.jpg";
+import oger from "@/static/trainers/oger.jpg";
+import sandra from "@/static/trainers/sandra.jpg";
+import sheremeta from "@/static/trainers/sheremeta.jpg";
+import volkov from "@/static/trainers/volkov.jpg";
+import zilina from "@/static/trainers/zilina.jpg";
+import { Trainer } from "@/model/model";
+
 const TrenerComponents: FC = () => {
   // const { trener, loading, error } = useAppSelector((state) => state.trener);
   // const dispatch = useAppDiscpatch();
@@ -16,56 +26,63 @@ const TrenerComponents: FC = () => {
 
   // if (loading) return <div>Загрузка...</div>;
   // if (error) return <div>Ошибка: {error}</div>;
-  const trainers = [
-    {
-      name: "Анна Петрова",
-      position: "Старший тренер",
-      experience: "Опыт: 15 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      name: "Анна Петрова",
-      position: "Старший тренер",
-      experience: "Опыт: 15 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      name: "Анна Петрова",
-      position: "Старший тренер",
-      experience: "Опыт: 15 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      name: "Анна Петрова",
-      position: "Старший тренер",
-      experience: "Опыт: 15 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      name: "Анна Петрова",
-      position: "Старший тренер",
-      experience: "Опыт: 15 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      name: "Сергей Иванов",
-      position: "Тренер по спортивному плаванию",
-      experience: "Опыт: 20 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      name: "Елена Морозова",
-      position: "Тренер по обучению взрослых",
-      experience: "Опыт: 12 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-    {
-      name: "Иван Смирнов",
-      position: "Детский тренер",
-      experience: "Опыт: 8 лет",
-      image: "/placeholder.svg?height=400&width=400",
-    },
-  ];
+
+
+const trainers: Trainer[] = [
+  {
+    Id: 1,
+    TrainerName: "Сергей Евгеньевич Кирьянов",
+    TrainerDescription: "ТГПУ-Факультет физической культуры и спорта — 2021 г.",
+    TrainerPhotoUrl: kiryanov,
+  },
+  {
+    Id: 2,
+    TrainerName: "Наталья Петровна Огер",
+    TrainerDescription: "Вхахах прикольная бабулька",
+    TrainerPhotoUrl: oger,
+  },
+  {
+    Id: 3,
+    TrainerName: "Мария Алексеевна Лапшина",
+    TrainerDescription: "ТГПК направление: Физическая культура — 2019 г.",
+    TrainerPhotoUrl: lapshina,
+  },
+  {
+    Id: 4,
+    TrainerName: "Алина Константиновна Жилина",
+    TrainerDescription:
+      "ТГПУ — Факультет физической культуры и спорта — 2019 г.",
+    TrainerPhotoUrl: zilina,
+  },
+  {
+    Id: 5,
+    TrainerName: "Виктория Дмитриевна Шеремета",
+    TrainerDescription: "Томский Аграрный Колледж — 2013 г.",
+    TrainerPhotoUrl: sheremeta,
+  },
+  {
+    Id: 6,
+    TrainerName: "Максим Сергеевич Букреев",
+    TrainerDescription:
+      "ТГПУ — Факультет физической культуры и спорта — 2020 г.",
+    TrainerPhotoUrl: bykreev,
+  },
+  {
+    Id: 7,
+    TrainerName: "Сандра Евгеньевна Сен-Ли",
+    TrainerDescription:
+      "УрФУ имени первого президента России Б.Н.Ельцина – 2021г;",
+    TrainerPhotoUrl: sandra,
+  },
+  {
+    Id: 8,
+    TrainerName: "Евгений Александрович Волков",
+    TrainerDescription:
+      "УрФУ имени первого президента России Б.Н.Ельцина – 2021г;",
+    TrainerPhotoUrl: volkov,
+  },
+];
+  
   return (
     // <section className="py-16" id="our-team">
     //   <div className="container mx-auto px-4">
@@ -158,21 +175,21 @@ const TrenerComponents: FC = () => {
               <div className="relative w-24 h-24 md:w-40 md:h-40 mx-auto rounded-full overflow-hidden mb-3 md:mb-4 border-2 md:border-4 border-yellow-400">
                 <Link to={RouteNames.TRAINERS}>
                   <img
-                    src={trainer.image || "/placeholder.svg"}
-                    alt={trainer.name}
+                    src={trainer.TrainerPhotoUrl}
+                    alt={trainer.TrainerName}
                     className="object-cover"
                   />
                 </Link>
               </div>
               <h3 className="text-base md:text-xl font-bold mb-0 md:mb-1 text-white">
-                {trainer.name}
+                {trainer.TrainerName}
               </h3>
               <p className="text-yellow-400 text-xs md:text-sm mb-1 md:mb-2">
-                {trainer.position}
+                {trainer.TrainerDescription}
               </p>
-              <p className="text-blue-100 text-xs md:text-sm">
+              {/* <p className="text-blue-100 text-xs md:text-sm">
                 {trainer.experience}
-              </p>
+              </p> */}
             </div>
           ))}
         </div>

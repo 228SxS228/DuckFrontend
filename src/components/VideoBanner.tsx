@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Button } from "./ui/button";
-import baa from "@/static/DSC_7757.jpg";
+import bgimg from "@/static/interior/SSV_1325.jpg";
 import videoplayback  from "@/static/videoplayback.mp4";
 import DuckComponent from "./WaveComponent"
 import WaveComponent from "./WaveComponent";
@@ -78,7 +78,7 @@ const VideoBanner: FC = () => {
         md:gap-12
         py-20 md:py-32 "
         style={{
-          backgroundImage: `url(${baa})`,
+          backgroundImage: `url(${bgimg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -91,28 +91,28 @@ const VideoBanner: FC = () => {
               <span className="text-yellow-400">радость плавания</span>
             </h1> */}
             <h1 className="font-myfont text-5xl md:text-8xl font-bold text-white mb-8 leading-tight">
-              Ваш ребенок полюбит
+              Плавательный Центр
               <span className="block bg-gradient-to-r from-yellow-300 via-orange-300 to-yellow-400 bg-clip-text text-transparent animate-pulse">
-                ПЛАВАНИЕ
+                «Утенок»
               </span>
             </h1>
             <p className="text-xl text-blue-100 mb-8">
               Профессиональное обучение плаванию для детей от 3 месяцев до 10
-              лет в современном центре с опытными тренерами
+              лет в современном центре с опытными тренерами.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button
                 size="lg"
                 className="hover:bg-yellow-500 rounded-full px-8 text-black bg-[rgba(255,235,0,1)] cursor-pointer"
               >
-                Записаться
+                Записаться на первое бесплатное занятие 
               </Button>
-              <Button
+              {/* <Button
                 size="lg"
                 className="border-white bg-white hover:bg-gray-200 rounded-full px-8 text-black cursor-pointer"
               >
                 Узнать больше
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
