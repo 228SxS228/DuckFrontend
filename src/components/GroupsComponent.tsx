@@ -1,7 +1,5 @@
-import { RouteNames } from "@/router";
 import { ArrowRight, Award, Clock, Shield, Users } from "lucide-react";
 import { FC, useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Program } from "@/types";
 import Modal from "./Modal";
@@ -190,7 +188,7 @@ const GroupsComponent: FC = () => {
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          title={selectedProgram?.title || "Тренер"}
+         
         >
           {selectedProgram && (
             <div className="flex space-x-4  ">

@@ -8,7 +8,7 @@ import SaltCavePage from "@/pages/SaltCavePage";
 import PromotionPage from "@/pages/PromotionPage";
 import CompetitionsPage from "@/pages/CompetitionsPage";
 import Layout from "@/components/Layout";
-import ScrollToTop from "@/components/ScrollToTop";
+
 
 // export interface IRoute {
 //   path: string;

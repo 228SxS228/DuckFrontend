@@ -1,23 +1,19 @@
-import { useState, useEffect, FC } from "react";
+import { useState, FC } from "react";
 import { Trainer } from "../model/model";
 import Modal from "../components/Modal";
 // import { useAppDiscpatch, useAppSelector } from "../hooks/reduxe";
 //import { fetchTrener} from "../store/action/trenerAction";
-import { Award, GraduationCap } from "lucide-react";
+import { Award, GraduationCap} from "lucide-react";
 
-
-
-import bykreev  from "@/static/trainers/bykreev.jpg";
-import kiryanov  from "@/static/trainers/kiryanov.jpg";
-import lapshina  from "@/static/trainers/lapshina.jpg";
-import oger  from "@/static/trainers/oger.jpg";
-import sandra  from "@/static/trainers/sandra.jpg";
-import sheremeta  from "@/static/trainers/sheremeta.jpg";
-import volkov  from "@/static/trainers/volkov.jpg";
-import zilina  from "@/static/trainers/zilina.jpg";
+import bykreev from "@/static/trainers/bykreev.jpg";
+import kiryanov from "@/static/trainers/kiryanov.jpg";
+import lapshina from "@/static/trainers/lapshina.jpg";
+import oger from "@/static/trainers/oger.jpg";
+import sandra from "@/static/trainers/sandra.jpg";
+import sheremeta from "@/static/trainers/sheremeta.jpg";
+import volkov from "@/static/trainers/volkov.jpg";
+import zilina from "@/static/trainers/zilina.jpg";
 import { Button } from "@/components/ui/button";
-
-
 
 //trener, добавить в const {  loading, error } = useAppSelector((state) => state.trener);
 const TrainersPage: FC = () => {
@@ -225,13 +221,14 @@ const TrainersPage: FC = () => {
           );
         })}
       </div>
-      <Modal
+      {/* <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title={selectedTrainer?.TrainerName || "Тренер"}
+        className="fixed inset-0 flex items-center justify-center "
       >
         {selectedTrainer && (
           <div className="flex space-x-4  ">
+            <div>{selectedTrainer.TrainerName}</div>
             <img
               src={selectedTrainer.TrainerPhotoUrl}
               alt={selectedTrainer.TrainerName}
@@ -240,6 +237,39 @@ const TrainersPage: FC = () => {
             <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 opacity-90">
               {selectedTrainer.TrainerDescription}
             </p>
+          </div>
+        )}
+      </Modal> */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        className="fixed inset-0 flex items-center justify-center "
+      >
+        {selectedTrainer && (
+          <div className="grid grid-cols-2">
+            {/* Контент тренера */}
+            {/* Бейдж с именем */}
+            <div>
+              <div className="bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
+                <h2 className="text-xl md:text-2xl font-bold">
+                  {selectedTrainer.TrainerName}
+                </h2>
+              </div>
+              {/* Фото тренера */}
+              <img
+                src={selectedTrainer.TrainerPhotoUrl}
+                alt={selectedTrainer.TrainerName}
+                className="w-full h-64 md:h-auto object-cover object-center"
+              />
+            </div>
+            {/* Описание тренера */}
+            <div className="md:w-3/5 p-6 md:p-8 overflow-y-auto max-h-[60vh]">
+              <div className="">
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  {selectedTrainer.TrainerDescription}
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </Modal>

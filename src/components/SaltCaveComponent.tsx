@@ -1,14 +1,13 @@
-import  { FC } from "react";
+import { FC } from "react";
 import { Shield, Heart, Clock, Star, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { RouteNames } from "@/router";
 
-import ImageGalleryBanner from './ui/ImageGalleryBanner';
+import ImageGalleryBanner from "./ImageGalleryBanner";
 
-
-import photo2  from "@/static/solinai_pehera_2-768x1151.jpg";
-import photo3  from "@/static/solinai_pehera_4-683x1024.jpg";
+import photo2 from "@/static/solinai_pehera_2-768x1151.jpg";
+import photo3 from "@/static/solinai_pehera_4-683x1024.jpg";
 const images = [photo2, photo3];
 const SaltCaveComponent: FC = () => {
   // const benefits = [

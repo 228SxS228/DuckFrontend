@@ -1,15 +1,15 @@
 import { RouteNames } from "@/router";
-import { ArrowRight, Check} from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { FC } from "react";
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 
-import ImageGalleryBanner from './ui/ImageGalleryBanner';
+import ImageGalleryBanner from "./ImageGalleryBanner";
 import photo2 from "@/static/interior/SSV_8967.jpg";
 import photo3 from "@/static/interior/SSV_8975.jpg";
 import photo4 from "@/static/interior/SSV_8910.jpg";
-const images = [photo2, photo3,photo4];
+const images = [photo2, photo3, photo4];
 
 const BenefitsComponent: FC = () => {
   // const benefits = [

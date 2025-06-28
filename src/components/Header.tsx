@@ -1,11 +1,12 @@
 import { FC, useState } from "react";
-import { Phone, Menu } from "lucide-react";
+import { Phone, Menu} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RouteNames } from "../router/index";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../static/utenok_logo.png";
 import Modal from "./Modal";
+import { Input } from "./ui/input";
 
 // interface HeaderProps {
 //   imageSrc?: string;
@@ -24,7 +25,7 @@ const Header: FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full overflow-visible bg-white/95 backdrop-blur-sm border-b border-gray-100">
+    <header className="sticky h-25 top-0 z-50 w-full overflow-visible bg-white/95 backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto overflow-visible flex h-17 items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 overflow-visible">
@@ -110,6 +111,8 @@ const Header: FC = () => {
           </div>
           <Button
             onClick={() => handleOpenClick()}
+            size="lg"
+            variant="destructive"
             className="hidden sm:inline-flex bg-blue-700 hover:bg-blue-800 rounded-full cursor-pointer"
           >
             Записаться
@@ -117,23 +120,35 @@ const Header: FC = () => {
           <Modal
             isOpen={isModalOpen}
             onClose={handleCloseModal}
-            title="Моя информация"
+            className="absolute top-50 left-180 rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
           >
-            <div className="space-x-4 pt-50 grid ">
-              <h3 className=" py-10">
+            <div className="p-6 md:p-8">
+              <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 md:mb-8">
                 Оставьте контактные данные, мы перезвоним Вам и запишем на
                 занятие
-              </h3>
-              <label className=" py-5" htmlFor="">
-                {" "}
-                Ваше имя
-                <input type="text" />
-              </label>
-              <label className=" py-5" htmlFor="">
-                {" "}
-                Ваш телефон
-                <input type="text" />
-              </label>
+              </h2>
+
+              <div className="space-y-6 mb-6">
+                <Input
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  type="text"
+                  placeholder="Ваше имя"
+                />
+                <Input
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  type="tel"
+                  placeholder="Ваш телефон"
+                />
+              </div>
+              <Button className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform duration-300">
+                Оставить заявку
+              </Button>
+            </div>
+            <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100">
+              Нажимая кнопку, вы соглашаетесь с{" "}
+              <a href="#" className="text-blue-600 hover:underline">
+                политикой конфиденциальности
+              </a>
             </div>
           </Modal>
           <Sheet>

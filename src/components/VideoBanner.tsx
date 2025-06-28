@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Button } from "./ui/button";
 import bgimg from "@/static/interior/SSV_1325.jpg";
-import videoplayback  from "@/static/videoplayback.mp4";
-import DuckComponent from "./WaveComponent"
+// import videoplayback  from "@/static/videoplayback.mp4";
+// import DuckComponent from "./WaveComponent"
 import WaveComponent from "./WaveComponent";
 
 

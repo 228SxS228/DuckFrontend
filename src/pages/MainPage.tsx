@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useState } from "react";
+import { FC, lazy, Suspense} from "react";
 import { Button } from "@/components/ui/button";
 
 import BenefitsComponent from "@/components/BenefitsComponent";
@@ -7,7 +7,7 @@ import SaltCaveComponent from "@/components/SaltCaveComponent";
 import Rentalcomponent from "@/components/RentalComponent";
 import PromotionsComponent from "@/components/PromotionsComponent";
 import ProgramsComponent from "@/components/ProgramsComponent";
-import Modal from "@/components/Modal";
+
 
 // Ленивая загрузка компонентов
 const VideoBanner = lazy(() => import("../components/VideoBanner"));

@@ -1,17 +1,16 @@
-import ImageGalleryBanner from '../components/ui/ImageGalleryBanner';
+import ImageGalleryBanner from "../components/ImageGalleryBanner";
 
 import { Button } from "@/components/ui/button";
 // import { Badge } from "@/components/ui/badge";
 
-import photo2  from "@/static/DSC_7757.jpg";
-import photo3  from "@/static/DSC_7832.jpg";
+import photo2 from "@/static/DSC_7757.jpg";
+import photo3 from "@/static/DSC_7832.jpg";
 import photo4 from "@/static/DSC_7840.jpg";
 import photo5 from "@/static/solinai_pehera_3-500x300.jpg";
 import photo6 from "@/static/solinai_pehera_8-854x750.jpg";
 import photo7 from "@/static/solinai_pehera_6-768x512.jpg";
 
-
-import Video  from "@/static/saltVideoPrew.mp4";
+import Video from "@/static/saltVideoPrew.mp4";
 
 import {
   TreesIcon as AlertCircle,
@@ -32,11 +31,10 @@ export default function SaltCavePage() {
     }
   };
 
-
-const images = [photo2, photo3, photo4, photo5, photo6, photo7];
+  const images = [photo2, photo3, photo4, photo5, photo6, photo7];
 
   const safeImageSrc = validateMediaSource(import.meta.env.VITE_DEFAULT_IMG);
- // const safeVideoSrc = validateMediaSource(import.meta.env.VITE_VIDEO_SALT_SRC);
+  // const safeVideoSrc = validateMediaSource(import.meta.env.VITE_VIDEO_SALT_SRC);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -142,9 +140,9 @@ const images = [photo2, photo3, photo4, photo5, photo6, photo7];
                     <h3 className="font-bold text-gray-900">Сеанс</h3>
                     <p className="text-gray-700">
                       Во время сеанса вы и ваш ребенок располагаетесь на удобных
-                      креслах. Для детей предусмотрены игрушки и стол для рисования песком. Сеанс
-                      сопровождается спокойной музыкой и мягким освещением,
-                      создающим расслабляющую атмосферу.
+                      креслах. Для детей предусмотрены игрушки и стол для
+                      рисования песком. Сеанс сопровождается спокойной музыкой и
+                      мягким освещением, создающим расслабляющую атмосферу.
                     </p>
                   </div>
                 </div>

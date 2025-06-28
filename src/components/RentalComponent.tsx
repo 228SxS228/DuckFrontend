@@ -1,13 +1,11 @@
 import { FC } from "react";
-import { Gift} from "lucide-react";
+import { Gift } from "lucide-react";
 import { Button } from "./ui/button";
-import ImageGalleryBanner from './ui/ImageGalleryBanner';
-
-
+import ImageGalleryBanner from "./ImageGalleryBanner";
 
 //сделать норм ренейм
-import photo2  from "@/static/utenokpro_animatory.jpg";
-import photo3  from "@/static/utenokpro_programma.jpg";
+import photo2 from "@/static/utenokpro_animatory.jpg";
+import photo3 from "@/static/utenokpro_programma.jpg";
 const images = [photo2, photo3];
 
 const Rentalcomponent: FC = () => {
@@ -160,11 +158,11 @@ const Rentalcomponent: FC = () => {
             </div>
 
             <div className="relative h-56 md:h-72 lg:h-96 rounded-2xl overflow-hidden mt-4 md:mt-0">
-               <ImageGalleryBanner 
-        images={images}
-        interval={3000} 
-        height="h-[400px]" 
-      />
+              <ImageGalleryBanner
+                images={images}
+                interval={3000}
+                height="h-[400px]"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-4 md:p-6">
                 <div className="inline-block px-2 py-1 mb-1 md:mb-2 bg-yellow-400 text-blue-900 rounded-full text-xs font-medium">
