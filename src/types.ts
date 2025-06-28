@@ -30,3 +30,13 @@ export interface FaqText {
   question: string;
   answer: string;
 }
+
+//Программы в компоненте программы для отображения модалки
+
+export interface Program {
+  title: string;
+  description: string;
+  schedule: string;
+  icon: React.ReactNode;
+  description2: string;
+}

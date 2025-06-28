@@ -38,7 +38,8 @@ const trainers: Trainer[] = [
   {
     Id: 2,
     TrainerName: "Наталья Петровна Огер",
-    TrainerDescription: "Вхахах прикольная бабулька",
+    TrainerDescription:
+      "ТГПУ – «Факультет физической культуры и спорта» 1977 год.",
     TrainerPhotoUrl: oger,
   },
   {
@@ -71,14 +72,14 @@ const trainers: Trainer[] = [
     Id: 7,
     TrainerName: "Сандра Евгеньевна Сен-Ли",
     TrainerDescription:
-      "УрФУ имени первого президента России Б.Н.Ельцина – 2021г;",
+      "УрФУ имени первого президента России Б.Н.Ельцина – 2021г.",
     TrainerPhotoUrl: sandra,
   },
   {
     Id: 8,
     TrainerName: "Евгений Александрович Волков",
     TrainerDescription:
-      "УрФУ имени первого президента России Б.Н.Ельцина – 2021г;",
+      "ТГПУ — Факультет физической культуры и спорта — 2017 г.",
     TrainerPhotoUrl: volkov,
   },
 ];

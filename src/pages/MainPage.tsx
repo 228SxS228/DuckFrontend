@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense } from "react";
+import { FC, lazy, Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import BenefitsComponent from "@/components/BenefitsComponent";
@@ -7,12 +7,16 @@ import SaltCaveComponent from "@/components/SaltCaveComponent";
 import Rentalcomponent from "@/components/RentalComponent";
 import PromotionsComponent from "@/components/PromotionsComponent";
 import ProgramsComponent from "@/components/ProgramsComponent";
+import Modal from "@/components/Modal";
 
 // Ленивая загрузка компонентов
 const VideoBanner = lazy(() => import("../components/VideoBanner"));
 const TrenerComponents = lazy(() => import("../components/TrenerComponents"));
 
 const MainPage: FC = () => {
+
+
+
   return (
     <div className="flex min-h-screen flex-col">
       <Suspense fallback={<div>Загрузка...</div>}>
@@ -107,6 +111,7 @@ const MainPage: FC = () => {
                     Запишитесь на пробное занятие уже сегодня и ощутите все
                     преимущества нашего центра плавания
                   </p>
+                
                   <Button
                     size="lg"
                     className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 rounded-full px-6 md:px-8 text-sm md:text-base cursor-pointer"

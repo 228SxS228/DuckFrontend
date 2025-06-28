@@ -1,10 +1,11 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Phone, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RouteNames } from "../router/index";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../static/utenok_logo.png";
+import Modal from "./Modal";
 
 // interface HeaderProps {
 //   imageSrc?: string;
@@ -14,49 +15,14 @@ import logo from "../static/utenok_logo.png";
 //   "D:projectDuckdevDuckFrontendsrcstaticлогототип утенок 2.png";
 
 const Header: FC = () => {
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const menuRef = useRef<HTMLDivElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleOpenClick = () => {
+    setIsModalOpen(true);
+  };
 
-  // const navItems = [
-  //   { label: "Расписание", href: "/raspisanie" },
-  //   { label: "Тренеры", href: "/trainers" },
-  //   { label: "Акции", href: "/promotion" },
-  //   { label: "Соляная пещера", href: "/saltcave" },
-  //   { label: "Соревнования", href: "/competitions" },
-  // ];
-  // Валидация мед
-  // const validateMediaSource = (url: string | undefined) => {
-  //   if (!url) return "";
-  //   try {
-  //     new URL(url);
-  //     return url;
-  //   } catch {
-  //     return "";
-  //   }
-  // };
-
-  // const safeImageSrc = validateMediaSource(imageSrc);
-
-  // const handleMenuToggle = () => setIsMenuOpen((prev) => !prev);
-
-  // const handleClickOutside = (event: MouseEvent) => {
-  //   if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-  //     setIsMenuOpen(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => document.removeEventListener("mousedown", handleClickOutside);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (isMenuOpen) {
-  //     document.body.classList.add("overflow-hidden");
-  //   } else {
-  //     document.body.classList.remove("overflow-hidden");
-  //   }
-  // }, [isMenuOpen]);
   return (
     <header className="sticky top-0 z-50 w-full overflow-visible bg-white/95 backdrop-blur-sm border-b border-gray-100">
       <div className="container mx-auto overflow-visible flex h-17 items-center justify-between">
@@ -85,18 +51,6 @@ const Header: FC = () => {
             </Link>
           </div>
         </div>
-        {/* {/* <nav className="hidden md:flex items-center gap-8">
-          {/* {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md transition-colors text-sm font-medium"
-            >
-              {item.label}
-            </a>
-          ))}
-        
-        </nav>  */}
         <nav className="font-myfont">
           <ul className="hidden md:flex items-center  gap-8">
             <li className="px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md transition-colors  font-medium">
@@ -154,9 +108,34 @@ const Header: FC = () => {
             <Phone className="h-4 w-4 text-yellow-500" />
             <span className="text-sm font-medium">+7 (123) 456-78-90</span>
           </div>
-          <Button className="hidden sm:inline-flex bg-blue-700 hover:bg-blue-800 rounded-full cursor-pointer">
+          <Button
+            onClick={() => handleOpenClick()}
+            className="hidden sm:inline-flex bg-blue-700 hover:bg-blue-800 rounded-full cursor-pointer"
+          >
             Записаться
           </Button>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            title="Моя информация"
+          >
+            <div className="space-x-4 pt-50 grid ">
+              <h3 className=" py-10">
+                Оставьте контактные данные, мы перезвоним Вам и запишем на
+                занятие
+              </h3>
+              <label className=" py-5" htmlFor="">
+                {" "}
+                Ваше имя
+                <input type="text" />
+              </label>
+              <label className=" py-5" htmlFor="">
+                {" "}
+                Ваш телефон
+                <input type="text" />
+              </label>
+            </div>
+          </Modal>
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -165,21 +144,10 @@ const Header: FC = () => {
                 className="md:hidden rounded-full mr-4"
               >
                 <Menu className="h-5 w-5" />
-                {/* <span className="sr-only">Toggle menu</span> */}
               </Button>
             </SheetTrigger>
             <SheetContent className="bg-white" side="right">
               <nav className="flex mx-auto flex-col gap-4 mt-8 ">
-                {/* {navItems.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    className="px-3 py-2 text-gray-700 hover:text-blue-600 rounded-md transition-colors text-sm font-medium"
-                  >
-                    {item.label}
-                  </a>
-                ))} */}
-
                 <NavLink
                   to={RouteNames.HOME}
                   className="text-base font-medium hover:text-blue-700 transition-colors"

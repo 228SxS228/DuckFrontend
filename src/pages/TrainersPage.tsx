@@ -1,7 +1,7 @@
 import { useState, useEffect, FC } from "react";
 import { Trainer } from "../model/model";
 import Modal from "../components/Modal";
-import { useAppDiscpatch, useAppSelector } from "../hooks/reduxe";
+// import { useAppDiscpatch, useAppSelector } from "../hooks/reduxe";
 //import { fetchTrener} from "../store/action/trenerAction";
 import { Award, GraduationCap } from "lucide-react";
 
@@ -15,69 +15,88 @@ import sandra  from "@/static/trainers/sandra.jpg";
 import sheremeta  from "@/static/trainers/sheremeta.jpg";
 import volkov  from "@/static/trainers/volkov.jpg";
 import zilina  from "@/static/trainers/zilina.jpg";
+import { Button } from "@/components/ui/button";
 
-export const trainerConst: Trainer[] = [
-  {
-    Id: 1,
-    TrainerName: "Сергей Евгеньевич Кирьянов",
-    TrainerDescription: "ТГПУ-Факультет физической культуры и спорта — 2021 г.",
-    TrainerPhotoUrl: kiryanov
-  },
-  {
-    Id: 2,
-    TrainerName: "Наталья Петровна Огер",
-    TrainerDescription: "Вхахах прикольная бабулька",
-    TrainerPhotoUrl: oger
-  },
-  {
-    Id: 3,
-    TrainerName: "Мария Алексеевна Лапшина",
-    TrainerDescription: "ТГПК направление: Физическая культура — 2019 г.",
-    TrainerPhotoUrl: lapshina
-  },
-  {
-    Id: 4,
-    TrainerName: "Алина Константиновна Жилина",
-    TrainerDescription: "ТГПУ — Факультет физической культуры и спорта — 2019 г.",
-    TrainerPhotoUrl: zilina
-  },
-  {
-    Id: 5,
-    TrainerName: "Виктория Дмитриевна Шеремета",
-    TrainerDescription: "Томский Аграрный Колледж — 2013 г.",
-    TrainerPhotoUrl: sheremeta
-  },
-  {
-    Id: 6,
-    TrainerName: "Максим Сергеевич Букреев",
-    TrainerDescription: "ТГПУ — Факультет физической культуры и спорта — 2020 г.",
-    TrainerPhotoUrl: bykreev
-  },
-  {
-    Id: 7,
-    TrainerName: "Сандра Евгеньевна Сен-Ли",
-    TrainerDescription: "УрФУ имени первого президента России Б.Н.Ельцина – 2021г;",
-    TrainerPhotoUrl: sandra
-  },
-   {
-    Id: 8,
-    TrainerName: "Евгений Александрович Волков",
-    TrainerDescription: "УрФУ имени первого президента России Б.Н.Ельцина – 2021г;",
-    TrainerPhotoUrl: volkov
-  }
-];
+
 
 //trener, добавить в const {  loading, error } = useAppSelector((state) => state.trener);
 const TrainersPage: FC = () => {
-  const {  loading, error } = useAppSelector((state) => state.trener);
+  //все что связанно с модалкой
   const [selectedTrainer, setSelectedTrainer] = useState<Trainer | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const dispatch = useAppDiscpatch();
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedTrainer(null);
+  };
+  const handleTrainerClick = (trainer: Trainer) => {
+    setSelectedTrainer(trainer);
+    setIsModalOpen(true);
+  };
 
-  useEffect(() => {
-    //dispatch(fetchTrener());
-    // dispatch(fetchTrenerById(1));
-  }, [dispatch]);
+  // запросы к бд
+  // const dispatch = useAppDiscpatch();
+  // useEffect(() => {
+  //   //dispatch(fetchTrener());
+  //   // dispatch(fetchTrenerById(1));
+  // }, [dispatch]);
+  // const {  loading, error } = useAppSelector((state) => state.trener);
+
+  const trainers: Trainer[] = [
+    {
+      Id: 1,
+      TrainerName: "Сергей Евгеньевич Кирьянов",
+      TrainerDescription:
+        "ТГПУ-Факультет физической культуры и спорта — 2021 г.",
+      TrainerPhotoUrl: kiryanov,
+    },
+    {
+      Id: 2,
+      TrainerName: "Наталья Петровна Огер",
+      TrainerDescription:
+        "ТГПУ – «Факультет физической культуры и спорта» 1977 год.",
+      TrainerPhotoUrl: oger,
+    },
+    {
+      Id: 3,
+      TrainerName: "Мария Алексеевна Лапшина",
+      TrainerDescription: "ТГПК направление: Физическая культура — 2019 г.",
+      TrainerPhotoUrl: lapshina,
+    },
+    {
+      Id: 4,
+      TrainerName: "Алина Константиновна Жилина",
+      TrainerDescription:
+        "ТГПУ — Факультет физической культуры и спорта — 2019 г.",
+      TrainerPhotoUrl: zilina,
+    },
+    {
+      Id: 5,
+      TrainerName: "Виктория Дмитриевна Шеремета",
+      TrainerDescription: "Томский Аграрный Колледж — 2013 г.",
+      TrainerPhotoUrl: sheremeta,
+    },
+    {
+      Id: 6,
+      TrainerName: "Максим Сергеевич Букреев",
+      TrainerDescription:
+        "ТГПУ — Факультет физической культуры и спорта — 2020 г.",
+      TrainerPhotoUrl: bykreev,
+    },
+    {
+      Id: 7,
+      TrainerName: "Сандра Евгеньевна Сен-Ли",
+      TrainerDescription:
+        "УрФУ имени первого президента России Б.Н.Ельцина – 2021г.",
+      TrainerPhotoUrl: sandra,
+    },
+    {
+      Id: 8,
+      TrainerName: "Евгений Александрович Волков",
+      TrainerDescription:
+        "ТГПУ — Факультет физической культуры и спорта — 2017 г.",
+      TrainerPhotoUrl: volkov,
+    },
+  ];
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -107,26 +126,17 @@ const TrainersPage: FC = () => {
   //   fetchData();
   // }, [dataSrc]); //массив зависимостей, чтобы запрос выполнялся один раз при монтировании
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedTrainer(null);
-  };
-  // const handleTrainerClick = (trainer: Trainer) => {
-  //   setSelectedTrainer(trainer);
-  //   setIsModalOpen(true);
-  // };
+  // if (loading) {
+  //   return <div className="text-center py-8">Загрузка...</div>;
+  // }
 
-  if (loading) {
-    return <div className="text-center py-8">Загрузка...</div>;
-  }
+  // if (error) {
+  //   return <div className="text-center py-8 text-red-500">{error}</div>;
+  // }
 
-  if (error) {
-    return <div className="text-center py-8 text-red-500">{error}</div>;
-  }
-
-  if (!trainerConst?.length) {
-    return <div className="text-center py-8">Данные не найдены</div>;
-  }
+  // if (!trainerConst?.length) {
+  //   return <div className="text-center py-8">Данные не найдены</div>;
+  // }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -167,62 +177,65 @@ const TrainersPage: FC = () => {
           </div>
         ))}
       </div> */}
-     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-  {trainerConst.map((trainer, index) => {
-    return (
-      <div
-        key={index}
-        className="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:-translate-y-1 flex flex-col h-full"
-      >
-        <div className="relative h-128 w-full overflow-hidden">
-          <img
-            src={trainer.TrainerPhotoUrl || "/placeholder.svg"}
-            alt={trainer.TrainerName}
-            className="h-full w-full object-cover"
-            style={{ objectPosition: 'center 15%' }}
-          />
-        </div>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {trainers.map((trainer, index) => {
+          return (
+            <div
+              key={index}
+              className="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:-translate-y-1 flex flex-col h-full"
+            >
+              <div className="relative h-128 w-full overflow-hidden">
+                <img
+                  src={trainer.TrainerPhotoUrl || "/placeholder.svg"}
+                  alt={trainer.TrainerName}
+                  className="h-full w-full object-cover"
+                  style={{ objectPosition: "center 15%" }}
+                />
+              </div>
 
-        <div className="p-6 flex flex-col flex-grow">
-          <h3 className="mb-1 text-xl font-bold text-sky-800">
-            {trainer.TrainerName}
-          </h3>
+              <div className="p-6 flex flex-col flex-grow">
+                <h3 className="mb-1 text-xl font-bold text-sky-800">
+                  {trainer.TrainerName}
+                </h3>
 
-          <div className="mb-4 space-y-2 flex-grow">
-            <div className="flex items-start">
-              <GraduationCap className="mr-2 mt-1 h-5 w-5 shrink-0 text-sky-600" />
-              <p className="text-sm text-gray-700">
-                <span className="font-medium">Образование:</span>{" "}
-                {trainer.TrainerDescription}
-              </p>
+                <div className="mb-4 space-y-2 flex-grow">
+                  <div className="flex items-start">
+                    <GraduationCap className="mr-2 mt-1 h-5 w-5 shrink-0 text-sky-600" />
+                    <p className="text-sm text-gray-700">
+                      <span className="font-medium">Образование:</span>{" "}
+                      {trainer.TrainerDescription}
+                    </p>
+                  </div>
+                  <div className="flex items-start">
+                    <Award className="mr-2 mt-1 h-5 w-5 shrink-0 text-sky-600" />
+                    <p className="text-sm text-gray-700">
+                      <span className="font-medium">Стаж:</span> 5+ лет
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => handleTrainerClick(trainer)}
+                  className="w-full rounded-md bg-sky-600 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-sky-700"
+                >
+                  Подробнее
+                </Button>
+              </div>
             </div>
-            <div className="flex items-start">
-              <Award className="mr-2 mt-1 h-5 w-5 shrink-0 text-sky-600" />
-              <p className="text-sm text-gray-700">
-                <span className="font-medium">Стаж:</span> 5+ лет
-              </p>
-            </div>
-          </div>
-
-          <button className="w-full rounded-md bg-sky-600 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-sky-700">
-            Подробнее
-          </button>
-        </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         title={selectedTrainer?.TrainerName || "Тренер"}
       >
         {selectedTrainer && (
-          <div className="flex space-x-4">
+          <div className="flex space-x-4  ">
             <img
               src={selectedTrainer.TrainerPhotoUrl}
               alt={selectedTrainer.TrainerName}
-              className="w-1/2 h-60 object-cover rounded-lg"
+              className="w-200 h-100 object-cover rounded-lg"
             />
             <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 opacity-90">
               {selectedTrainer.TrainerDescription}

@@ -1,7 +1,10 @@
 import { RouteNames } from "@/router";
 import { ArrowRight, Award, Clock, Shield, Users } from "lucide-react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
+import { Program } from "@/types";
+import Modal from "./Modal";
 
 const GroupsComponent: FC = () => {
   // const groups = [
@@ -42,18 +45,24 @@ const GroupsComponent: FC = () => {
   //     ],
   //   },
   // ];
-  const programs = [
+
+
+  const programs: Program[] = [
     {
       title: "Пузырьки",
       description: "Грудничковое плавание детки с 3мес до 2 лет",
       schedule: "ПН, ПТ: 11:00 - 12:00",
       icon: <Users className="h-6 w-6 text-blue-700" />,
+      description2:
+        "Возраст с 3 месяцев и до года – это второй этап в обучении плаванию наших малышей. В это время очень важно, что мама находится в бассейне вместе с малышом. Ребенок, чувствуя присутствие мамы, ее защиту и поддержку, без страха познает водную среду. А мама при совместных занятиях сможет лучше понять состояние своего ребенка, все его малейшие желания. В такие минуты мама и малыш особенно близки и получают большое удовольствие от общения.",
     },
     {
       title: "Смелые утята",
       description: "Умеющие плавать, детки от 5-8 лет",
       schedule: "Пн-Пт: 7:00 - 9:00, 19:00 - 22:00",
       icon: <Users className="h-6 w-6 text-blue-700" />,
+      description2:
+        "Умеющие плавать, детки от 5-8 лет «Смелые утята» (Эта группа включает в себя 10 ребятишек, которые прошли обучение базовым навыкам на индивидуальных занятиях, занимаются по единой программе и все вместе прогрессируют)  длительность 45 минут, далее прогрев в сауне",
     },
     {
       title: "Индивидуальные занятия от 3 мес до 10 лет",
@@ -61,14 +70,29 @@ const GroupsComponent: FC = () => {
         "Индивидуальное занятие в нашем центре – это больше, чем просто занятие!",
       schedule: "Пн-Пт: 10:00 - 21:00",
       icon: <Award className="h-6 w-6 text-blue-700" />,
+      description2:
+        "30 мин — это время, которое Ваш ребёнок проводит наедине с тренером,и занимается по индивидуальной программе, непосредственно в воде. Вы можете прийти по-раньше на 10-15 минут и самостоятельно провести разминку в сухом зале. Так же, по завершении занятия в бассейне, ребёнок может погреться в финской парной, принять душ и т.п.",
     },
     {
       title: "Соляная пещера",
       description: "Уникальный формат оздоровления всей семьи в Томске",
       schedule: "Ежедневно: 10:00 - 20:00",
       icon: <Shield className="h-6 w-6 text-blue-700" />,
+      description2:
+        "Соляная пещера — это специально оборудованное помещение, стены, пол и потолок которого покрыты солью. Во время сеанса в воздух распыляются мельчайшие частицы соли, создавая особый микроклимат, благотворно влияющий на здоровье.",
     },
   ];
+
+  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProgram(null);
+  };
+  const handleProgramClick = (program: Program) => {
+    setSelectedProgram(program);
+    setIsModalOpen(true);
+  };
   return (
     // <section className="bg-sky-50 py-16">
     //   <div className="container mx-auto px-4">
@@ -152,16 +176,31 @@ const GroupsComponent: FC = () => {
                 <Clock className="h-4 w-4 mr-1 text-yellow-500" />
                 <span>{program.schedule}</span>
               </div>
-              <Link
-                to={RouteNames.SCHEDULE}
-                className="inline-flex items-center text-blue-700 font-medium hover:text-blue-800 transition-colors text-sm"
+              <Button
+                // to={RouteNames.SCHEDULE}
+                onClick={() => handleProgramClick(program)}
+                className="cursor-pointer inline-flex items-center text-blue-700 font-medium hover:text-blue-800 transition-colors text-sm"
               >
                 Подробнее
                 <ArrowRight className="ml-1 h-3 w-3" />
-              </Link>
+              </Button>
             </div>
           ))}
         </div>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          title={selectedProgram?.title || "Тренер"}
+        >
+          {selectedProgram && (
+            <div className="flex space-x-4  ">
+              
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 opacity-90">
+                {selectedProgram.description2}
+              </p>
+            </div>
+          )}
+        </Modal>
       </div>
     </section>
   );
