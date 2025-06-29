@@ -135,8 +135,8 @@ const TrainersPage: FC = () => {
   // }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <section className="bg-gradient-to-b from-sky-100 to-white py-12 md:py-20">
+    <section className="flex min-h-screen flex-col">
+      <div className="bg-gradient-to-b from-sky-100 to-white py-12 md:py-20">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="mb-6 text-3xl font-bold text-sky-800 md:text-4xl lg:text-5xl">
@@ -148,7 +148,7 @@ const TrainersPage: FC = () => {
             </p>
           </div>
         </div>
-      </section>
+      </div>
       {/* <TrainerDetails /> */}
       {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {trener.map((trainer) => (
@@ -289,7 +289,7 @@ const TrainersPage: FC = () => {
           Отправить резюме
         </a>
       </div>
-    </div>
+    </section>
   );
 };
 

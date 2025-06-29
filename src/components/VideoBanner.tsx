@@ -73,7 +73,7 @@ const VideoBanner: FC = () => {
       </div> */}
       <div
         className="
-        h-[55rem]
+        h-[52rem]
         grid md:grid-cols-2 gap-6 
         md:gap-12
         py-20 md:py-32 "
