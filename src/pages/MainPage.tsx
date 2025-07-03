@@ -15,8 +15,6 @@ const TrenerComponents = lazy(() => import("../components/TrenerComponents"));
 
 const MainPage: FC = () => {
 
-
-
   return (
     <div className="flex min-h-screen flex-col">
       <Suspense fallback={<div>Загрузка...</div>}>

@@ -90,13 +90,8 @@ const VideoBanner: FC = () => {
               Откройте для себя{" "}
               <span className="text-yellow-400">радость плавания</span>
             </h1> */}
-<<<<<<< HEAD
-            <h1 className=" text-5xl md:text-8xl font-bold text-white mb-8 leading-tight">
-              Ваш ребенок полюбит
-=======
             <h1 className="font-myfont text-5xl md:text-8xl font-bold text-white mb-8 leading-tight">
               Плавательный Центр
->>>>>>> fdfb448c567a2490a2dfaf02db28832a008b2ebd
               <span className="block bg-gradient-to-r from-yellow-300 via-orange-300 to-yellow-400 bg-clip-text text-transparent animate-pulse">
                 «Утенок»
               </span>
