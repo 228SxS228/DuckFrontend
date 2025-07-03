@@ -16,7 +16,7 @@ export default function WaveComponent() {
     <div className="realiteve flex-1 z-20 ">
       {/* Первая волна с утками */}
       {activeWave}
-      <div className="absolute inset-x-0 top-190 flex-1 mb-4 sm:mb-8 lg:mb-16 z-100">
+      <div className="absolute inset-x-0 top-197 flex-1 mb-4 sm:mb-8 lg:mb-16 z-100">
         <svg
           viewBox="800 80 800 200"
           className="w-full h-24 sm:h-32 md:h-40 lg:h-48"

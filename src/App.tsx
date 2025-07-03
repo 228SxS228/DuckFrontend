@@ -1,4 +1,3 @@
-
 import AppRoutes from "./router";
 
 function App() {

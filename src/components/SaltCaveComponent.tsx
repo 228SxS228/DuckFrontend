@@ -1,14 +1,13 @@
-import  { FC } from "react";
+import { FC } from "react";
 import { Shield, Heart, Clock, Star, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { RouteNames } from "@/router";
 
-import ImageGalleryBanner from './ui/ImageGalleryBanner';
+import ImageGalleryBanner from "./ImageGalleryBanner";
 
-
-import photo2  from "@/static/solinai_pehera_2-768x1151.jpg";
-import photo3  from "@/static/solinai_pehera_4-683x1024.jpg";
+import photo2 from "@/static/solinai_pehera_2-768x1151.jpg";
+import photo3 from "@/static/solinai_pehera_4-683x1024.jpg";
 const images = [photo2, photo3];
 const SaltCaveComponent: FC = () => {
   // const benefits = [
@@ -120,11 +119,11 @@ const SaltCaveComponent: FC = () => {
         <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
           <div className="grid md:grid-cols-2">
             <div className="relative h-56 md:h-auto order-1 md:order-1">
-             <ImageGalleryBanner 
-        images={images}
-        interval={3000} 
-        height="h-[600px]" 
-      />
+              <ImageGalleryBanner
+                images={images}
+                interval={3000}
+                height="h-[600px]"
+              />
               <div className="absolute inset-0 bg-gradient-to-r from-blue-900/60 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-4 md:p-6">
                 <div className="inline-block px-3 py-1 mb-2 bg-yellow-400 text-blue-900 rounded-full text-xs font-medium">
@@ -141,8 +140,10 @@ const SaltCaveComponent: FC = () => {
               </h3>
               <p className="text-gray-600 mb-6">
                 Соляная пещера — это специально оборудованное помещение, стены,
-                пол и потолок которого покрыты солью. Во время сеанса в воздух
-                распыляются мельчайшие частицы соли, создавая особый
+                пол и потолок которого покрыты солью.С удобнейшими креслами,
+                приятной сопровождающей музыкой и множеством игрушек, а так же
+                большим современным телевизором. Во время сеанса в воздух
+                распыляются мельчайшие частицы соли, создающие специальный
                 микроклимат, благотворно влияющий на здоровье.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6">
@@ -155,7 +156,7 @@ const SaltCaveComponent: FC = () => {
                 <div className="flex items-center">
                   <Leaf className="h-5 w-5 text-yellow-500 mr-2 flex-shrink-0" />
                   <span className="text-gray-700 text-sm md:text-base">
-                    Улучшение дыхания
+                    Улучшение общего состояния
                   </span>
                 </div>
                 <div className="flex items-center">

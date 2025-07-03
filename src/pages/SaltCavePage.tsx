@@ -1,12 +1,16 @@
-import ImageGalleryBanner from '../components/ui/ImageGalleryBanner';
+import ImageGalleryBanner from "../components/ImageGalleryBanner";
 
 import { Button } from "@/components/ui/button";
 // import { Badge } from "@/components/ui/badge";
 
-import photo2  from "@/static/DSC_7757.jpg";
-import photo3  from "@/static/DSC_7832.jpg";
+import photo2 from "@/static/DSC_7757.jpg";
+import photo3 from "@/static/DSC_7832.jpg";
+import photo4 from "@/static/DSC_7840.jpg";
+import photo5 from "@/static/solinai_pehera_3-500x300.jpg";
+import photo6 from "@/static/solinai_pehera_8-854x750.jpg";
+import photo7 from "@/static/solinai_pehera_6-768x512.jpg";
 
-import Video  from "@/static/saltVideoPrew.mp4";
+import Video from "@/static/saltVideoPrew.mp4";
 
 import {
   TreesIcon as AlertCircle,
@@ -27,11 +31,10 @@ export default function SaltCavePage() {
     }
   };
 
-
-const images = [photo2, photo3];
+  const images = [photo2, photo3, photo4, photo5, photo6, photo7];
 
   const safeImageSrc = validateMediaSource(import.meta.env.VITE_DEFAULT_IMG);
- // const safeVideoSrc = validateMediaSource(import.meta.env.VITE_VIDEO_SALT_SRC);
+  // const safeVideoSrc = validateMediaSource(import.meta.env.VITE_VIDEO_SALT_SRC);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -137,9 +140,9 @@ const images = [photo2, photo3];
                     <h3 className="font-bold text-gray-900">Сеанс</h3>
                     <p className="text-gray-700">
                       Во время сеанса вы и ваш ребенок располагаетесь на удобных
-                      шезлонгах. Для детей предусмотрены игрушки и книги. Сеанс
-                      сопровождается спокойной музыкой и мягким освещением,
-                      создающим расслабляющую атмосферу.
+                      креслах. Для детей предусмотрены игрушки и стол для
+                      рисования песком. Сеанс сопровождается спокойной музыкой и
+                      мягким освещением, создающим расслабляющую атмосферу.
                     </p>
                   </div>
                 </div>
@@ -188,9 +191,9 @@ const images = [photo2, photo3];
             </div>
 
             <div className="space-y-6">
-              <div className="relative h-[250px] overflow-hidden rounded-lg shadow-md">
+              <div className="relative h-[385px] overflow-hidden rounded-lg shadow-md">
                 <img
-                  src={safeImageSrc}
+                  src={photo2}
                   alt="Сеанс в соляной пещере"
                   className="object-cover"
                 />
@@ -203,20 +206,20 @@ const images = [photo2, photo3];
                 <div className="space-y-3">
                   <div className="flex justify-between border-b border-gray-100 pb-2">
                     <span className="font-medium text-gray-700">
-                      Понедельник - Пятница:
+                      Понедельник - Воскресенье:
                     </span>
-                    <span className="text-gray-700">10:00 - 19:00</span>
+                    <span className="text-gray-700">10:00 - 20:00</span>
                   </div>
-                  <div className="flex justify-between border-b border-gray-100 pb-2">
+                  {/* <div className="flex justify-between border-b border-gray-100 pb-2">
                     <span className="font-medium text-gray-700">Суббота:</span>
-                    <span className="text-gray-700">10:00 - 18:00</span>
+                    <span className="text-gray-700">10:00 - 20:00</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="font-medium text-gray-700">
                       Воскресенье:
                     </span>
                     <span className="text-gray-700">10:00 - 16:00</span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="mt-4 text-sm text-gray-600">
                   <Clock className="mr-1 inline-block h-4 w-4" />
@@ -242,8 +245,8 @@ const images = [photo2, photo3];
             в нашей соляной пещере
           </p>
         </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* grid md:grid-cols-3 gap-8 */}
+        <div className="grid grid-cols-3 md:grid-cols-4 gap-8 md:gap-8">
           {pricingPlans.map((plan, index) => (
             <div
               key={index}
@@ -360,11 +363,11 @@ const images = [photo2, photo3];
             ожидает
           </p>
         </div>
-         <ImageGalleryBanner 
-        images={images}
-        interval={3000} 
-        height="h-[600px]" 
-      />
+        <ImageGalleryBanner
+          images={images}
+          interval={3000}
+          height="h-[600px]"
+        />
       </section>
     </div>
   );
@@ -398,7 +401,7 @@ const benefits = [
 const pricingPlans = [
   {
     title: "Разовое посещение",
-    price: "800",
+    price: "580",
     perSession: true,
     description:
       "Идеально для тех, кто хочет попробовать соляную пещеру впервые",
@@ -411,8 +414,8 @@ const pricingPlans = [
     popular: false,
   },
   {
-    title: "Абонемент на 10 сеансов",
-    price: "6500",
+    title: "Абонемент на 10 посещений",
+    price: "4620",
     perSession: false,
     description:
       "Оптимальный вариант для регулярного посещения с хорошей скидкой",
@@ -420,16 +423,90 @@ const pricingPlans = [
       "Длительность сеанса 40 минут",
       "Срок действия 3 месяца",
       "Возможность заморозки",
-      "Скидка 20% на следующий абонемент",
-      "Бесплатное полотенце",
     ],
     popular: true,
   },
   {
-    title: "Семейное посещение",
-    price: "1500",
+    title: "Абонемент на 15 посещений",
+    price: "6240",
+    perSession: false,
+    description:
+      "Оптимальный вариант для регулярного посещения с хорошей скидкой",
+    features: [
+      "Длительность сеанса 40 минут",
+      "До 8 человек",
+      "Специальные кресла ",
+      "Детская релаксирующая музыка",
+      "Игрушки для детей",
+    ],
+    popular: false,
+  },
+  {
+    title: "Абонемент на 20 посещений",
+    price: "7500",
+    perSession: false,
+    description:
+      "Оптимальный вариант для регулярного посещения с хорошей скидкой",
+    features: [
+      "Длительность сеанса 40 минут",
+      "До 8 человек",
+      "Специальные кресла для детей",
+      "Детская релаксирующая музыка",
+      "Игрушки для детей",
+    ],
+    popular: false,
+  },
+  {
+    title: "Индивидуальное посещение",
+    price: "2000",
     perSession: true,
-    description: "Для семей до 4 человек, включая детей от 3 лет",
+    description:
+      "до 4 человек включительно + после каждого посещения бесплатные кислородные коктейли",
+    features: [
+      "Длительность сеанса 40 минут",
+      "До 4 человек",
+      "Специальные кресла для детей",
+      "Детская релаксирующая музыка",
+      "Игрушки для детей",
+    ],
+    popular: true,
+  },
+  {
+    title: "Абонемент на 10 посещений ",
+    price: "16000",
+    perSession: false,
+    description:
+      "до 4 человек включительно + после каждого посещения бесплатные кислородные коктейли",
+    features: [
+      "Длительность сеанса 40 минут",
+      "До 4 человек",
+      "Специальные кресла для детей",
+      "Детская релаксирующая музыка",
+      "Игрушки для детей",
+    ],
+    popular: false,
+  },
+  {
+    title: "Абонемент на 15 посещений ",
+    price: "22000",
+    perSession: false,
+    description:
+      "до 4 человек включительно + после каждого посещения бесплатные кислородные коктейли",
+    features: [
+      "Длительность сеанса 40 минут",
+      "До 4 человек",
+      "Специальные кресла для детей",
+      "Детская релаксирующая музыка",
+      "Игрушки для детей",
+    ],
+    popular: false,
+  },
+  {
+    title: "Абонемент на 20 посещений",
+    price: "27000",
+    perSession: false,
+    description:
+      "до 4 человек включительно + после каждого посещения бесплатные кислородные коктейли",
     features: [
       "Длительность сеанса 40 минут",
       "До 4 человек",

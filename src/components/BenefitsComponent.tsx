@@ -1,15 +1,15 @@
 import { RouteNames } from "@/router";
-import { ArrowRight, Check} from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { FC } from "react";
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 
-import ImageGalleryBanner from './ui/ImageGalleryBanner';
-import photo2  from "@/static/utenok_g2.jpg";
-import photo3  from "@/static/utenok_g3.jpg";
-import photo4  from "@/static/utenok_g4.jpg";
-const images = [photo2, photo3,photo4];
+import ImageGalleryBanner from "./ImageGalleryBanner";
+import photo2 from "@/static/interior/SSV_8967.jpg";
+import photo3 from "@/static/interior/SSV_8975.jpg";
+import photo4 from "@/static/interior/SSV_8910.jpg";
+const images = [photo2, photo3, photo4];
 
 const BenefitsComponent: FC = () => {
   // const benefits = [
@@ -51,27 +51,35 @@ const BenefitsComponent: FC = () => {
   //   },
   // ];
 
+  const benefist = [
+    "2 бассейна по 12 метров и комфортной глубиной",
+    "Игровые, кафе, зоны ожидания",
+    "Просторные раздевалки и душевые",
+    "Мотивационная система для малышей с медалями и кубками",
+    "Соревнования с множеством подарков для наших утят",
+  ];
+
   return (
     <div>
       <section className="py-10 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="container  mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <p className="text-4xl font-bold text-blue-800 mb-2">8+</p>
+              <p className="text-4xl font-bold text-blue-800 mb-2">8</p>
               <p className="text-gray-600">Опытных тренеров</p>
             </div>
             <div className="text-center">
-              <p className="text-4xl font-bold text-blue-800 mb-2">4+</p>
-              <p className="text-gray-600">Групп для всех возрастов</p>
+              <p className="text-4xl font-bold text-blue-800 mb-2">12 лет</p>
+              <p className="text-gray-600">Дарим радость и обучаем ребятишек</p>
             </div>
             <div className="text-center">
               <p className="text-4xl font-bold text-blue-800 mb-2">25000+</p>
-              <p className="text-gray-600">Довольных клиентов</p>
+              <p className="text-gray-600">Довольных родителей и их утят</p>
             </div>
-            <div className="text-center">
+            {/* <div className="text-center">
               <p className="text-4xl font-bold text-blue-800 mb-2">12м</p>
               <p className="text-gray-600">Длина бассейна</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -79,32 +87,28 @@ const BenefitsComponent: FC = () => {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative aspect-square md:aspect-auto md:h-[500px] rounded-2xl overflow-hidden">
-             <ImageGalleryBanner 
-        images={images}
-        interval={3000} 
-        height="h-[500px]" 
-      />
+              <ImageGalleryBanner
+                images={images}
+                interval={3000}
+                height="h-[500px]"
+              />
             </div>
             <div>
               <div className="inline-block px-4 py-1 mb-4 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                 О нашем центре
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6">
-                Современный центр плавания для всей семьи
+                Современный центр плавания для самых маленьких.
               </h2>
               <p className="text-gray-600 mb-6">
-                Наш центр плавания оборудован современным бассейном с передовой системой очистки воды. 
-                Мы предлагаем
-                программы для детей от 3 месяцев до 10 лет , разных уровней подготовки.
+                Мы предлагаем методику обучения плаванию деток от 3 месяцев до
+                10 лет, где каждый малыш научиться базовым навыкам на воде с
+                большим удовольствием и наслаждением для него. Наш центр
+                плавания оборудован современными бассейнами с системами
+                предварительной, глубокой очистки.
               </p>
               <ul className="space-y-3 mb-8">
-                {[
-                  "Бассейн 12 метров",
-                  "Современная система очистки воды",
-                  "Комфортная температура воды и воздуха",
-                  "Просторные раздевалки и душевые",
-                  "Удобное расположение и парковка",
-                ].map((item, i) => (
+                {benefist.map((item, i) => (
                   <li key={i} className="flex items-center">
                     <div className="w-5 h-5 rounded-full bg-yellow-400 flex items-center justify-center mr-3">
                       <Check className="h-3 w-3 text-blue-900" />

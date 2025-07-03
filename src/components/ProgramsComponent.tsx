@@ -12,14 +12,14 @@ const ProgramsComponent: FC = () => {
       <div className="container px-4 mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-8 md:mb-12">
           <div className="inline-block px-4 py-1 mb-3 md:mb-4 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-            Детские программы
+            Детские басейны
           </div>
           <h2 className="text-2xl md:text-4xl font-bold text-blue-900 mb-3 md:mb-4">
-            Программы "Утенок" и "Утенок Продолжение"
+            Бассейны "Утенок" и "Утенок Продолжение"
           </h2>
           <p className="text-gray-600 text-sm md:text-base">
-            Специальные программы для обучения плаванию детей разных возрастов с
-            учетом их физиологических и психологических особенностей
+            Два современных, но по особенному разных бассейна в одном месте
+            (индивидуальны для каждого малыша и его родителя)
           </p>
         </div>
 
@@ -33,15 +33,14 @@ const ProgramsComponent: FC = () => {
                   <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-blue-900" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-blue-900">
-                  Программа "Утенок"
+                  Басейн "Утенок"
                 </h3>
               </div>
 
               <p className="text-gray-600 text-sm md:text-base mb-4 md:mb-6">
-                Программа "Утенок" разработана для самых маленьких пловцов в
-                возрасте от 3 до 6 лет. Это первое знакомство ребенка с водой,
-                где через игру и веселые упражнения дети учатся чувствовать себя
-                комфортно в бассейне.
+                Бассейн «Утенок» - обширное пространство с комфортабельными
+                раздевалками, душевыми, сауной, игровой, соляной пещерой, кафе,
+                зонами ожидания.
               </p>
               <motion.div
                 className="absolute top-2 left-2/3"
@@ -69,23 +68,23 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        3-4 года
+                        от 3 месяцев до 10 лет
                       </span>
                     </li>
-                    <li className="flex items-center">
+                    {/* <li className="flex items-center">
                       <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2">
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
                         5-6 лет
                       </span>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
 
                 <div className="bg-blue-50 rounded-lg p-3 md:p-4">
                   <h4 className="font-semibold text-blue-800 mb-2 text-sm md:text-base">
-                    Чему научится ребенок:
+                    Особенности:
                   </h4>
                   <ul className="space-y-1 md:space-y-2">
                     <li className="flex items-start">
@@ -93,7 +92,8 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Преодолевать страх воды
+                        Бассейн с комфортной глубиной 1.2 метра и длиной 12
+                        метров
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -101,7 +101,9 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Задерживать дыхание под водой
+                        Занятие проходит в параллели с другим тренером (всем
+                        хватает достаточно пространства для максимально
+                        продуктивного занятия)
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -109,7 +111,8 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Лежать на воде с поддержкой
+                        Большой, игровой зал, где возможно провести разминку,
+                        либо просто поиграть.
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -117,7 +120,26 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Выполнять базовые движения ногами
+                        Кафе, где можно наблюдать за малышом за онлайн
+                        трансляцией под чашечкой ароматного кофе или душистого
+                        чая.
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
+                        <Check className="h-2.5 w-2.5 text-blue-900" />
+                      </div>
+                      <span className="text-gray-700 text-xs md:text-sm">
+                        Зона ожидания с панорамным окном и комфортабельными
+                        диванами.
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
+                        <Check className="h-2.5 w-2.5 text-blue-900" />
+                      </div>
+                      <span className="text-gray-700 text-xs md:text-sm">
+                        Соляная пещера.
                       </span>
                     </li>
                   </ul>
@@ -126,11 +148,11 @@ const ProgramsComponent: FC = () => {
 
               <div className="flex items-center text-xs md:text-sm text-gray-500 mb-4 md:mb-6">
                 <Clock className="h-3 w-3 md:h-4 md:w-4 mr-1 text-yellow-500 flex-shrink-0" />
-                <span>Занятия: 2 раза в неделю по 30 минут</span>
+                <span>Продолжительность: 30 минут</span>
               </div>
 
               <Button className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-600 text-white rounded-full text-sm md:text-base cursor-pointer">
-                Записаться на программу
+                Записаться
               </Button>
             </div>
           </div>
@@ -158,15 +180,16 @@ const ProgramsComponent: FC = () => {
                   <ArrowDownToLine className="h-6 w-6 md:h-8 md:w-8 text-white" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-blue-900">
-                  Программа "Утенок Продолжение"
+                  Утенок «ПРОдолжение»
                 </h3>
               </div>
 
               <p className="text-gray-600 text-sm md:text-base mb-4 md:mb-6">
-                Программа "Утенок Продолжение" предназначена для детей от 6 до 9
-                лет, которые уже освоили базовые навыки в воде. На этом этапе
-                дети изучают технику плавания различными стилями и развивают
-                выносливость.
+                Бассейн Утенок «ПРОдолжение» - уютное пространство с новейшим
+                дизайнерским ремонтом, двухуровневой игровой, комфортабельной
+                зоной ожидания, финскими и турецкими парными. Программа Утенок
+                «ПРОдолжение» разработана для малышей кому нужен индивидуальных
+                подход .
               </p>
 
               <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
@@ -180,23 +203,23 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        6-7 лет
+                        от 3 мес до 10 лет
                       </span>
                     </li>
-                    <li className="flex items-center">
+                    {/* <li className="flex items-center">
                       <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2">
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
                         8-9 лет
                       </span>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
 
                 <div className="bg-blue-50 rounded-lg p-3 md:p-4">
                   <h4 className="font-semibold text-blue-800 mb-2 text-sm md:text-base">
-                    Чему научится ребенок:
+                    Особенности:
                   </h4>
                   <ul className="space-y-1 md:space-y-2">
                     <li className="flex items-start">
@@ -204,7 +227,8 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Плавать кролем на груди и спине
+                        Бассейн с переходящей глубиной от 1.2м до 2м и длиной 10
+                        метров.
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -212,7 +236,8 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Основам техники брасса
+                        Занятие проходит НАЕДИНЕ с малышом (больше в бассейне
+                        никого нет) – индивидуальный подход.
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -220,7 +245,8 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Нырять и проплывать под водой
+                        Комфортабельная зона ожидания с большой экраном на
+                        котором выведена онлайн трансляция с занятия.
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -228,7 +254,7 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Правильно дышать во время плавания
+                        Бесплатный, ароматный кофе и чай со сладостями.
                       </span>
                     </li>
                     <li className="flex items-start">
@@ -236,7 +262,17 @@ const ProgramsComponent: FC = () => {
                         <Check className="h-2.5 w-2.5 text-blue-900" />
                       </div>
                       <span className="text-gray-700 text-xs md:text-sm">
-                        Проплывать без остановки до 25 метров
+                        Двухуровневая игровая не оставит ни одного малыша
+                        равнодушным.
+                      </span>
+                    </li>
+                    <li className="flex items-start">
+                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
+                        <Check className="h-2.5 w-2.5 text-blue-900" />
+                      </div>
+                      <span className="text-gray-700 text-xs md:text-sm">
+                        Парящее кресло-качалка для самого прекрасного отдыха и
+                        релаксации.
                       </span>
                     </li>
                   </ul>
@@ -245,11 +281,13 @@ const ProgramsComponent: FC = () => {
 
               <div className="flex items-center text-xs md:text-sm text-gray-500 mb-4 md:mb-6">
                 <Clock className="h-3 w-3 md:h-4 md:w-4 mr-1 text-yellow-500 flex-shrink-0" />
-                <span>Занятия: 3 раза в неделю по 45 минут</span>
+                <span>
+                  Продолжительность индивидуального занятия – 30 минут
+                </span>
               </div>
 
               <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-800 text-white rounded-full text-sm md:text-base cursor-pointer">
-                Записаться на программу
+                Записаться
               </Button>
             </div>
           </div>

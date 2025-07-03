@@ -1,9 +1,9 @@
+import { Button } from "@/components/ui/button";
+import { RouteNames } from "@/router";
 import { FC } from "react";
-import {useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const ErrorPage: FC = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="max-w-md w-full text-center">
@@ -12,11 +12,11 @@ const ErrorPage: FC = () => {
           Страница не найдена
         </h2>
         <p className="text-gray-600 mb-8">
-         Ой..., запрашиваемая страница не существует.
+          Ой..., запрашиваемая страница не существует.
         </p>
-        <button onClick={() => navigate("/")} className="px-6 py-3">
-          Вернуться на главную
-        </button>
+        <Button className="px-6 py-3">
+          <Link to={RouteNames.HOME}>Вернуться на главную</Link>
+        </Button>
       </div>
     </div>
   );
