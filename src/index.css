@@ -113,27 +113,27 @@
 
   /* ДОБАВЛЕНО: Стили для ссылок */
   a {
-    color: #0369a1 ;
+    color: #0369a1;
     /* Синий для ссылок */
   }
 
   a:hover {
-    color: #0c4a6e ;
+    color: #0c4a6e;
     /* Темно-синий при наведении */
   }
 
   /* ДОБАВЛЕНО: Стили для кнопок */
   button {
-    color: inherit ;
+    color: inherit;
   }
 
   /* ДОБАВЛЕНО: Стили для форм */
   input,
   textarea,
   select {
-    background-color: #ffffff ;
-    color: #374151 ;
-    border-color: #d1d5db ;
+    background-color: #ffffff;
+    color: #374151;
+    border-color: #d1d5db;
   }
 
   input:focus,
@@ -211,23 +211,23 @@
   }
 
   .text-blue-700 {
-    color: rgb(var(--primary-blue)) ;
+    color: rgb(var(--primary-blue));
   }
 
   .text-blue-800 {
-    color: rgb(25, 118, 210) ;
+    color: rgb(25, 118, 210);
   }
 
   .text-blue-900 {
-    color: rgb(13, 71, 161) ;
+    color: rgb(13, 71, 161);
   }
 
   .text-yellow-400 {
-    color: rgb(var(--secondary-yellow)) ;
+    color: rgb(var(--secondary-yellow));
   }
 
   .text-yellow-500 {
-    color: rgb(230, 162, 30) ;
+    color: rgb(230, 162, 30);
   }
 
   .border-blue-200 {
@@ -270,4 +270,58 @@
     }
   }
 
+ /* Блокировка прокрутки во время загрузки */
+ body.duck-loader-active {
+   overflow: hidden;
+   height: 100vh;
+ }
+
+ /* Анимации для загрузчика */
+ @keyframes float {
+
+   0%,
+   100% {
+     transform: translateY(0);
+   }
+
+   50% {
+     transform: translateY(-10px);
+   }
+ }
+
+ @keyframes wave {
+
+   0%,
+   100% {
+     transform: translateY(0);
+   }
+
+   50% {
+     transform: translateY(-5px);
+   }
+ }
+
+ @keyframes bubble-rise {
+   0% {
+     transform: translateY(0);
+     opacity: 0.5;
+   }
+
+   100% {
+     transform: translateY(-25px);
+     opacity: 0;
+   }
+ }
+
+ .animate-float {
+   animation: float 2s infinite ease-in-out;
+ }
+
+ .animate-wave {
+   animation: wave 1.5s infinite ease-in-out;
+ }
+
+ .animate-bubble-rise {
+   animation: bubble-rise 1.5s infinite ease-in;
+ }
 }
