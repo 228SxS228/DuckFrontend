@@ -188,7 +188,7 @@ const Header: FC = () => {
           <Modal
             isOpen={isModalOpen}
             onClose={handleCloseModal}
-            className="absolute top-50 left-180 rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
+            className=" rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
           >
             <div className="p-6 md:p-8">
               <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 md:mb-8">

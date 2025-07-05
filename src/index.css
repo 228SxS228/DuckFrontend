@@ -270,58 +270,123 @@
     }
   }
 
- /* Блокировка прокрутки во время загрузки */
- body.duck-loader-active {
-   overflow: hidden;
-   height: 100vh;
- }
+  /* Блокировка прокрутки во время загрузки */
+  body.duck-loader-active {
+    overflow: hidden;
+    height: 100vh;
+  }
 
- /* Анимации для загрузчика */
- @keyframes float {
+  /* Анимации для загрузчика */
+  @keyframes float {
 
-   0%,
-   100% {
-     transform: translateY(0);
-   }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
 
-   50% {
-     transform: translateY(-10px);
-   }
- }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 
- @keyframes wave {
+  @keyframes wave {
 
-   0%,
-   100% {
-     transform: translateY(0);
-   }
+    0%,
+    100% {
+      transform: translateY(0);
+    }
 
-   50% {
-     transform: translateY(-5px);
-   }
- }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
 
- @keyframes bubble-rise {
-   0% {
-     transform: translateY(0);
-     opacity: 0.5;
-   }
+  @keyframes bubble-rise {
+    0% {
+      transform: translateY(0);
+      opacity: 0.5;
+    }
 
-   100% {
-     transform: translateY(-25px);
-     opacity: 0;
-   }
- }
+    100% {
+      transform: translateY(-25px);
+      opacity: 0;
+    }
+  }
 
- .animate-float {
-   animation: float 2s infinite ease-in-out;
- }
+  .animate-float {
+    animation: float 2s infinite ease-in-out;
+  }
 
- .animate-wave {
-   animation: wave 1.5s infinite ease-in-out;
- }
+  .animate-wave {
+    animation: wave 1.5s infinite ease-in-out;
+  }
 
- .animate-bubble-rise {
-   animation: bubble-rise 1.5s infinite ease-in;
- }
+  .animate-bubble-rise {
+    animation: bubble-rise 1.5s infinite ease-in;
+  }
+
+  /* Анимации модального окна */
+  .modal-backdrop {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .modal-enter {
+    opacity: 1;
+  }
+
+  .modal-backdrop .modal-enter {
+    animation: modal-enter 0.4s ease-out forwards;
+  }
+
+  @keyframes modal-enter {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Убрать горизонтальный скролл */
+  html,
+  body {
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  /* Предотвратить выход элементов за пределы экрана */
+  * {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  /* Если проблема в конкретном компоненте */
+  .modal-content,
+  .gallery-container,
+  .trainer-grid {
+    overflow: hidden;
+  }
+
+  /* Для модальных окон */
+  .modal-container {
+    overflow: hidden !important;
+  }
+
+  @keyframes wave {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-5px);
+    }
+  }
 }
