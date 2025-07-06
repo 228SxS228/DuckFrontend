@@ -10,7 +10,7 @@ import photo5 from "@/static/solinai_pehera_3-500x300.jpg";
 import photo6 from "@/static/solinai_pehera_8-854x750.jpg";
 import photo7 from "@/static/solinai_pehera_6-768x512.jpg";
 
-import Video from "@/static/saltVideoPrew.mp4";
+import Video from "@/static/saltcave_prewei.mp4";
 
 import {
   TreesIcon as AlertCircle,

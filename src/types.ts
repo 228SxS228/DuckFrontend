@@ -38,5 +38,9 @@ export interface Program {
   description: string;
   schedule: string;
   icon: React.ReactNode;
+  photoProgram: string;
   description2: string;
+  age: string;
+  duration: string;
+  features: string[];
 }

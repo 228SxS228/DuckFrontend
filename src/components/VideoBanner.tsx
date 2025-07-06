@@ -20,9 +20,9 @@ const VideoBanner: FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="p-5 md:p-8 relative z-20">
               <div className="max-w-3xl">
-                <h1 className="font-bold text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
+                <h1 className="font-bold text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight">
                   Плавательный Центр
-                  <span className="block mt-2 bg-gradient-to-r from-yellow-300 via-orange-300 to-yellow-400 bg-clip-text text-transparent">
+                  <span className="block mt- bg-gradient-to-r from-yellow-300 via-orange-300 to-yellow-400 bg-clip-text text-transparent">
                     «Утенок»
                   </span>
                 </h1>
@@ -31,15 +31,15 @@ const VideoBanner: FC = () => {
                   Профессиональное обучение плаванию для детей от 3 месяцев до
                   10 лет в современном центре с опытными тренерами.
                 </p>
-
-                <div className="flex flex-wrap gap-4">
                   <Button
                     size="lg"
-                    className="hover:bg-yellow-500 rounded-full px-6 py-6 text-lg font-bold text-black bg-yellow-400 cursor-pointer shadow-lg transition-all duration-300 hover:scale-105"
+                    className="hover:bg-yellow-500 rounded-full px-6 py-6 text-lg text-black bg-yellow-400 cursor-pointer shadow-lg transition-all duration-300 hover:scale-105"
                   >
                     Записаться на первое бесплатное занятие
                   </Button>
-                </div>
+                {/* <div className="flex flex-wrap gap-4">
+                  
+                </div> */}
               </div>
             </div>
 
