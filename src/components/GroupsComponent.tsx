@@ -148,6 +148,7 @@ import { Button } from "./ui/button";
 import { Program } from "@/types";
 import Modal from "./Modal";
 import photo from "@/static/utenok_g4.jpg";
+import { motion } from "framer-motion";
 
 const GroupsComponent: FC = () => {
   const programs: Program[] = [
@@ -227,7 +228,30 @@ const GroupsComponent: FC = () => {
   };
 
   return (
-    <section className="py-10 bg-gradient-to-b from-blue-50 to-white">
+    <section className="py-10 bg-gradient-to-r from-blue-900 to-blue-700 text-white via-blue-300  overflow-hidden relative flex flex-col">
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 bg-white/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -50, -100, 0],
+              opacity: [0.3, 0.8, 0.3],
+              scale: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Number.POSITIVE_INFINITY,
+              delay: Math.random() * 2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-block px-4 py-2 mb-4 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">

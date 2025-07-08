@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Shield, Heart, Clock, Star, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -8,8 +8,13 @@ import ImageGalleryBanner from "./ImageGalleryBanner";
 
 import photo2 from "@/static/solinai_pehera_2-768x1151.jpg";
 import photo3 from "@/static/solinai_pehera_4-683x1024.jpg";
+import { Input } from "./ui/input";
+import Modal from "./Modal";
 const images = [photo2, photo3];
 const SaltCaveComponent: FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenClick = () => setIsModalOpen(true);
   // const benefits = [
   //   {
   //     icon: <Lungs className="h-8 w-8 text-sky-600" />,
@@ -114,7 +119,7 @@ const SaltCaveComponent: FC = () => {
     //     </div>
     //   </div>
     // </section>
-    <section className="py-12 md:py-20 bg-gray-50">
+    <section className="py-12 md:py-20 overflow-hidden relative flex flex-col">
       <div className="container mx-auto px-4">
         <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
           <div className="grid md:grid-cols-2">
@@ -179,7 +184,10 @@ const SaltCaveComponent: FC = () => {
                 </span>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button className="bg-blue-700 hover:bg-blue-800 rounded-full text-sm md:text-base cursor-pointer">
+                <Button
+                  onClick={handleOpenClick}
+                  className="bg-blue-700 hover:bg-blue-800 rounded-full text-sm md:text-base cursor-pointer"
+                >
                   Забронировать сеанс
                 </Button>
                 <Link to={RouteNames.SALTCAVE}>
@@ -195,6 +203,38 @@ const SaltCaveComponent: FC = () => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        className=" rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
+      >
+        <div className="p-6 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 md:mb-8">
+            Оставьте контактные данные, мы перезвоним Вам и запишем на занятие
+          </h2>
+          <div className="space-y-6 mb-6">
+            <Input
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              type="text"
+              placeholder="Ваше имя"
+            />
+            <Input
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              type="tel"
+              placeholder="Ваш телефон"
+            />
+          </div>
+          <Button className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:opacity-90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform duration-300">
+            Оставить заявку
+          </Button>
+        </div>
+        <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100">
+          Нажимая кнопку, вы соглашаетесь с{" "}
+          <a href="#" className="text-blue-600 hover:underline">
+            политикой конфиденциальности
+          </a>
+        </div>
+      </Modal>
     </section>
   );
 };

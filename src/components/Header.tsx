@@ -34,6 +34,50 @@ const Header: FC = () => {
     { name: "Акции", path: RouteNames.PROMOTION },
     { name: "Соляная пещера", path: RouteNames.SALTCAVE },
   ];
+  const waveVariants: Variants = {
+    animate: {
+      x: ["0%", "-50%"],
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: "loop",
+          duration: 20,
+          ease: "linear",
+        },
+      },
+    },
+  };
+
+  // Анимация пузырьков (как в footer)
+  const bubbleVariants: Variants = {
+    float: {
+      y: [0, -20],
+      opacity: [0.6, 1],
+      transition: {
+        y: {
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 3 + Math.random() * 5,
+          ease: "easeInOut",
+        },
+        opacity: {
+          repeat: Infinity,
+          repeatType: "reverse",
+          duration: 3 + Math.random() * 5,
+          ease: "easeInOut",
+        },
+      },
+    },
+  };
+
+  // Создаем пузырьки (15 штук как в footer)
+  const bubbles = Array.from({ length: 15 }).map((_, i) => ({
+    id: i,
+    size: `${Math.random() * 10 + 5}px`,
+    left: `${Math.random() * 100}%`,
+    delay: Math.random() * 5,
+  }));
+
 
   const handleCloseModal = () => setIsModalOpen(false);
   const handleOpenClick = () => setIsModalOpen(true);
@@ -75,10 +119,10 @@ const Header: FC = () => {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white via-blue-300 overflow-hidden"
+      className="sticky top-0 z-50 w-full bg-blue-950 text-blue-200 overflow-hidden"
     >
       {/* Анимированные пузырьки */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* <div className="absolute inset-0 pointer-events-none">
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
@@ -100,7 +144,39 @@ const Header: FC = () => {
             }}
           />
         ))}
+      </div> */}
+      {/* Волны */}
+      <div className="absolute bottom-0 left-0 w-full h-16 overflow-hidden z-0">
+        <motion.div
+          className="absolute bottom-0 w-[200%] h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCI+PHBhdGggZmlsbD0iIzA4NjdhZSIgZD0iTTAsNjRDMjQwLDExMiA0ODAsMCA3MjAsNDhDOTYwLDk2IDEyMDAsMCAxMjAwLDQ4VjEyMEgwVjY0WiIvPjwvc3ZnPg==')] bg-repeat-x"
+          variants={waveVariants}
+          animate="animate"
+        />
+        <motion.div
+          className="absolute bottom-2 w-[200%] h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCI+PHBhdGggZmlsbD0iIzA3NzViZSIgZD0iTTAsOTZDMTYwLDQ4IDMyMCwxMjAgNDgwLDcyQzY0MCwyNCA4MDAsOTYgOTYwLDQ4QzExMjAsMCAxMjAwLDQ4IDEyMDAsOTZWMTIwSDBWOTZaIi8+PC9zdmc+')] bg-repeat-x opacity-70"
+          variants={waveVariants}
+          animate="animate"
+          style={{ animationDelay: "5s" }}
+        />
       </div>
+
+      {/* Пузырьки */}
+      {bubbles.map((bubble) => (
+        <motion.div
+          key={bubble.id}
+          className="absolute rounded-full bg-blue-300 opacity-60 z-0"
+          style={{
+            width: bubble.size,
+            height: bubble.size,
+            left: bubble.left,
+            bottom: "10%",
+          }}
+          variants={bubbleVariants}
+          animate="float"
+          initial={{ opacity: 0 }}
+          transition={{ delay: bubble.delay }}
+        />
+      ))}
 
       {/* Анимированная утка */}
       <AnimatePresence>
@@ -127,7 +203,7 @@ const Header: FC = () => {
         </motion.div>
       </AnimatePresence>
 
-      <div className="container mx-auto overflow-visible flex h-35 items-center justify-between py-3">
+      <div className="container text-blue-200 mx-auto overflow-visible flex h-35 items-center justify-between py-3">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 overflow-visible">
             {/* <Link to={RouteNames.HOME} className="flex items-center">
@@ -174,13 +250,15 @@ const Header: FC = () => {
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
             <Phone className="h-4 w-4 text-yellow-500" />
-            <span className="text-sm font-medium">+7 (123) 456-78-90</span>
+            <span className="text-sm font-medium text-blue-200">
+              +7 (123) 456-78-90
+            </span>
           </div>
           <Button
             onClick={handleOpenClick}
             size="lg"
             variant="destructive"
-            className="hidden sm:inline-flex bg-blue-700 hover:bg-blue-800 rounded-full cursor-pointer transition-transform duration-300 hover:scale-105"
+            className="hidden text-blue-200 sm:inline-flex bg-blue-700 hover:bg-blue-800 rounded-full cursor-pointer transition-transform duration-300 hover:scale-105"
           >
             Записаться
           </Button>

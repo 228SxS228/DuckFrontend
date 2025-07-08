@@ -6,9 +6,10 @@ import { ArrowDownToLine, Check, Clock, MessageSquare } from "lucide-react";
 import DuckComponent from "./DuckComponent";
 import { motion } from "framer-motion";
 
+
 const ProgramsComponent: FC = () => {
   return (
-    <section className="py-12 md:py-20 bg-gray-50">
+    <section className="py-12 md:py-20 overflow-hidden relative flex flex-col">
       <div className="container px-4 mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-8 md:mb-12">
           <div className="inline-block px-4 py-1 mb-3 md:mb-4 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">

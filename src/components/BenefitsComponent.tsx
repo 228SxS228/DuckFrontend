@@ -8,6 +8,7 @@ import photo3 from "@/static/interior/SSV_8975.jpg";
 import photo4 from "@/static/interior/SSV_8910.jpg";
 import ImageGalleryBanner from "./ImageGalleryBanner";
 
+import BubleComponent from "./BubleComponent";
 
 
 const BenefitsComponent: FC = () => {
@@ -27,9 +28,10 @@ const BenefitsComponent: FC = () => {
   ];
 
   return (
-    <div className="relative overflow-hidden">
+    <section className="text-white via-blue-300 overflow-hidden relative flex flex-col">
       {/* Секция статистики */}
-      <section className="py-14 bg-gradient-to-br from-blue-50 to-blue-100">
+      <BubleComponent />
+      <div className="py-14 ">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {stats.map((stat, index) => (
@@ -45,10 +47,10 @@ const BenefitsComponent: FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Основная секция с фото и описанием */}
-      <section className="py-16 bg-gradient-to-b from-blue-50 to-blue-100">
+      <div className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-10 items-center">
             <div className="w-full lg:w-1/2">
@@ -105,8 +107,8 @@ const BenefitsComponent: FC = () => {
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
