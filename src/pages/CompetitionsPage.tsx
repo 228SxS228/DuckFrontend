@@ -6,15 +6,22 @@ import { Button } from "@/components/ui/button";
 const CompetitionsPage: FC = () => {
   const upcomingCompetitions = [
     {
-      title: "Весенние старты",
-      date: "15 апреля 2023",
-      time: "10:00 - 14:00",
-      location: 'Бассейн "Утенок", ул. Примерная, 123',
-      ageGroups: ["3-5 лет", "6-8 лет", "9-11 лет", "12-14 лет"],
+      title: "Ежегодный Кубок ПЦ «Утенок» II этап (финал)",
+      date: "20.10 – 30.10 каждого года",
+      time: "18:00 - 20:00",
+      program:
+        "задержка дыхания, 12 метров кроль на животе, 12 метров кроль на спине.",
+      ageGroups: [
+        "3 – 4 года ласты",
+        "5 лет ласты",
+        "6 лет ласты",
+        "7-8 лет",
+        "7-8 лет",
+      ],
       description:
-        "Традиционные соревнования для воспитанников нашего центра. Участники будут соревноваться в различных стилях плавания в своих возрастных категориях.",
-      image: "/placeholder.svg?height=300&width=500",
-      status: "Регистрация открыта",
+        "Финал Кубка «Утенка» это завершающий этап соревнований, где по сумме двух этапов выявляются лучшие детки по итогам прошедшего года, все участники получают памятные призы, победители и призеры получают кубки, медали и множество подарков от нас и наших спонсоров.ВАЖНО УЧАСТВОВАТЬ В ДВУХ ЭТАПАХ. ( по отдельности на каждом этапе тоже выявляются победители и призеры которые получают дипломы и медали).",
+      image: "/src/static/DSC_2379.jpg",
+      status: "Скоро открытие регистрации",
     },
     {
       title: "Городской чемпионат по плаванию среди детей",
@@ -42,8 +49,8 @@ const CompetitionsPage: FC = () => {
 
   const pastCompetitions = [
     {
-      title: "Зимние старты",
-      date: "15 декабря 2022",
+      title: "Ежегодный Кубок ПЦ «Утенок» I этап ",
+      date: "20.03-05.04 каждого года",
       location: 'Бассейн "Утенок"',
       results:
         "Наши воспитанники завоевали 5 золотых, 7 серебряных и 10 бронзовых медалей",
@@ -97,9 +104,9 @@ const CompetitionsPage: FC = () => {
                   >
                     <div className="relative h-48 w-full">
                       <img
-                        src={competition.image || "/placeholder.svg"}
+                        src={competition.image}
                         alt={competition.title}
-                        className="object-cover"
+                        className="absol object-center h-45"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                       <div className="absolute bottom-0 left-0 p-4">
@@ -130,8 +137,10 @@ const CompetitionsPage: FC = () => {
                           <span>{competition.time}</span>
                         </div>
                         <div className="flex items-center text-sm text-gray-600">
-                          <MapPin className="mr-2 h-4 w-4 text-sky-600" />
-                          <span>{competition.location}</span>
+                          <span className="font-medium">
+                            Возрастные группы:
+                          </span>
+                          <span>{competition.program}</span>
                         </div>
                         <div className="flex items-start text-sm text-gray-600">
                           <Users className="mr-2 mt-1 h-4 w-4 shrink-0 text-sky-600" />
