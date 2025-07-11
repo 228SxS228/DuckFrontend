@@ -1,16 +1,16 @@
 import { FC } from "react";
 import { Award, Calendar, Clock, MapPin, Trophy, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 const CompetitionsPage: FC = () => {
   const upcomingCompetitions = [
     {
       title: "Ежегодный Кубок ПЦ «Утенок» II этап (финал)",
-      date: "20.10 – 30.10 каждого года",
+      date: "Ориентировочно 20.10 – 30.10 каждого года",
       time: "18:00 - 20:00",
       program:
-        "задержка дыхания, 12 метров кроль на животе, 12 метров кроль на спине.",
+        "Задержка дыхания, 12 метров кроль на животе, 12 метров кроль на спине.",
       ageGroups: [
         "3 – 4 года ласты",
         "5 лет ласты",
@@ -21,29 +21,19 @@ const CompetitionsPage: FC = () => {
       description:
         "Финал Кубка «Утенка» это завершающий этап соревнований, где по сумме двух этапов выявляются лучшие детки по итогам прошедшего года, все участники получают памятные призы, победители и призеры получают кубки, медали и множество подарков от нас и наших спонсоров.ВАЖНО УЧАСТВОВАТЬ В ДВУХ ЭТАПАХ. ( по отдельности на каждом этапе тоже выявляются победители и призеры которые получают дипломы и медали).",
       image: "/src/static/DSC_2379.jpg",
-      status: "Скоро открытие регистрации",
+      status: "Ожидается",
     },
     {
-      title: "Городской чемпионат по плаванию среди детей",
-      date: "20 мая 2023",
-      time: "09:00 - 17:00",
-      location: "Городской спортивный комплекс, ул. Спортивная, 45",
-      ageGroups: ["6-8 лет", "9-11 лет", "12-14 лет"],
+      title: "Новогодние праздники",
+      date: "Ориентировочно 17.12 – 25.12 каждого года",
+      time: "18:00 - 20:00",
+      program:
+        "Задержка дыхания, 12 метров кроль на животе, 12 метров кроль на спине.",
+      ageGroups: ["3 мес – 2 года", "3-5 лет", "5-9 лет плавающие"],
       description:
-        "Ежегодные городские соревнования по плаванию среди детей. Наш центр традиционно выставляет команду участников. Победители получат медали и ценные призы.",
-      image: "/placeholder.svg?height=300&width=500",
-      status: "Регистрация открыта",
-    },
-    {
-      title: 'Летний кубок "Утенка"',
-      date: "10 июня 2023",
-      time: "11:00 - 15:00",
-      location: 'Бассейн "Утенок", ул. Примерная, 123',
-      ageGroups: ["3-5 лет", "6-8 лет", "9-11 лет", "12-14 лет"],
-      description:
-        "Соревнования для воспитанников нашего центра, посвященные началу летних каникул. В программе различные дистанции и эстафеты.",
-      image: "/placeholder.svg?height=300&width=500",
-      status: "Скоро открытие регистрации",
+        "Праздничные группы для разных возрастов с увлекательной программой сказочного мира с аниматорами в зале. Далее водные развлекательные игры.Всем маленьким гостям подарки от Деда Мороза и его друзей.Профессиональные фотографии с праздника. Подарки каждому малышу. Розыгрыш подарков родителям",
+      image: "/src/static/DSC_8626.jpg",
+      status: "Ожидается",
     },
   ];
 
@@ -54,324 +44,338 @@ const CompetitionsPage: FC = () => {
       location: 'Бассейн "Утенок"',
       results:
         "Наши воспитанники завоевали 5 золотых, 7 серебряных и 10 бронзовых медалей",
-      image: "/placeholder.svg?height=200&width=300",
+      image: "/src/static/DSC_1425.jpg",
     },
     {
-      title: "Осенний кубок",
-      date: "20 октября 2022",
+      title: "День Рождения «Утенка»",
+      date: "Ориентировочно 15.06 – 20.06",
       location: 'Бассейн "Утенок"',
-      results: "Команда центра заняла первое место в общем зачете",
-      image: "/placeholder.svg?height=200&width=300",
-    },
-    {
-      title: "Городской чемпионат",
-      date: "5 мая 2022",
-      location: "Городской спортивный комплекс",
-      results: "Наши воспитанники завоевали 3 золотых и 5 серебряных медалей",
-      image: "/placeholder.svg?height=200&width=300",
+      results:
+        "Каждый год наша команда грандиозно отмечает День Рождения «Утенка», дарит множество подарков, проводит розыгрышы для взрослых, устраивает развлекательные программы для деток разных возрастов на суше и в воде.",
+      image: "/src/static/DSC_2379.jpg", // Заменил на реальное изображение
     },
   ];
 
+  // Анимация для карточек
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <div className="flex min-h-screen flex-col">
-      <main className="flex-1">
-        <section className="grid grid-flow-col justify-items-center bg-gradient-to-r items-center from-blue-900 to-blue-700 py-16 md:py-24">
-          <div className="container px-4">
-            <div className="text-center max-w-2x">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-                Соревнования
-              </h1>
-              <p className="mx-auto mb-8 max-w-2xl text-blue-100 text-lg">
-                Информация о предстоящих и прошедших соревнованиях в детском
-                плавательном центре "Утенок"
-              </p>
-            </div>
+    <section className="min-h-screen pt-15">
+      <section className="container overflow-hidden mx-auto px-4">
+        <div className="container px-4">
+          <div className="text-center max-w-2x">
+            <motion.h1
+              className="text-3xl md:text-5xl font-bold text-white mb-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
+              Соревнования
+            </motion.h1>
+            <motion.p
+              className="mx-auto mb-8 max-w-2xl text-blue-100 text-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+            >
+              Информация о предстоящих и прошедших соревнованиях в детском
+              плавательном центре "Утенок"
+            </motion.p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <div className="mb-12">
-              <h2 className="mb-6 text-3xl font-bold text-sky-800">
-                Предстоящие соревнования
-              </h2>
+      <section className="py-10">
+        <div className="container mx-auto px-4">
+          <div className="mb-12">
+            <h2 className="mb-6 text-3xl font-bold text-white">
+              Предстоящие соревнования
+            </h2>
 
-              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                {upcomingCompetitions.map((competition, index) => (
-                  <div
-                    key={index}
-                    className="overflow-hidden rounded-lg bg-white shadow-md transition-transform hover:-translate-y-1"
-                  >
-                    <div className="relative h-48 w-full">
-                      <img
-                        src={competition.image}
-                        alt={competition.title}
-                        className="absol object-center h-45"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                      <div className="absolute bottom-0 left-0 p-4">
-                        <span
-                          className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
-                            competition.status.includes("Регистрация открыта")
-                              ? "bg-green-400 text-green-900"
-                              : "bg-yellow-400 text-yellow-900"
-                          }`}
-                        >
-                          {competition.status}
+            <div className="grid gap-8 md:grid-cols-2">
+              {upcomingCompetitions.map((competition, index) => (
+                <motion.div
+                  key={index}
+                  className="overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-lg"
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover={{ y: -5 }}
+                >
+                  {/* Контейнер с фиксированным соотношением сторон */}
+                  <div className="relative pb-[56.25%]">
+                    {" "}
+                    {/* 16:9 соотношение */}
+                    <img
+                      src={competition.image}
+                      alt={competition.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 p-4">
+                      <span
+                        className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
+                          competition.status.includes("Регистрация открыта")
+                            ? "bg-green-400 text-green-900"
+                            : "bg-yellow-400 text-yellow-900"
+                        }`}
+                      >
+                        {competition.status}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <h3 className="mb-2 text-xl font-bold text-sky-800">
+                      {competition.title}
+                    </h3>
+
+                    <div className="mb-4 space-y-3">
+                      <div className="flex items-center">
+                        <Calendar className="mr-2 h-5 w-5 text-sky-600 flex-shrink-0" />
+                        <span className="text-gray-700">
+                          {competition.date}
                         </span>
                       </div>
-                    </div>
-
-                    <div className="p-6">
-                      <h3 className="mb-2 text-xl font-bold text-sky-800">
-                        {competition.title}
-                      </h3>
-
-                      <div className="mb-4 space-y-2">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Calendar className="mr-2 h-4 w-4 text-sky-600" />
-                          <span>{competition.date}</span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Clock className="mr-2 h-4 w-4 text-sky-600" />
-                          <span>{competition.time}</span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <span className="font-medium">
+                      <div className="flex items-center">
+                        <Clock className="mr-2 h-5 w-5 text-sky-600 flex-shrink-0" />
+                        <span className="text-gray-700">
+                          {competition.time}
+                        </span>
+                      </div>
+                      <div className="flex">
+                        <Users className="mr-2 mt-0.5 h-5 w-5 text-sky-600 flex-shrink-0" />
+                        <div>
+                          <p className="text-gray-700 font-medium mb-1">
                             Возрастные группы:
-                          </span>
-                          <span>{competition.program}</span>
-                        </div>
-                        <div className="flex items-start text-sm text-gray-600">
-                          <Users className="mr-2 mt-1 h-4 w-4 shrink-0 text-sky-600" />
-                          <div>
-                            <span className="font-medium">
-                              Возрастные группы:
-                            </span>
-                            <div className="mt-1 flex flex-wrap gap-1">
-                              {competition.ageGroups.map((age, i) => (
-                                <span
-                                  key={i}
-                                  className="inline-block rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800"
-                                >
-                                  {age}
-                                </span>
-                              ))}
-                            </div>
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {competition.ageGroups.map((age, i) => (
+                              <span
+                                key={i}
+                                className="inline-block rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800"
+                              >
+                                {age}
+                              </span>
+                            ))}
                           </div>
                         </div>
                       </div>
-
-                      <p className="mb-4 text-sm text-gray-600">
-                        {competition.description}
-                      </p>
-
-                      <Button className="cursor-pointer w-full rounded-md bg-sky-600 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-sky-700">
-                        Подробнее
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-12 rounded-lg bg-sky-50 p-6">
-              <h2 className="mb-4 text-2xl font-bold text-sky-800">
-                Как принять участие в соревнованиях
-              </h2>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <p className="mb-4 text-gray-700">
-                    Для участия в соревнованиях необходимо:
-                  </p>
-                  <ul className="mb-6 space-y-2 text-gray-700">
-                    <li className="flex items-start">
-                      <span className="mr-2 mt-1 text-sky-600">1.</span>
-                      <span>
-                        Быть воспитанником центра "Утенок" или иметь приглашение
-                        (для открытых соревнований)
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="mr-2 mt-1 text-sky-600">2.</span>
-                      <span>
-                        Иметь медицинскую справку о допуске к соревнованиям
-                        (действительна 6 месяцев)
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="mr-2 mt-1 text-sky-600">3.</span>
-                      <span>
-                        Заполнить заявку на участие и оплатить стартовый взнос
-                        (если предусмотрен)
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="mr-2 mt-1 text-sky-600">4.</span>
-                      <span>
-                        Прийти на соревнования в указанное время с необходимым
-                        снаряжением
-                      </span>
-                    </li>
-                  </ul>
-                  <Link
-                    to="#contacts"
-                    className="cursor-pointer inline-flex items-center rounded-md bg-sky-600 px-6 py-3 font-medium text-white transition-colors hover:bg-sky-700"
-                  >
-                    Подать заявку
-                  </Link>
-                </div>
-                <div className="relative h-64 overflow-hidden rounded-lg md:h-auto">
-                  <img
-                    src="/placeholder.svg?height=300&width=500"
-                    alt="Соревнования по плаванию"
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="mb-6 text-3xl font-bold text-sky-800">
-                Прошедшие соревнования
-              </h2>
-
-              <div className="grid gap-8 md:grid-cols-3">
-                {pastCompetitions.map((competition, index) => (
-                  <div
-                    key={index}
-                    className="overflow-hidden rounded-lg bg-white shadow-md"
-                  >
-                    <div className="relative h-40 w-full">
-                      <img
-                        src={competition.image || "/placeholder.svg"}
-                        alt={competition.title}
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="mb-2 text-lg font-bold text-sky-800">
-                        {competition.title}
-                      </h3>
-                      <div className="mb-2 space-y-1">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Calendar className="mr-2 h-4 w-4 text-sky-600" />
-                          <span>{competition.date}</span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <MapPin className="mr-2 h-4 w-4 text-sky-600" />
-                          <span>{competition.location}</span>
+                      <div className="flex">
+                        <div>
+                          <p className="text-gray-700 font-medium mb-1">
+                            Программа:
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            <span className="inline-block rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800">
+                              {competition.program}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-start">
-                        <Trophy className="mr-2 mt-1 h-4 w-4 shrink-0 text-sky-600" />
-                        <p className="text-sm text-gray-600">
-                          {competition.results}
-                        </p>
-                      </div>
                     </div>
+
+                    <p className="mb-4 text-gray-600 text-sm leading-relaxed">
+                      {competition.description}
+                    </p>
                   </div>
-                ))}
-              </div>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </section>
 
-        <section className="bg-sky-50 py-12">
-          <div className="container mx-auto px-4">
-            <div className="grid gap-8 md:grid-cols-2">
+          <div className="mb-12 rounded-lg bg-sky-50 p-6 shadow-sm">
+            <h2 className="mb-4 text-2xl font-bold text-sky-800">
+              Как принять участие в соревнованиях
+            </h2>
+
+            <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <h2 className="mb-4 text-2xl font-bold text-sky-800">
-                  Наши достижения
-                </h2>
-                <p className="mb-6 text-gray-700">
-                  Воспитанники детского плавательного центра "Утенок" регулярно
-                  участвуют в соревнованиях различного уровня и показывают
-                  отличные результаты. Мы гордимся достижениями наших юных
-                  спортсменов!
+                <p className="mb-4 text-gray-700">
+                  Для участия в соревнованиях необходимо:
                 </p>
-
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <Award className="mr-3 mt-1 h-6 w-6 shrink-0 text-sky-600" />
-                    <div>
-                      <h3 className="font-bold text-gray-900">
-                        Более 100 медалей за 2022 год
-                      </h3>
-                      <p className="text-gray-700">
-                        Наши воспитанники завоевали более 100 медалей различного
-                        достоинства на соревнованиях городского и областного
-                        уровня.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <Award className="mr-3 mt-1 h-6 w-6 shrink-0 text-sky-600" />
-                    <div>
-                      <h3 className="font-bold text-gray-900">
-                        5 воспитанников в сборной города
-                      </h3>
-                      <p className="text-gray-700">
-                        Пятеро наших воспитанников вошли в состав сборной города
-                        по плаванию и представляют его на областных
-                        соревнованиях.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <Award className="mr-3 mt-1 h-6 w-6 shrink-0 text-sky-600" />
-                    <div>
-                      <h3 className="font-bold text-gray-900">
-                        Победители городской спартакиады
-                      </h3>
-                      <p className="text-gray-700">
-                        Команда центра "Утенок" стала победителем городской
-                        спартакиады по плаванию среди детских спортивных школ и
-                        клубов.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <ul className="mb-6 space-y-3 text-gray-700">
+                  {[
+                    'Быть воспитанником центра "Утенок" или иметь приглашение (для открытых соревнований)',
+                    "Иметь медицинскую справку о допуске к соревнованиям (действительна 6 месяцев)",
+                    "Заполнить заявку на участие и оплатить стартовый взнос (если предусмотрен)",
+                    "Прийти на соревнования в указанное время с необходимым снаряжением",
+                  ].map((item, index) => (
+                    <li key={index} className="flex items-start">
+                      <div className="bg-sky-100 rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                        <span className="text-sky-700 font-bold text-sm">
+                          {index + 1}
+                        </span>
+                      </div>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="#contacts"
+                  className="cursor-pointer inline-flex items-center rounded-md bg-sky-600 px-6 py-3 font-medium text-white transition-colors hover:bg-sky-700 shadow-md hover:shadow-lg"
+                >
+                  Подать заявку
+                </Link>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="relative h-40 overflow-hidden rounded-lg shadow-md md:h-48">
-                  <img
-                    src="/placeholder.svg?height=200&width=300"
-                    alt="Награждение победителей"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-40 overflow-hidden rounded-lg shadow-md md:h-48">
-                  <img
-                    src="/placeholder.svg?height=200&width=300"
-                    alt="Юные пловцы с медалями"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-40 overflow-hidden rounded-lg shadow-md md:h-48">
-                  <img
-                    src="/placeholder.svg?height=200&width=300"
-                    alt="Команда на соревнованиях"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="relative h-40 overflow-hidden rounded-lg shadow-md md:h-48">
-                  <img
-                    src="/placeholder.svg?height=200&width=300"
-                    alt="Кубок победителей"
-                    className="object-cover"
-                  />
+              <div className="relative rounded-xl overflow-hidden border-2 border-sky-100 bg-gradient-to-r from-sky-100 to-blue-100 flex items-center justify-center">
+                <div className="text-center p-6">
+                  <div className="bg-sky-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="h-8 w-8 text-sky-700" />
+                  </div>
+                  <h3 className="text-xl font-bold text-sky-800 mb-2">
+                    Регистрация открыта
+                  </h3>
+                  <p className="text-sky-700 mb-4">На ближайшие соревнования</p>
+                  <div className="inline-block bg-sky-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+                    Успейте записаться!
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </main>
-    </div>
+
+          <div>
+            <h2 className="mb-6 text-3xl font-bold text-white">
+              Прошедшие соревнования
+            </h2>
+
+            <div className="grid gap-8 md:grid-cols-2">
+              {pastCompetitions.map((competition, index) => (
+                <motion.div
+                  key={index}
+                  className="overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-lg"
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover={{ y: -5 }}
+                >
+                  <div className="relative pb-[56.25%]">
+                    {" "}
+                    {/* Фиксированное соотношение */}
+                    <img
+                      src={competition.image}
+                      alt={competition.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 p-4">
+                      <span className="inline-block rounded-full px-3 py-1 text-xs font-semibold bg-gray-200 text-gray-800">
+                        Завершено
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="mb-2 text-lg font-bold text-sky-800">
+                      {competition.title}
+                    </h3>
+                    <div className="mb-3 space-y-1">
+                      <div className="flex items-center text-gray-600">
+                        <Calendar className="mr-2 h-4 w-4 text-sky-600 flex-shrink-0" />
+                        <span>{competition.date}</span>
+                      </div>
+                      <div className="flex items-center text-gray-600">
+                        <MapPin className="mr-2 h-4 w-4 text-sky-600 flex-shrink-0" />
+                        <span>{competition.location}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <Trophy className="mr-2 mt-1 h-5 w-5 text-sky-600 flex-shrink-0" />
+                      <p className="text-gray-600 text-sm">
+                        {competition.results}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-gradient-to-br from-sky-50 to-blue-50 py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-8 md:grid-cols-2">
+            <div>
+              <h2 className="mb-4 text-2xl font-bold text-sky-800">
+                Наши достижения
+              </h2>
+              <p className="mb-6 text-gray-700">
+                Воспитанники детского плавательного центра "Утенок" регулярно
+                участвуют в соревнованиях различного уровня и показывают
+                отличные результаты. Мы гордимся достижениями наших юных
+                спортсменов!
+              </p>
+
+              <div className="space-y-5">
+                {[
+                  {
+                    title: "Более 100 медалей за 2022 год",
+                    description:
+                      "Наши воспитанники завоевали более 100 медалей различного достоинства на соревнованиях городского и областного уровня.",
+                  },
+                  {
+                    title: "5 воспитанников в сборной города",
+                    description:
+                      "Пятеро наших воспитанников вошли в состав сборной города по плаванию и представляют его на областных соревнованиях.",
+                  },
+                  {
+                    title: "Победители городской спартакиады",
+                    description:
+                      'Команда центра "Утенок" стала победителем городской спартакиады по плаванию среди детских спортивных школ и клубов.',
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    className="flex items-start p-4 bg-white rounded-lg shadow-sm border border-sky-50"
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="bg-sky-100 rounded-lg w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+                      <Award className="h-5 w-5 text-sky-700" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900">{item.title}</h3>
+                      <p className="text-gray-700 mt-1">{item.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                "Награждение победителей",
+                "Юные пловцы с медалями",
+                "Команда на соревнованиях",
+                "Кубок победителей",
+              ].map((alt, index) => (
+                <motion.div
+                  key={index}
+                  className="relative rounded-xl overflow-hidden border-2 border-sky-100 bg-gradient-to-r from-sky-50 to-blue-100"
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="relative pb-[100%]">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center p-4">
+                        <div className="bg-sky-200 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <Trophy className="h-6 w-6 text-sky-700" />
+                        </div>
+                        <span className="text-sky-700 font-medium">{alt}</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
   );
 };
 

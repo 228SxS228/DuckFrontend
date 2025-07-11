@@ -119,7 +119,7 @@ const SaltCaveComponent: FC = () => {
     //     </div>
     //   </div>
     // </section>
-    <section className="py-12 md:py-20 overflow-hidden relative flex flex-col">
+    <section className="py-12 md:py-20 bg-blue-100 overflow-hidden relative flex flex-col">
       <div className="container mx-auto px-4">
         <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
           <div className="grid md:grid-cols-2">

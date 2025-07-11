@@ -228,7 +228,7 @@ const GroupsComponent: FC = () => {
   };
 
   return (
-    <section className="py-10 bg-gradient-to-r from-blue-900 to-blue-700 text-white via-blue-300  overflow-hidden relative flex flex-col">
+    <section className="py-10  text-white via-blue-300  overflow-hidden relative flex flex-col">
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(8)].map((_, i) => (
           <motion.div
@@ -258,10 +258,10 @@ const GroupsComponent: FC = () => {
             <Users className="inline mr-2" size={16} />
             Наши программы
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">
+          <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white">
             Программы для всех возрастов
           </h2>
-          <p className="text-blue-700">
+          <p className="text-blue-100 text-sm md:text-base">
             Специально разработанные курсы для каждого этапа развития вашего
             ребенка
           </p>
@@ -286,7 +286,7 @@ const GroupsComponent: FC = () => {
               </div>
               <Button
                 onClick={() => handleProgramClick(program)}
-                variant="link"
+                variant="default"
                 className="text-blue-600 hover:text-blue-800 pl-0"
               >
                 Подробнее

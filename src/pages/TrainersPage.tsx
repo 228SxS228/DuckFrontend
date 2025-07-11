@@ -299,7 +299,6 @@ import { useState, FC } from "react";
 import Modal from "../components/Modal";
 import {
   GraduationCap,
-  Waves,
   Medal,
   Heart,
   Star,
@@ -307,6 +306,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 // Импорт фотографий тренеров
 import bykreev from "@/static/trainers/bykreev.jpg";
@@ -455,21 +455,31 @@ const TrainersPage: FC = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-sky-50 to-blue-100 py-12">
+    <section className="min-h-screen  py-12">
       <div className="container overflow-hidden mx-auto px-4">
         {/* Заголовок */}
         <div className="text-center mb-16">
-          <div className="inline-block bg-gradient-to-r from-sky-400 to-blue-600 text-white px-6 py-2 rounded-full mb-4">
+          {/* <div className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2 rounded-full mb-4">
             <Waves className="inline mr-2" size={20} />
             Наша команда
-          </div>
-          <h1 className="mb-4 text-4xl font-bold text-sky-900 md:text-5xl">
+          </div> */}
+          <motion.h1
+            className="text-3xl md:text-5xl font-bold text-white mb-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
             Профессиональные тренеры
-          </h1>
-          <p className="mx-auto max-w-2xl text-lg text-blue-700">
+          </motion.h1>
+          <motion.p
+            className="mx-auto mb-8 max-w-2xl text-blue-100 text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.7 }}
+          >
             Наши опытные специалисты помогут вашему ребенку освоить плавание в
             безопасной и дружелюбной атмосфере
-          </p>
+          </motion.p>
         </div>
 
         {/* Сетка тренеров */}
@@ -479,20 +489,22 @@ const TrainersPage: FC = () => {
               key={trainer.Id}
               className="group overflow-hidden rounded-2xl bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
             >
-              <div className="relative h-80 overflow-hidden">
+              <div className="relative h-100 overflow-hidden">
                 <img
                   src={trainer.TrainerPhotoUrl}
                   alt={trainer.TrainerName}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
-                  <h3 className="text-xl font-bold">{trainer.TrainerName}</h3>
+                  <h3 className="text-xl font-bold text-gray-200">
+                    {trainer.TrainerName}
+                  </h3>
                   <div className="flex items-center mt-1">
                     <Star
                       className="fill-yellow-400 text-yellow-400 mr-1"
                       size={16}
                     />
-                    <span className="text-sm">
+                    <span className="text-sm text-gray-200">
                       Стаж: {trainer.experience} лет
                     </span>
                   </div>
@@ -512,7 +524,7 @@ const TrainersPage: FC = () => {
 
                 <Button
                   onClick={() => handleTrainerClick(trainer)}
-                  className="w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
+                  className="w-full text-blue-50 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
                 >
                   Подробнее
                 </Button>
@@ -524,10 +536,10 @@ const TrainersPage: FC = () => {
         {/* Блок призыва к действию */}
         <div className="mt-16 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-600 p-8 text-center text-white">
           <div className="max-w-2xl mx-auto">
-            <h2 className="mb-4 text-2xl font-bold">
+            <h2 className="mb-4 text-2xl font-bold text-white">
               Хотите присоединиться к нашей команде?
             </h2>
-            <p className="mb-6">
+            <p className="mb-6 text-white">
               Мы всегда рады талантливым и увлеченным тренерам. Если вы любите
               работать с детьми и имеете опыт в обучении плаванию, отправьте нам
               свое резюме.
@@ -595,19 +607,6 @@ const TrainersPage: FC = () => {
                 <div className="flex items-center mb-2">
                   <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mr-3">
                     Стаж: {selectedTrainer.experience} лет
-                  </div>
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`${
-                          i < 4
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                        } mr-1`}
-                        size={18}
-                      />
-                    ))}
                   </div>
                 </div>
               </div>
@@ -677,7 +676,7 @@ const TrainersPage: FC = () => {
               </div>
 
               {/* Кнопка записи */}
-              <Button className="mt-6 w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 py-6 text-lg">
+              <Button className="mt-6 w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 py-6 text-lg text-white">
                 Записаться к тренеру
               </Button>
             </div>

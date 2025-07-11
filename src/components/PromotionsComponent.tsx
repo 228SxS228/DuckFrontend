@@ -64,7 +64,7 @@ const PromotionsComponent: FC = () => {
   ];
 
   return (
-    <section className="py-20 overflow-hidden relative flex flex-col">
+    <section className="py-20 bg-blue-100 overflow-hidden relative flex flex-col">
       <div className="container px-4 mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-block px-4 py-1 mb-4 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
@@ -131,7 +131,7 @@ const PromotionsComponent: FC = () => {
           <Link to={RouteNames.PROMOTION}>
             <Button
               variant="outline"
-              className="border-blue-200 text-blue-700 hover:bg-blue-100 rounded-full px-8 cursor-pointer"
+              className="text-black border-white/30  hover:bg-yellow-400 rounded-full px-15 text-lg bg-white cursor-pointer"
             >
               Все акции
             </Button>

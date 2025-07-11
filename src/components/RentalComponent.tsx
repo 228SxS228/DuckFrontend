@@ -92,7 +92,7 @@ const Rentalcomponent: FC = () => {
     //     </div>
     //   </div>
     // </section>
-    <section className="py-12 md:py-20 overflow-hidden relative flex flex-col">
+    <section className="py-12 md:py-20 bg-blue-100 overflow-hidden relative flex flex-col">
       <div className="container mx-auto px-4">
         <div className="bg-gradient-to-r from-yellow-50 to-blue-50 rounded-3xl p-5 md:p-8 lg:p-12 border border-blue-100 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 -mt-12 -mr-12 bg-yellow-200 rounded-full opacity-20 blur-3xl"></div>
@@ -146,7 +146,7 @@ const Rentalcomponent: FC = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <Button className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 rounded-full text-sm md:text-base cursor-pointer">
+                <Button className="bg-yellow-400 hover:bg-yellow-500 text-white rounded-full text-sm md:text-base cursor-pointer">
                   Забронировать мероприятие
                 </Button>
                 <Button

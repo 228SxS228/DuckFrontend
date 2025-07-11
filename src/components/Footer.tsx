@@ -99,7 +99,7 @@ const Footer: FC = () => {
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <motion.div 
+            <motion.div
               className="flex items-center gap-2 mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +110,7 @@ const Footer: FC = () => {
                 Детский плавательный центр "Утенок"
               </span>
             </motion.div>
-            <motion.p 
+            <motion.p
               className="text-blue-200 mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -120,7 +120,7 @@ const Footer: FC = () => {
               Профессиональное обучение плаванию для всех возрастов в
               современном бассейне
             </motion.p>
-            <motion.div 
+            <motion.div
               className="flex space-x-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -143,7 +143,7 @@ const Footer: FC = () => {
               </Link>
             </motion.div>
           </div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ const Footer: FC = () => {
             <h3 className="mb-4 text-lg font-bold text-blue-200">Навигация</h3>
             <ul className="space-y-2">
               {menuLinks.map((link, index) => (
-                <motion.li 
+                <motion.li
                   key={index}
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
@@ -179,7 +179,7 @@ const Footer: FC = () => {
             <address className="not-italic text-blue-200">
               <p className="not-italic text-blue-200">г.Томск</p>
               <p className="not-italic text-blue-200">ул. Суворова, 11/1</p>
-              <p className="mt-2 text-blue-200">Телефон: +7 (913) 682800</p>
+              <p className="mt-2 text-blue-200">Телефон: +7 (3822) 68-28-00</p>
               <p className="not-italic text-blue-200">Email: info@utenok.ru</p>
             </address>
           </motion.div>
@@ -210,7 +210,7 @@ const Footer: FC = () => {
           </motion.div>
         </div>
 
-        <motion.div 
+        <motion.div
           className="border-t border-blue-900 mt-12 pt-8 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

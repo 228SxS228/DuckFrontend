@@ -2,6 +2,8 @@ import ImageGalleryBanner from "../components/ImageGalleryBanner";
 
 import { Button } from "@/components/ui/button";
 // import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
+
 
 import photo2 from "@/static/DSC_7757.jpg";
 import photo3 from "@/static/DSC_7832.jpg";
@@ -42,14 +44,24 @@ export default function SaltCavePage() {
       <div className="grid grid-flow-col justify-items-center bg-gradient-to-r items-center from-blue-900 to-blue-700 py-16 md:py-24">
         <div className="container px-4 ">
           <div className="text-center max-w-2x">
-            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
+            <motion.h1
+              className="text-3xl md:text-5xl font-bold text-white mb-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+            >
               Соляная пещера
-            </h1>
-            <p className="text-blue-100 text-lg">
+            </motion.h1>
+            <motion.p
+              className="mx-auto mb-8 max-w-2xl text-blue-100 text-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+            >
               Оздоровительные сеансы в соляной пещере для укрепления иммунитета
               и релаксации
-            </p>
-          </div>
+            </motion.p>
+              </div>
         </div>
       </div>
 

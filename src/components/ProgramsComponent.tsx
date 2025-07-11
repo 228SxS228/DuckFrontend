@@ -9,16 +9,16 @@ import { motion } from "framer-motion";
 
 const ProgramsComponent: FC = () => {
   return (
-    <section className="py-12 md:py-20 overflow-hidden relative flex flex-col">
+    <section className="py-12 md:py-20  overflow-hidden relative flex flex-col">
       <div className="container px-4 mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-8 md:mb-12">
           <div className="inline-block px-4 py-1 mb-3 md:mb-4 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
             Детские басейны
           </div>
-          <h2 className="text-2xl md:text-4xl font-bold text-blue-900 mb-3 md:mb-4">
+          <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white">
             Бассейны "Утенок" и "Утенок Продолжение"
           </h2>
-          <p className="text-gray-600 text-sm md:text-base">
+          <p className="text-blue-100 text-sm md:text-base">
             Два современных, но по особенному разных бассейна в одном месте
             (индивидуальны для каждого малыша и его родителя)
           </p>
@@ -295,7 +295,7 @@ const ProgramsComponent: FC = () => {
         </div>
 
         <div className="mt-8 md:mt-12 text-center">
-          <p className="text-gray-600 mb-4 md:mb-6 max-w-2xl mx-auto text-sm md:text-base">
+          <p className="text-blue-100 mb-4 md:mb-6 max-w-2xl mx-auto text-sm md:text-base">
             Все занятия проводятся опытными тренерами в малых группах до 6
             человек, что позволяет уделить внимание каждому ребенку. Температура
             воды в детском бассейне поддерживается на уровне 30-32°C для
@@ -304,7 +304,7 @@ const ProgramsComponent: FC = () => {
           <Link to={RouteNames.SCHEDULE}>
             <Button
               variant="outline"
-              className="border-blue-200 text-blue-700 hover:bg-blue-300 rounded-full px-6 md:px-8 text-sm md:text-base cursor-pointer"
+              className="text-black border-white/30  hover:bg-yellow-400 rounded-full px-15 text-lg bg-white cursor-pointer"
             >
               Посмотреть расписание занятий
             </Button>

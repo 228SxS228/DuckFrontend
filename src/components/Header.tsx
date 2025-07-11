@@ -34,21 +34,7 @@ const Header: FC = () => {
     { name: "Акции", path: RouteNames.PROMOTION },
     { name: "Соляная пещера", path: RouteNames.SALTCAVE },
   ];
-  const waveVariants: Variants = {
-    animate: {
-      x: ["0%", "-50%"],
-      transition: {
-        x: {
-          repeat: Infinity,
-          repeatType: "loop",
-          duration: 20,
-          ease: "linear",
-        },
-      },
-    },
-  };
-
-  // Анимация пузырьков (как в footer)
+    // Анимация пузырьков (как в footer)
   const bubbleVariants: Variants = {
     float: {
       y: [0, -20],
@@ -119,7 +105,7 @@ const Header: FC = () => {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 w-full bg-blue-950 text-blue-200 overflow-hidden"
+      className="sticky top-0 z-50 w-full bg-blue-600 text-blue-700 overflow-hidden"
     >
       {/* Анимированные пузырьки */}
       {/* <div className="absolute inset-0 pointer-events-none">
@@ -145,21 +131,6 @@ const Header: FC = () => {
           />
         ))}
       </div> */}
-      {/* Волны */}
-      <div className="absolute bottom-0 left-0 w-full h-16 overflow-hidden z-0">
-        <motion.div
-          className="absolute bottom-0 w-[200%] h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCI+PHBhdGggZmlsbD0iIzA4NjdhZSIgZD0iTTAsNjRDMjQwLDExMiA0ODAsMCA3MjAsNDhDOTYwLDk2IDEyMDAsMCAxMjAwLDQ4VjEyMEgwVjY0WiIvPjwvc3ZnPg==')] bg-repeat-x"
-          variants={waveVariants}
-          animate="animate"
-        />
-        <motion.div
-          className="absolute bottom-2 w-[200%] h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCI+PHBhdGggZmlsbD0iIzA3NzViZSIgZD0iTTAsOTZDMTYwLDQ4IDMyMCwxMjAgNDgwLDcyQzY0MCwyNCA4MDAsOTYgOTYwLDQ4QzExMjAsMCAxMjAwLDQ4IDEyMDAsOTZWMTIwSDBWOTZaIi8+PC9zdmc+')] bg-repeat-x opacity-70"
-          variants={waveVariants}
-          animate="animate"
-          style={{ animationDelay: "5s" }}
-        />
-      </div>
-
       {/* Пузырьки */}
       {bubbles.map((bubble) => (
         <motion.div
@@ -203,7 +174,7 @@ const Header: FC = () => {
         </motion.div>
       </AnimatePresence>
 
-      <div className="container text-blue-200 mx-auto overflow-visible flex h-35 items-center justify-between py-3">
+      <div className="container text-blue-700 mx-auto overflow-visible flex h-35 items-center justify-between py-3">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 overflow-visible">
             {/* <Link to={RouteNames.HOME} className="flex items-center">
@@ -219,18 +190,18 @@ const Header: FC = () => {
         </div>
 
         <nav className="font-myfont text-lg relative">
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden md:flex items-center gap-8 ">
             {menuLinks.map((link, index) => (
               <li
                 key={index}
                 ref={(el) => setMenuItemRef(el, index)}
-                className="px-3 py-2 text-white hover:text-yellow-300 rounded-md transition-colors font-medium group relative"
+                className="px-3 py-2 text-blue-700 hover:text-yellow-300 rounded-md transition-colors font-medium group relative"
                 onMouseEnter={() => setActiveItem(index)}
                 onMouseLeave={() => setActiveItem(null)}
               >
                 <NavLink
                   to={link.path}
-                  className="relative z-30 transition-all duration-300 group-hover:scale-105"
+                  className="relative text-blue-100 z-30 transition-all duration-300 group-hover:scale-105"
                 >
                   {link.name}
                 </NavLink>
@@ -249,9 +220,9 @@ const Header: FC = () => {
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
-            <Phone className="h-4 w-4 text-yellow-500" />
-            <span className="text-sm font-medium text-blue-200">
-              +7 (123) 456-78-90
+            <Phone className="h-4 w-4 text-yellow-600" />
+            <span className="text-sm font-medium text-blue-100">
+              +7 (3822) 68-28-00
             </span>
           </div>
           <Button
@@ -321,7 +292,7 @@ const Header: FC = () => {
                 <div className="flex items-center gap-2 mt-2">
                   <Phone className="h-4 w-4 text-yellow-500" />
                   <span className="text-sm font-medium">
-                    +7 (123) 456-78-90
+                    +7 (3822) 68-28-00
                   </span>
                 </div>
                 <Button className="mt-4 bg-blue-700 hover:bg-blue-800 rounded-full">
