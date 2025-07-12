@@ -1,89 +1,11 @@
-// // // import { FC } from "react";
-// // // import { Button } from "./ui/button";
-// // // import bgimg from "@/static/interior/SSV_1325.jpg";
-// // // import WaveComponent from "./WaveComponent";
-
-// // // const VideoBanner: FC = () => {
-// // //   return (
-// // //     <section className="overflow-hidden">
-// // //       {/* Основной контент баннера */}
-// // //       <div
-// // //         className="relative min-h-[40rem] md:min-h-[52rem] flex flex-col-reverse md:grid md:grid-cols-2 gap-6 md:gap-12 py-16 md:py-32 px-4"
-// // //         style={{
-// // //           backgroundImage: `url(${bgimg})`,
-// // //           backgroundSize: "cover",
-// // //           backgroundPosition: "center",
-// // //           backgroundAttachment: "fixed",
-// // //         }}
-// // //       >
-// // //         <div className="container mx-auto">
-// // //           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-// // //             <div className="p-5 md:p-8 relative z-20">
-// // //               <div className="max-w-3xl">
-// // //                 <h1 className="font-bold text-4xl md:text-6xl lg:text-7xl text-white mb-4 leading-tight">
-// // //                   Плавательный Центр
-// // //                   <span className="block mt- bg-gradient-to-r from-yellow-300 via-orange-300 to-yellow-400 bg-clip-text text-transparent">
-// // //                     «Утенок»
-// // //                   </span>
-// // //                 </h1>
-
-// // //                 <p className="text-xl text-blue-100 mb-8 max-w-xl">
-// // //                   Профессиональное обучение плаванию для детей от 3 месяцев до
-// // //                   10 лет в современном центре с опытными тренерами.
-// // //                 </p>
-// // //                   <Button
-// // //                     size="lg"
-// // //                     className="hover:bg-yellow-500 rounded-full px-6 py-6 text-lg text-black bg-yellow-400 cursor-pointer shadow-lg transition-all duration-300 hover:scale-105"
-// // //                   >
-// // //                     Записаться на первое бесплатное занятие
-// // //                   </Button>
-// // //                 {/* <div className="flex flex-wrap gap-4">
-
-// // //                 </div> */}
-// // //               </div>
-// // //             </div>
-
-// // //             {/* Блок с преимуществами (для мобильной версии) */}
-// // //             <div className="md:hidden bg-blue-900/50 backdrop-blur-sm rounded-xl p-6 border border-blue-700">
-// // //               <h3 className="text-xl font-bold text-yellow-300 mb-4">
-// // //                 Наши преимущества:
-// // //               </h3>
-// // //               <ul className="space-y-3">
-// // //                 {[
-// // //                   "Опытные детские тренеры",
-// // //                   "Современные бассейны",
-// // //                   "Индивидуальный подход",
-// // //                   "Безопасная среда",
-// // //                 ].map((item, i) => (
-// // //                   <li key={i} className="flex items-center">
-// // //                     <span className="w-5 h-5 rounded-full bg-yellow-400 flex items-center justify-center mr-3">
-// // //                       <span className="w-2 h-2 rounded-full bg-blue-900"></span>
-// // //                     </span>
-// // //                     <span className="text-blue-100">{item}</span>
-// // //                   </li>
-// // //                 ))}
-// // //               </ul>
-// // //             </div>
-// // //           </div>
-// // //         </div>
-// // //       </div>
-
-// // //       {/* Волна - скрыта на мобильных устройствах */}
-// // //       <div className=" md:block">
-// // //         <WaveComponent />
-// // //       </div>
-// // //     </section>
-// // //   );
-// // // };
-
-// // // export default VideoBanner;
-
 import { FC, useState } from "react";
 import { Button } from "./ui/button";
 import bgimg from "@/static/interior/SSV_1325.jpg";
-import { Play} from "lucide-react";
-import Modal from "./Modal"; // Импортируем ваш компонент Modal
+import { Play } from "lucide-react";
+import Modal from "./Modal";
 import { Input } from "./ui/input";
+import { motion } from "framer-motion";
+import { LiquidGlass } from "./ui/LiquidGlass";
 
 const VideoBanner: FC = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
@@ -91,30 +13,6 @@ const VideoBanner: FC = () => {
 
   const handleCloseModal = () => setIsModalOpen(false);
   const handleOpenClick = () => setIsModalOpen(true);
-  // Генератор случайных пузырьков
-  const generateBubbles = () => {
-    return Array.from({ length: 50 }).map((_, i) => {
-      const size = Math.random() * 40 + 10;
-      const left = `${Math.random() * 100}%`;
-      const delay = Math.random() * 10;
-      const duration = 5 + Math.random() * 10;
-
-      return (
-        <div
-          key={i}
-          className="absolute rounded-full bg-white opacity-30 animate-bubble"
-          style={{
-            width: `${size}px`,
-            height: `${size}px`,
-            left,
-            bottom: "-50px",
-            animationDelay: `${delay}s`,
-            animationDuration: `${duration}s`,
-          }}
-        />
-      );
-    });
-  };
 
   return (
     <section className="relative overflow-hidden">
@@ -127,54 +25,136 @@ const VideoBanner: FC = () => {
           backgroundPosition: "center",
         }}
       >
-        {/* Текстура воды поверх изображения */}
-        <div className="absolute inset-0 ">
-          // {generateBubbles()}
-          //{" "}
-        </div>
-
+        {/* Пузырьки */}
+        {/* <BubbleComponent
+          count={30}
+          speed={1}
+          color="#ffff"
+          size={{ base: 20, sm: 30, md: 40 }}
+        /> */}
         {/* Контент */}
         <div className="container mx-auto relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="p-5 md:p-8 text-center md:text-left">
-              <div className="max-w-3xl">
-                <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-white mb-4 leading-tight">
-                  Плавательный Центр
-                  <span className="block mt-2 bg-gradient-to-r from-yellow-300 via-orange-300 to-yellow-400 bg-clip-text text-transparent">
-                    «Утенок»
-                  </span>
-                </h1>
+            <LiquidGlass
+              glassColor="#ffffff"
+              opacity={0.15}
+              blurStrength={10}
+              borderRadius={32}
+              className="container mx-auto px-4 relative z-10"
+            >
+              <motion.div
+                className="p-5 md:p-8 text-center md:text-left"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-white mb-4 leading-tight">
+                    Плавательный Центр
+                    <motion.span
+                      className="block mt-2 bg-gradient-to-r from-[#EBA31E] via-[#ff8c00] to-[#EBA31E] bg-clip-text text-transparent"
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5 }}
+                    >
+                      «Утенок»
+                    </motion.span>
+                  </h1>
+                </motion.div>
 
-                <p className="text-xl text-blue-100 mb-8 max-w-xl mx-auto md:mx-0">
+                <motion.p
+                  className="text-xl text-blue-100 mb-8 max-w-xl mx-auto md:mx-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7 }}
+                >
                   Профессиональное обучение плаванию для детей от 3 месяцев до
                   10 лет в современном центре с опытными тренерами.
-                </p>
+                </motion.p>
 
-                <Button
-                  size="lg"
-                  onClick={handleOpenClick}
-                  className="hover:bg-yellow-500 rounded-full px-6 py-6 text-lg font-bold text-black bg-yellow-400 shadow-lg transition-all duration-300 hover:scale-105"
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.9 }}
                 >
-                  Записаться на первое бесплатное занятие
-                </Button>
-              </div>
-            </div>
+                  <Button
+                    size="lg"
+                    onClick={handleOpenClick}
+                    className="rounded-full px-8 py-7 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                  >
+                    Записаться на первое бесплатное занятие
+                  </Button>
+                </motion.div>
+              </motion.div>
+            </LiquidGlass>
 
             {/* Кнопка воспроизведения видео */}
-            <div className="flex justify-center">
-              <button
-                onClick={() => setIsVideoOpen(true)}
-                className="group w-24 h-24 md:w-32 md:h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all"
-                aria-label="Посмотреть видео"
-              >
-                <div className="bg-gradient-to-r from-yellow-400 to-orange-400 group-hover:from-yellow-500 group-hover:to-orange-500 w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center transition-all">
-                  <Play className="text-white fill-white ml-1 w-8 h-8 md:w-10 md:h-10" />
-                </div>
-              </button>
-            </div>
+            <motion.div
+              className="flex justify-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <div className="flex flex-col items-center">
+                <motion.div
+                  className="mb-6 px-6 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] rounded-full backdrop-blur-sm border border-white/20 shadow-lg"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <p className="text-white font-bold text-center text-lg md:text-xl">
+                    Посмотрите как у нас круто!
+                  </p>
+                </motion.div>
+
+                <motion.button
+                  onClick={() => setIsVideoOpen(true)}
+                  className="group w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center transition-all relative overflow-hidden"
+                  aria-label="Посмотреть видео"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${bgimg})` }}
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#301EEB]/40 to-[#9F1EEB]/40"></div>
+
+                  <div className="relative z-10 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white/30 backdrop-blur-sm">
+                    <img
+                      src={bgimg}
+                      alt="Интерьер бассейна"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="absolute z-20 inset-0 flex items-center justify-center">
+                    <motion.div
+                      className="bg-gradient-to-r from-[#EBA31E] to-[#d6940c] w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center"
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.8, 1, 0.8],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                      }}
+                    >
+                      <Play className="text-white fill-current ml-1 w-8 h-8 md:w-10 md:h-10" />
+                    </motion.div>
+                  </div>
+                </motion.button>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
+
+      {/* Модальное окно для записи */}
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -207,9 +187,52 @@ const VideoBanner: FC = () => {
           </a>
         </div>
       </Modal>
+      {/* <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        className="rounded-3xl shadow-2xl w-full max-w-xl"
+      >
+        <div className="p-8 bg-gradient-to-b from-blue-50 to-blue-100 text-[#301EEB] rounded-3xl">
+          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+            Запишитесь на первое бесплатное занятие
+          </h2>
+
+          <div className="space-y-6 mb-8">
+            <Input
+              className="w-full px-5 py-4 bg-white/10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-[#301EEB] placeholder-gray-400 transition-all"
+              type="text"
+              placeholder="Ваше имя"
+            />
+            <Input
+              className="w-full px-5 py-4 bg-white/10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-[#301EEB] placeholder-gray-400 transition-all"
+              type="tel"
+              placeholder="Ваш телефон"
+            />
+          </div>
+
+          <Button
+            className="w-full py-5 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+            onClick={handleCloseModal}
+          >
+            Записаться бесплатно
+          </Button>
+
+          <div className="mt-6 text-center text-sm text-white/70">
+            Нажимая кнопку, вы соглашаетесь с{" "}
+            <a href="#" className="text-[#EBA31E] hover:underline font-medium">
+              политикой конфиденциальности
+            </a>
+          </div>
+        </div>
+      </Modal> */}
+
       {/* Модальное окно с видео */}
-      <Modal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)}>
-        <div className="relative pb-[56.25%] h-0 rounded-lg overflow-hidden">
+      <Modal
+        isOpen={isVideoOpen}
+        onClose={() => setIsVideoOpen(false)}
+        className="rounded-3xl shadow-2xl w-full max-w-4xl"
+      >
+        <div className="relative pb-[56.25%] h-0 rounded-3xl overflow-hidden">
           <video
             controls
             autoPlay

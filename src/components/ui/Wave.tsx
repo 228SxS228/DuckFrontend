@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import DuckComponent from "./DuckComponent";
+import DuckComponent from "../DuckComponent";
 
 export default function WaveComponent() {
   const [activeWave, setActiveWave] = useState(0);

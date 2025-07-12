@@ -1,9 +1,9 @@
-import { FC, useState, useRef} from "react";
+import { FC, useState, useRef } from "react";
 import { Phone, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RouteNames } from "../router/index";
-import {NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import logo from "../static/utenok_logo.png";
 import Modal from "./Modal";
 import { Input } from "./ui/input";
@@ -13,7 +13,7 @@ import {
   Variants,
   TargetAndTransition,
 } from "framer-motion";
-
+import BubbleComponent from "./ui/Buble";
 
 const Header: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -25,7 +25,6 @@ const Header: FC = () => {
     menuItems.current[index] = el;
   };
 
-
   const menuLinks = [
     { name: "Главная", path: RouteNames.HOME },
     { name: "Тренеры", path: RouteNames.TRAINERS },
@@ -34,36 +33,6 @@ const Header: FC = () => {
     { name: "Акции", path: RouteNames.PROMOTION },
     { name: "Соляная пещера", path: RouteNames.SALTCAVE },
   ];
-    // Анимация пузырьков (как в footer)
-  const bubbleVariants: Variants = {
-    float: {
-      y: [0, -20],
-      opacity: [0.6, 1],
-      transition: {
-        y: {
-          repeat: Infinity,
-          repeatType: "reverse",
-          duration: 3 + Math.random() * 5,
-          ease: "easeInOut",
-        },
-        opacity: {
-          repeat: Infinity,
-          repeatType: "reverse",
-          duration: 3 + Math.random() * 5,
-          ease: "easeInOut",
-        },
-      },
-    },
-  };
-
-  // Создаем пузырьки (15 штук как в footer)
-  const bubbles = Array.from({ length: 15 }).map((_, i) => ({
-    id: i,
-    size: `${Math.random() * 10 + 5}px`,
-    left: `${Math.random() * 100}%`,
-    delay: Math.random() * 5,
-  }));
-
 
   const handleCloseModal = () => setIsModalOpen(false);
   const handleOpenClick = () => setIsModalOpen(true);
@@ -105,49 +74,15 @@ const Header: FC = () => {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 w-full bg-blue-600 text-blue-700 overflow-hidden"
+      className="sticky top-0 z-50 w-full bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] overflow-hidden"
     >
-      {/* Анимированные пузырьки */}
-      {/* <div className="absolute inset-0 pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 bg-white/30 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -50, -100, 0],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [0.5, 1, 0.5],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 2,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 2,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div> */}
       {/* Пузырьки */}
-      {bubbles.map((bubble) => (
-        <motion.div
-          key={bubble.id}
-          className="absolute rounded-full bg-blue-300 opacity-60 z-0"
-          style={{
-            width: bubble.size,
-            height: bubble.size,
-            left: bubble.left,
-            bottom: "10%",
-          }}
-          variants={bubbleVariants}
-          animate="float"
-          initial={{ opacity: 0 }}
-          transition={{ delay: bubble.delay }}
-        />
-      ))}
+      <BubbleComponent
+        count={10}
+        speed={1}
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
 
       {/* Анимированная утка */}
       <AnimatePresence>
@@ -157,8 +92,8 @@ const Header: FC = () => {
           initial={false}
           transition={{
             type: "spring",
-            damping: 20, // Увеличил плавность
-            stiffness: 80, // Уменьшил жесткость
+            damping: 20,
+            stiffness: 80,
             mass: 0.8,
           }}
         >
@@ -174,70 +109,73 @@ const Header: FC = () => {
         </motion.div>
       </AnimatePresence>
 
-      <div className="container text-blue-700 mx-auto overflow-visible flex h-35 items-center justify-between py-3">
+      <div className="container mx-auto overflow-visible flex h-35 items-center justify-between py-3">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 overflow-visible">
-            {/* <Link to={RouteNames.HOME} className="flex items-center">
-              <img
-                src={logo}
-                alt="logo"
-                className="container h-35 w-35 z-60 overflow-hidden object-contain"
-                loading="eager"
-                decoding="async"
-              />
-            </Link> */}
+            {/* Пустое место для логотипа */}
           </div>
         </div>
 
         <nav className="font-myfont text-lg relative">
-          <ul className="hidden md:flex items-center gap-8 ">
+          <ul className="hidden md:flex items-center gap-8">
             {menuLinks.map((link, index) => (
-              <li
+              <motion.li
                 key={index}
                 ref={(el) => setMenuItemRef(el, index)}
-                className="px-3 py-2 text-blue-700 hover:text-yellow-300 rounded-md transition-colors font-medium group relative"
+                className="px-3 py-2 text-white hover:text-[#EBA31E] rounded-md transition-colors font-medium group relative"
                 onMouseEnter={() => setActiveItem(index)}
                 onMouseLeave={() => setActiveItem(null)}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
               >
                 <NavLink
                   to={link.path}
-                  className="relative text-blue-100 z-30 transition-all duration-300 group-hover:scale-105"
+                  className="relative z-30 transition-all text-white hover:text-[#EBA31E]  duration-300"
                 >
                   {link.name}
                 </NavLink>
 
                 {/* Волны при наведении */}
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-yellow-300/30 rounded-full"
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-[#EBA31E]/50 rounded-full"
                   initial={{ scaleX: 0 }}
                   animate={activeItem === index ? { scaleX: 1 } : { scaleX: 0 }}
                   transition={{ duration: 0.3 }}
                 />
-              </li>
+              </motion.li>
             ))}
           </ul>
         </nav>
 
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-2">
-            <Phone className="h-4 w-4 text-yellow-600" />
-            <span className="text-sm font-medium text-blue-100">
+          <motion.div
+            className="hidden md:flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Phone className="h-4 w-4 text-[#EBA31E]" />
+            <span className="text-sm font-medium text-white">
               +7 (3822) 68-28-00
             </span>
-          </div>
-          <Button
-            onClick={handleOpenClick}
-            size="lg"
-            variant="destructive"
-            className="hidden text-blue-200 sm:inline-flex bg-blue-700 hover:bg-blue-800 rounded-full cursor-pointer transition-transform duration-300 hover:scale-105"
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
           >
-            Записаться
-          </Button>
+            <Button
+              onClick={handleOpenClick}
+              size="lg"
+              className="hidden sm:inline-flex bg-gradient-to-r from-[#EBA31E] to-[#d6940c] text-black rounded-full cursor-pointer transition-transform duration-300 shadow-lg hover:shadow-xl"
+            >
+              Записаться
+            </Button>
+          </motion.div>
 
           <Modal
             isOpen={isModalOpen}
             onClose={handleCloseModal}
-            className=" rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
+            className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
           >
             <div className="p-6 md:p-8">
               <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 md:mb-8">
@@ -270,34 +208,58 @@ const Header: FC = () => {
 
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="md:hidden rounded-full mr-4"
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Menu className="h-5 w-5" />
-              </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="md:hidden rounded-full mr-4 bg-white/20 hover:bg-white/30"
+                >
+                  <Menu className="h-5 w-5 text-white" />
+                </Button>
+              </motion.div>
             </SheetTrigger>
-            <SheetContent className="bg-white" side="right">
-              <nav className="flex mx-auto flex-col gap-4 mt-8 ">
+            <SheetContent
+              className="bg-gradient-to-b from-[#301EEB] to-[#9F1EEB]"
+              side="right"
+            >
+              <nav className="flex mx-auto flex-col gap-6 mt-8">
                 {menuLinks.map((link, index) => (
-                  <NavLink
+                  <motion.div
                     key={index}
-                    to={link.path}
-                    className="text-base font-medium hover:text-blue-700 transition-colors"
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.1 }}
                   >
-                    {link.name}
-                  </NavLink>
+                    <NavLink
+                      to={link.path}
+                      className="text-lg font-medium text-white hover:text-[#EBA31E] transition-colors flex items-center group"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-[#EBA31E] mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                      {link.name}
+                    </NavLink>
+                  </motion.div>
                 ))}
-                <div className="flex items-center gap-2 mt-2">
-                  <Phone className="h-4 w-4 text-yellow-500" />
-                  <span className="text-sm font-medium">
+                <div className="flex items-center gap-2 mt-4 p-3 bg-white/10 rounded-lg">
+                  <Phone className="h-5 w-5 text-[#EBA31E]" />
+                  <span className="text-sm font-medium text-white">
                     +7 (3822) 68-28-00
                   </span>
                 </div>
-                <Button className="mt-4 bg-blue-700 hover:bg-blue-800 rounded-full">
-                  Записаться
-                </Button>
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <Button
+                    className="mt-4 w-full bg-gradient-to-r from-[#EBA31E] to-[#d6940c] text-black rounded-full py-6 text-base"
+                    onClick={handleOpenClick}
+                  >
+                    Записаться
+                  </Button>
+                </motion.div>
               </nav>
             </SheetContent>
           </Sheet>

@@ -1,190 +1,240 @@
-import { FC} from "react";
-import { Gift } from "lucide-react";
-import { Button } from "./ui/button";
-import ImageGalleryBanner from "./ImageGalleryBanner";
-
-//сделать норм ренейм
+import { FC } from "react";
+import { Gift, Calendar, Users, Star } from "lucide-react";
+import ImageGalleryBanner from "./ui/ImageGalleryBanner";
 import photo2 from "@/static/utenokpro_animatory.jpg";
 import photo3 from "@/static/utenokpro_programma.jpg";
+import { motion, Variants } from "framer-motion";
+import { LiquidGlass } from "./ui/LiquidGlass";
+import BubbleComponent from "./ui/Buble";
+import { Button } from "./ui/button";
+
 const images = [photo2, photo3];
 
 const Rentalcomponent: FC = () => {
+  const packages = [
+    {
+      title: "Праздничный пакет 'Утенок'",
+      icon: <Star className="h-6 w-6 text-[#EBA31E]" />,
+      color: "bg-gradient-to-r from-[#301EEB] to-[#9F1EEB]",
+      features: [
+        "1 час аренды детского бассейна",
+        "Профессиональный аниматор",
+        "Праздничное угощение",
+        "Подарки для всех гостей",
+        "Фотосессия (10 цифровых фото)",
+      ],
+    },
+    {
+      title: "Праздничный пакет 'Дельфин'",
+      icon: <Gift className="h-6 w-6 text-[#EBA31E]" />,
+      color: "bg-gradient-to-r from-[#9F1EEB] to-[#301EEB]",
+      features: [
+        "2 часа аренды бассейна",
+        "2 профессиональных аниматора",
+        "Премиальное угощение",
+        "Эксклюзивные подарки",
+        "Профессиональная фотосессия",
+        "Видеомонтаж праздника",
+      ],
+    },
+  ];
 
-  // const events = [
-  //   {
-  //     icon: <Cake className="h-10 w-10 text-sky-600" />,
-  //     title: "Дни рождения",
-  //     description:
-  //       "Организуем незабываемый праздник для вашего ребенка с аниматорами, играми в воде и праздничным угощением.",
-  //   },
-  //   {
-  //     icon: <Users className="h-10 w-10 text-sky-600" />,
-  //     title: "Групповые мероприятия",
-  //     description:
-  //       "Проведите корпоратив, школьное или детсадовское мероприятие в нашем центре.",
-  //   },
-  //   {
-  //     icon: <Calendar className="h-10 w-10 text-sky-600" />,
-  //     title: "Праздники",
-  //     description:
-  //       "Специальные программы на Новый год, 23 февраля, 8 марта и другие праздники.",
-  //   },
-  // ];
+  // Анимация для элементов
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+    hover: {
+      y: -10,
+      boxShadow: "0 20px 30px rgba(159, 30, 235, 0.2)",
+      transition: { duration: 0.3 },
+    },
+  };
+
+  const textVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
 
   return (
-    // <section className="py-16">
-    //   <div className="container mx-auto px-4">
-    //     <div className="mb-12 text-center">
-    //       <h2 className="mb-4 text-3xl font-bold text-sky-800 md:text-4xl">
-    //         Аренда центра для мероприятий "Утенок Продоложение"
-    //       </h2>
-    //       <p className="mx-auto max-w-2xl text-lg text-gray-600">
-    //         Организуйте незабываемый праздник для вашего ребенка в нашем центре
-    //       </p>
-    //     </div>
+    <section className="py-10 bg-gradient-to-b from-blue-50 to-blue-100 relative overflow-hidden">
+      {/* Пузырьки фона */}
+      <BubbleComponent
+        count={80}
+        speed={2}
+        color="#9F1EEB"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
 
-    //     <div className="grid gap-8 lg:grid-cols-2">
-    //       <div className="relative h-[400px] overflow-hidden rounded-lg shadow-md">
-    //         <img
-    //           src="/placeholder.svg?height=400&width=600"
-    //           alt="Празднование дня рождения в бассейне"
-    //         //   fill
-    //           className="object-cover"
-    //         />
-    //       </div>
+      <div className="container mx-auto px-4 relative z-10">
+        <motion.div
+          className="text-center max-w-3xl mx-auto mb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+          }}
+        >
+          <motion.div
+            className="inline-block px-6 py-2 mb-6 bg-gradient-to-r from-[#EBA31E] to-[#d6940c] text-black rounded-full font-bold shadow-lg"
+            variants={textVariants}
+          >
+            Особое предложение
+          </motion.div>
 
-    //       <div>
-    //         <div className="mb-6">
-    //           <h3 className="mb-4 text-2xl font-bold text-sky-800">
-    //             Что мы предлагаем
-    //           </h3>
-    //           <p className="text-gray-600">
-    //             Центр "Утенок" предлагает аренду помещения и бассейна для
-    //             проведения различных детских мероприятий. Мы создадим
-    //             праздничную атмосферу и обеспечим безопасность всех участников.
-    //           </p>
-    //         </div>
+          <motion.h2
+            className="ttext-4xl md:text-5xl font-extrabold mb-8 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-transparent bg-clip-text"
+            variants={textVariants}
+          >
+            Аренда бассейна для мероприятий
+          </motion.h2>
 
-    //         <div className="space-y-6">
-    //           {events.map((event, index) => (
-    //             <div key={index} className="flex">
-    //               <div className="mr-4">{event.icon}</div>
-    //               <div>
-    //                 <h4 className="mb-1 text-lg font-bold text-sky-800">
-    //                   {event.title}
-    //                 </h4>
-    //                 <p className="text-gray-600">{event.description}</p>
-    //               </div>
-    //             </div>
-    //           ))}
-    //         </div>
-
-    //         <div className="mt-8">
-    //           <a
-    //             href="#contacts"///юляяяяяя
-    //             className="inline-flex items-center rounded-md bg-sky-600 px-6 py-3 font-medium text-white transition-colors hover:bg-sky-700"
-    //           >
-    //             <Gift className="mr-2 h-5 w-5" />
-    //             Забронировать мероприятие
-    //           </a>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </section>
-    <section className="py-12 md:py-20 bg-blue-100 overflow-hidden relative flex flex-col">
-      <div className="container mx-auto px-4">
-        <div className="bg-gradient-to-r from-yellow-50 to-blue-50 rounded-3xl p-5 md:p-8 lg:p-12 border border-blue-100 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 -mt-12 -mr-12 bg-yellow-200 rounded-full opacity-20 blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 md:w-48 md:h-48 -mb-8 -ml-8 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
-
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center relative z-10">
-            <div>
-              <div className="inline-block px-3 py-1 mb-3 md:mb-4 bg-blue-100 text-blue-800 rounded-full text-xs md:text-sm font-medium">
-                Особое предложение
-              </div>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-blue-900 mb-4 md:mb-6">
-                Аренда бассейна для мероприятий "Утенок Продолжение"
-              </h2>
-              <p className="text-gray-700 mb-4 md:mb-6 text-sm md:text-base">
-                Организуйте незабываемый праздник для вашего ребенка и его
-                друзей! Мы предлагаем аренду бассейна и прилегающих помещений
-                для проведения детских дней рождения, выпускных и других
-                мероприятий.
-              </p>
-
-              <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
-                <div className="flex items-start">
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-yellow-400 flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
-                    <Gift className="h-4 w-4 md:h-5 md:w-5 text-blue-900" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-blue-800 mb-1 text-sm md:text-base">
-                      Праздничный пакет "Утенок"
-                    </h3>
-                    <p className="text-gray-600 text-xs md:text-sm">
-                      Включает 1 час аренды детского бассейна, аниматора,
-                      праздничное угощение и подарки для всех гостей.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-400 flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
-                    <Gift className="h-4 w-4 md:h-5 md:w-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-blue-800 mb-1 text-sm md:text-base">
-                      Праздничный пакет "Дельфин"
-                    </h3>
-                    <p className="text-gray-600 text-xs md:text-sm">
-                      Включает 2 часа аренды бассейна, 2 аниматоров, фотосессию,
-                      праздничное угощение и подарки для всех гостей.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-                <Button className="bg-yellow-400 hover:bg-yellow-500 text-white rounded-full text-sm md:text-base cursor-pointer">
-                  Забронировать мероприятие
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-blue-200 text-blue-700 hover:bg-blue-100 rounded-full text-sm md:text-base cursor-pointer"
-                >
-                  Узнать подробности
-                </Button>
-              </div>
-            </div>
-
-            <div className="relative h-56 md:h-72 lg:h-96 rounded-2xl overflow-hidden mt-4 md:mt-0">
+          <motion.p
+            className="text-xl text-[#1e293b] mb-8 leading-relaxed font-medium"
+            variants={textVariants}
+          >
+            Организуйте незабываемый праздник для вашего ребенка и его друзей в
+            нашем центре!
+          </motion.p>
+        </motion.div>
+        <LiquidGlass
+          glassColor="#ffffff"
+          opacity={0.15}
+          blurStrength={10}
+          borderRadius={32}
+          className="container   py-10  relative z-10"
+        >
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Галерея */}
+            <motion.div
+              className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl"
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               <ImageGalleryBanner
                 images={images}
-                interval={3000}
-                height="h-[400px]"
+                interval={4000}
+                height="h-full"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-4 md:p-6">
-                <div className="inline-block px-2 py-1 mb-1 md:mb-2 bg-yellow-400 text-blue-900 rounded-full text-xs font-medium">
+              <div className="absolute inset-0 " />
+              <div className="absolute bottom-0 left-0 p-6 md:p-8">
+                <div className="inline-block px-4 py-2 mb-3 bg-gradient-to-r from-[#EBA31E] to-[#d6940c] text-black font-bold rounded-full">
                   Детские праздники
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-white">
+                <h3 className="text-2xl font-bold text-white">
                   Незабываемые впечатления
                 </h3>
               </div>
+            </motion.div>
+
+            {/* Пакеты */}
+            <div>
+              <motion.div
+                className="mb-8"
+                variants={textVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
+                <p className="text-lg text-[#1e293b] mb-6">
+                  Мы предлагаем аренду бассейна и прилегающих помещений для
+                  проведения детских дней рождения, выпускных и других
+                  мероприятий.
+                </p>
+
+                <div className="flex items-center text-lg text-blue-100 mb-6">
+                  <Calendar className="h-6 w-6 mr-3 text-[#EBA31E] flex-shrink-0" />
+                  <span>
+                    Доступно для бронирования: Пн-Пт: 14:00-20:00, Сб-Вс:
+                    10:00-20:00
+                  </span>
+                </div>
+
+                <div className="flex items-center text-lg text-blue-100 mb-8">
+                  <Users className="h-6 w-6 mr-3 text-[#EBA31E] flex-shrink-0" />
+                  <span>Вместимость: до 15 детей + 5 взрослых</span>
+                </div>
+              </motion.div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {packages.map((pkg, index) => (
+                  <motion.div
+                    key={index}
+                    className="bg-white rounded-2xl p-6 border border-blue-200 shadow-lg"
+                    variants={cardVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    whileHover="hover"
+                    viewport={{ once: true }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <div
+                        className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${pkg.color}`}
+                      >
+                        {pkg.icon}
+                      </div>
+                      <h3 className="text-xl font-bold text-[#301EEB]">
+                        {pkg.title}
+                      </h3>
+                    </div>
+
+                    <ul className="space-y-3 mb-6">
+                      {pkg.features.map((feature, i) => (
+                        <li key={i} className="flex items-start">
+                          <div className="w-6 h-6 rounded-full bg-[#EBA31E]/20 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                            <div className="w-2 h-2 rounded-full bg-[#EBA31E]"></div>
+                          </div>
+                          <span className="text-[#1e293b]">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
-
-          <div className="mt-6 md:mt-8 pt-4 md:pt-8 border-t border-blue-100 text-center relative z-10">
-            <p className="text-gray-600 max-w-2xl mx-auto text-xs md:text-sm">
-              Мы также предлагаем индивидуальные решения для корпоративных
-              мероприятий, школьных групп и спортивных команд. Свяжитесь с нами
-              для получения подробной информации.
-            </p>
-          </div>
-        </div>
+                   <motion.div
+            className="text-center mt-16"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <Button className="py-5 px-10 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+              Узнать подробности
+            </Button>
+          </motion.div>
+        </LiquidGlass>
       </div>
+      <motion.div
+        className="mt-16 pt-8 border-t border-[#8968A4]/30 text-center"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        viewport={{ once: true }}
+      >
+        <p className="text-[#1e293b] max-w-3xl mx-auto text-lg">
+          Мы также предлагаем индивидуальные решения для корпоративных
+          мероприятий, школьных групп и спортивных команд. Свяжитесь с нами для
+          получения подробной информации.
+        </p>
+      </motion.div>
     </section>
   );
 };

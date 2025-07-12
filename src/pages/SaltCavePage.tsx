@@ -1,9 +1,8 @@
-import ImageGalleryBanner from "../components/ImageGalleryBanner";
+import ImageGalleryBanner from "../components/ui/ImageGalleryBanner";
 
 import { Button } from "@/components/ui/button";
 // import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-
 
 import photo2 from "@/static/DSC_7757.jpg";
 import photo3 from "@/static/DSC_7832.jpg";
@@ -21,6 +20,7 @@ import {
   Shield,
   Leaf,
 } from "lucide-react";
+import { LiquidGlass } from "@/components/ui/LiquidGlass";
 
 export default function SaltCavePage() {
   const validateMediaSource = (url: string | undefined) => {
@@ -61,13 +61,19 @@ export default function SaltCavePage() {
               Оздоровительные сеансы в соляной пещере для укрепления иммунитета
               и релаксации
             </motion.p>
-              </div>
+          </div>
         </div>
       </div>
 
       {/* Video Section */}
-      <section className=" px-4 -mt-8 mb-16">
-        <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+      <LiquidGlass
+        glassColor="#ffffff"
+        opacity={0.55}
+        blurStrength={12}
+        borderRadius={32}
+        className=" px-4 -mt-8 mb-16"
+      >
+        <div className=" rounded-2xl  p-6 md:p-8">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="rounded-xl overflow-hidden aspect-video">
               <video
@@ -118,9 +124,15 @@ export default function SaltCavePage() {
             </div>
           </div>
         </div>
-      </section>
+      </LiquidGlass>
 
-      <section className="py-12">
+      <LiquidGlass
+        glassColor="#ffffff"
+        opacity={0.55}
+        blurStrength={12}
+        borderRadius={32}
+        className="py-12"
+      >
         <div className="mx-auto px-4">
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
@@ -242,7 +254,7 @@ export default function SaltCavePage() {
             </div>
           </div>
         </div>
-      </section>
+      </LiquidGlass>
       {/* Pricing Section */}
       <section className="px-4 py-12 mb-16">
         <div className="text-center max-w-2xl mx-auto mb-12">

@@ -193,7 +193,7 @@ const PromotionPage: FC = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3">
+                {/* <div className="flex flex-col sm:flex-row gap-3">
                   <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-full cursor-pointer">
                     Воспользоваться акцией
                   </Button>
@@ -203,7 +203,7 @@ const PromotionPage: FC = () => {
                   >
                     Подробнее
                   </Button>
-                </div>
+                </div> */}
               </div>
             </div>
           ))}
