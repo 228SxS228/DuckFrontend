@@ -1,39 +1,100 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
-import { ArrowDownToLine, Check, Clock, MessageSquare } from "lucide-react";
+import {
+  ArrowDownToLine,
+  MessageSquare,
+  Users,
+  User,
+} from "lucide-react";
 import DuckComponent from "./DuckComponent";
-import { motion } from "framer-motion";
-
+import { motion, Variants } from "framer-motion";
+import Modal from "./Modal";
+import { Input } from "./ui/input";
 
 const ProgramsComponent: FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenClick = () => setIsModalOpen(true);
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "backOut",
+      },
+    },
+    hover: {
+      y: -10,
+      boxShadow: "0 15px 30px rgba(159, 30, 235, 0.2)",
+      transition: { duration: 0.3 },
+    },
+  };
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
+
   return (
-    <section className="py-12 md:py-20  overflow-hidden relative flex flex-col">
+    <section className="py-12 md:py-20 overflow-hidden relative flex flex-col bg-gradient-to-b from-[#301EEB] to-[#9F1EEB]">
       <div className="container px-4 mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-8 md:mb-12">
-          <div className="inline-block px-4 py-1 mb-3 md:mb-4 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+        <motion.div
+          className="text-center max-w-3xl mx-auto mb-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+          }}
+        >
+          <motion.div
+            className="inline-block px-6 py-2 mb-6 bg-gradient-to-r from-[#EBA31E] to-[#d6940c] text-black rounded-full font-bold shadow-lg"
+            variants={textVariants}
+          >
+            <Users className="inline mr-2" size={18} />
             Детские басейны
-          </div>
-          <h2 className="text-2xl md:text-4xl font-bold mb-4 text-white">
+          </motion.div>
+
+          <motion.h2
+            className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 text-white"
+            variants={textVariants}
+          >
             Бассейны "Утенок" и "Утенок Продолжение"
-          </h2>
-          <p className="text-blue-100 text-sm md:text-base">
+          </motion.h2>
+
+          <motion.p
+            className="text-xl text-blue-100 max-w-2xl mx-auto"
+            variants={textVariants}
+          >
             Два современных, но по особенному разных бассейна в одном месте
             (индивидуальны для каждого малыша и его родителя)
-          </p>
-        </div>
-
+          </motion.p>
+        </motion.div>
         <div className="grid md:grid-cols-2 gap-6 md:gap-12">
           {/* Утенок */}
-          <div className="bg-white rounded-2xl p-5 md:p-8 shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 -mt-8 -mr-8 bg-yellow-100 rounded-full opacity-50"></div>
+          <motion.div
+            className="text-center p-8 bg-white rounded-2xl border border-blue-200 shadow-lg"
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            whileHover="hover"
+            viewport={{ once: true, margin: "-100px" }}
+          >
             <div className="relative">
               <div className="flex items-center mb-4 md:mb-6">
-                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-yellow-400 flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
-                  <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-blue-900" />
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#EBA31E] flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
+                  <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-white" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-blue-900">
+                <h3 className="text-xl md:text-2xl font-bold text-[#301EEB]">
                   Басейн "Утенок"
                 </h3>
               </div>
@@ -43,12 +104,14 @@ const ProgramsComponent: FC = () => {
                 раздевалками, душевыми, сауной, игровой, соляной пещерой, кафе,
                 зонами ожидания.
               </p>
+
+              {/* Анимированный утенок */}
               <motion.div
-                className="absolute top-2 left-2/3"
+                className="absolute top-2 right-4"
                 animate={{
-                  x: [0, 30, -30, 0],
-                  y: [0, -8, 8, 0],
-                  rotate: [0, 15, -15, 0],
+                  x: [0, 10, -10, 0],
+                  y: [0, -5, 5, 0],
+                  rotate: [0, 10, -10, 0],
                 }}
                 transition={{
                   duration: 4,
@@ -56,131 +119,110 @@ const ProgramsComponent: FC = () => {
                   ease: "easeInOut",
                 }}
               >
-                <DuckComponent color="#ec4899" size="responsive" />
+                <DuckComponent color="#9F1EEB" size="responsive" />
               </motion.div>
-              <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
-                <div className="bg-blue-50 rounded-lg p-3 md:p-4">
-                  <h4 className="font-semibold text-blue-800 mb-2 text-sm md:text-base">
-                    Возрастные группы:
-                  </h4>
-                  <ul className="grid grid-cols-2 gap-2">
-                    <li className="flex items-center">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        от 3 месяцев до 10 лет
-                      </span>
-                    </li>
-                    {/* <li className="flex items-center">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        5-6 лет
-                      </span>
-                    </li> */}
-                  </ul>
+
+              <div className="space-y-6 mb-6">
+                {/* Групповые занятия */}
+                <div className="border border-[#EBA31E] rounded-xl p-4">
+                  <div className="flex items-center mb-3">
+                    <Users className="h-5 w-5 mr-2 text-[#9F1EEB]" />
+                    <h4 className="font-bold text-[#301EEB] text-lg">
+                      Групповые занятия
+                    </h4>
+                  </div>
+
+                  <div className="bg-gray-100 bg-opacity-10 rounded-lg p-4">
+                    <ul className="space-y-3">
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">Разовое посещение</span>
+                        <span className="font-bold text-[#301EEB]">
+                          1 500 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (4 занятия)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          5 000 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (8 занятий)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          9 000 ₽
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
 
-                <div className="bg-blue-50 rounded-lg p-3 md:p-4">
-                  <h4 className="font-semibold text-blue-800 mb-2 text-sm md:text-base">
-                    Особенности:
-                  </h4>
-                  <ul className="space-y-1 md:space-y-2">
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Бассейн с комфортной глубиной 1.2 метра и длиной 12
-                        метров
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Занятие проходит в параллели с другим тренером (всем
-                        хватает достаточно пространства для максимально
-                        продуктивного занятия)
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Большой, игровой зал, где возможно провести разминку,
-                        либо просто поиграть.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Кафе, где можно наблюдать за малышом за онлайн
-                        трансляцией под чашечкой ароматного кофе или душистого
-                        чая.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Зона ожидания с панорамным окном и комфортабельными
-                        диванами.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Соляная пещера.
-                      </span>
-                    </li>
-                  </ul>
+                {/* Индивидуальные занятия */}
+                <div className="border border-[#9F1EEB] rounded-xl p-4">
+                  <div className="flex items-center mb-3">
+                    <User className="h-5 w-5 mr-2 text-[#9F1EEB]" />
+                    <h4 className="font-bold text-[#301EEB] text-lg">
+                      Индивидуальные занятия
+                    </h4>
+                  </div>
+
+                  <div className="bg-gray-100 bg-opacity-10 rounded-lg p-4">
+                    <ul className="space-y-3">
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">Разовое занятие</span>
+                        <span className="font-bold text-[#301EEB]">
+                          2 500 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (4 занятия)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          9 000 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (8 занятий)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          16 000 ₽
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-center text-xs md:text-sm text-gray-500 mb-4 md:mb-6">
-                <Clock className="h-3 w-3 md:h-4 md:w-4 mr-1 text-yellow-500 flex-shrink-0" />
-                <span>Продолжительность: 30 минут</span>
-              </div>
-
-              <Button className="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-600 text-white rounded-full text-sm md:text-base cursor-pointer">
+              <Button
+                onClick={handleOpenClick}
+                className="w-full mt-8 bg-[#301EEB] hover:bg-[#1a12a8] text-white rounded-full text-base cursor-pointer"
+              >
                 Записаться
               </Button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Утенок Продолжение */}
-          <div className="bg-white rounded-2xl p-5 md:p-8 shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 -mt-8 -mr-8 bg-blue-100 rounded-full opacity-50"></div>
-            <motion.div
-              className="absolute top-2 left-2/3"
-              animate={{
-                y: [0, -10, -20, 0],
-                rotate: [0, 5, -5, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
-              <DuckComponent color="#fbbf24" size="responsive" />
-            </motion.div>
+          <motion.div
+            className="text-center p-8 bg-white rounded-2xl border border-blue-200 shadow-lg"
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            whileHover="hover"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 -mt-8 -mr-8 bg-[#9F1EEB] rounded-full opacity-20"></div>
             <div className="relative">
               <div className="flex items-center mb-4 md:mb-6">
-                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-blue-400 flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#9F1EEB] flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
                   <ArrowDownToLine className="h-6 w-6 md:h-8 md:w-8 text-white" />
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-blue-900">
+                <h3 className="text-xl md:text-2xl font-bold text-[#301EEB]">
                   Утенок «ПРОдолжение»
                 </h3>
               </div>
@@ -188,129 +230,159 @@ const ProgramsComponent: FC = () => {
               <p className="text-gray-600 text-sm md:text-base mb-4 md:mb-6">
                 Бассейн Утенок «ПРОдолжение» - уютное пространство с новейшим
                 дизайнерским ремонтом, двухуровневой игровой, комфортабельной
-                зоной ожидания, финскими и турецкими парными. Программа Утенок
-                «ПРОдолжение» разработана для малышей кому нужен индивидуальных
-                подход .
+                зоной ожидания, финскими и турецкими парными.
               </p>
 
-              <div className="space-y-3 md:space-y-4 mb-4 md:mb-6">
-                <div className="bg-blue-50 rounded-lg p-3 md:p-4">
-                  <h4 className="font-semibold text-blue-800 mb-2 text-sm md:text-base">
-                    Возрастные группы:
-                  </h4>
-                  <ul className="grid grid-cols-2 gap-2">
-                    <li className="flex items-center">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        от 3 мес до 10 лет
-                      </span>
-                    </li>
-                    {/* <li className="flex items-center">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        8-9 лет
-                      </span>
-                    </li> */}
-                  </ul>
+              {/* Анимированный утенок */}
+              <motion.div
+                className="absolute top-2 right-4"
+                animate={{
+                  y: [0, -10, 0],
+                  rotate: [0, 5, -5, 0],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
+              >
+                <DuckComponent color="#EBA31E" size="responsive" />
+              </motion.div>
+
+              <div className="space-y-6 mb-6">
+                {/* Групповые занятия */}
+                <div className="border border-[#EBA31E] rounded-xl p-4">
+                  <div className="flex items-center mb-3">
+                    <Users className="h-5 w-5 mr-2 text-[#9F1EEB]" />
+                    <h4 className="font-bold text-[#301EEB] text-lg">
+                      Групповые занятия
+                    </h4>
+                  </div>
+
+                  <div className="bg-gray-100 bg-opacity-10 rounded-lg p-4">
+                    <ul className="space-y-3">
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">Разовое посещение</span>
+                        <span className="font-bold text-[#301EEB]">
+                          1 800 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (4 занятия)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          6 500 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (8 занятий)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          12 000 ₽
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
 
-                <div className="bg-blue-50 rounded-lg p-3 md:p-4">
-                  <h4 className="font-semibold text-blue-800 mb-2 text-sm md:text-base">
-                    Особенности:
-                  </h4>
-                  <ul className="space-y-1 md:space-y-2">
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Бассейн с переходящей глубиной от 1.2м до 2м и длиной 10
-                        метров.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Занятие проходит НАЕДИНЕ с малышом (больше в бассейне
-                        никого нет) – индивидуальный подход.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Комфортабельная зона ожидания с большой экраном на
-                        котором выведена онлайн трансляция с занятия.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Бесплатный, ароматный кофе и чай со сладостями.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Двухуровневая игровая не оставит ни одного малыша
-                        равнодушным.
-                      </span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center mr-2 mt-0.5">
-                        <Check className="h-2.5 w-2.5 text-blue-900" />
-                      </div>
-                      <span className="text-gray-700 text-xs md:text-sm">
-                        Парящее кресло-качалка для самого прекрасного отдыха и
-                        релаксации.
-                      </span>
-                    </li>
-                  </ul>
+                {/* Индивидуальные занятия */}
+                <div className="border border-[#9F1EEB] rounded-xl p-4">
+                  <div className="flex items-center mb-3">
+                    <User className="h-5 w-5 mr-2 text-[#9F1EEB]" />
+                    <h4 className="font-bold text-[#301EEB] text-lg">
+                      Индивидуальные занятия
+                    </h4>
+                  </div>
+
+                  <div className="bg-gray-100 bg-opacity-10 rounded-lg p-4">
+                    <ul className="space-y-3">
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">Разовое занятие</span>
+                        <span className="font-bold text-[#301EEB]">
+                          3 000 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (4 занятия)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          11 000 ₽
+                        </span>
+                      </li>
+                      <li className="flex justify-between items-center">
+                        <span className="text-gray-700">
+                          Абонемент (8 занятий)
+                        </span>
+                        <span className="font-bold text-[#301EEB]">
+                          20 000 ₽
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-
-              <div className="flex items-center text-xs md:text-sm text-gray-500 mb-4 md:mb-6">
-                <Clock className="h-3 w-3 md:h-4 md:w-4 mr-1 text-yellow-500 flex-shrink-0" />
-                <span>
-                  Продолжительность индивидуального занятия – 30 минут
-                </span>
-              </div>
-
-              <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-800 text-white rounded-full text-sm md:text-base cursor-pointer">
+              <Button
+                onClick={handleOpenClick}
+                className="w-full mt-8 bg-[#301EEB] hover:bg-[#1a12a8] text-white rounded-full text-base cursor-pointer"
+              >
                 Записаться
               </Button>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         <div className="mt-8 md:mt-12 text-center">
-          <p className="text-blue-100 mb-4 md:mb-6 max-w-2xl mx-auto text-sm md:text-base">
-            Все занятия проводятся опытными тренерами в малых группах до 6
-            человек, что позволяет уделить внимание каждому ребенку. Температура
-            воды в детском бассейне поддерживается на уровне 30-32°C для
-            комфортного обучения.
+          <p className="text-[#EACBBE] mb-6 max-w-2xl mx-auto text-base">
+            Все занятия проводятся опытными тренерами. В групповых занятиях - до
+            6 человек, что позволяет уделить внимание каждому ребенку.
+            Температура воды в детском бассейне поддерживается на уровне
+            30-32°C.
           </p>
           <Link to={RouteNames.SCHEDULE}>
             <Button
               variant="outline"
-              className="text-black border-white/30  hover:bg-yellow-400 rounded-full px-15 text-lg bg-white cursor-pointer"
+              className="text-[#301EEB] border-[#9F1EEB] hover:bg-[#EBA31E] hover:text-white rounded-full px-8 py-6 text-lg bg-white cursor-pointer"
             >
               Посмотреть расписание занятий
             </Button>
           </Link>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
+      >
+        <div className="p-6 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 md:mb-8">
+            Оставьте контактные данные, мы перезвоним Вам и запишем на занятие
+          </h2>
+          <div className="space-y-6 mb-6">
+            <Input
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              type="text"
+              placeholder="Ваше имя"
+            />
+            <Input
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              type="tel"
+              placeholder="Ваш телефон"
+            />
+          </div>
+          <Button className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:opacity-90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform duration-300">
+            Оставить заявку
+          </Button>
+        </div>
+        <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100">
+          Нажимая кнопку, вы соглашаетесь с{" "}
+          <a href="#" className="text-blue-600 hover:underline">
+            политикой конфиденциальности
+          </a>
+        </div>
+      </Modal>
     </section>
   );
 };

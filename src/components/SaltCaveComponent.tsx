@@ -198,15 +198,6 @@ const SaltCaveComponent: FC = () => {
               type="tel"
               placeholder="Ваш телефон"
             />
-            <div>
-              <label className="block mb-2 text-blue-700 font-medium">
-                Желаемая дата
-              </label>
-              <Input
-                className="w-full px-5 py-4 bg-white/80 border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-blue-900 transition-all"
-                type="date"
-              />
-            </div>
           </div>
 
           <Button
