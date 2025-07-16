@@ -113,7 +113,6 @@ const BenefitsComponent: FC = () => {
         count={80}
         speed={2}
         color="#9F1EEB"
-        
         size={{ base: 20, sm: 30, md: 40 }}
       />
 
@@ -145,7 +144,30 @@ const BenefitsComponent: FC = () => {
       </div>
 
       {/* Основная секция с фото и описанием */}
-      <div className="py-16 relative z-10">
+      <div className=" container  mx-auto py-16 relative z-10">
+        <motion.div
+          className="inline-flex text-center max-w-3xl mx-auto mb-16 px-5 py-3 bg-gradient-to-r from-[#9F1EEB] to-[#301EEB] text-white rounded-full text-base font-bold shadow-lg"
+          variants={textVariants}
+        >
+          <Waves className="h-5 w-5 mr-2" />О нашем центре
+        </motion.div>
+
+        <motion.h2
+          className="text-4xl md:text-5xl font-extrabold mb-8 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-transparent bg-clip-text"
+          variants={textVariants}
+        >
+          Современный центр плавания для детей
+        </motion.h2>
+
+        <motion.p
+          className="text-xl text-[#1e293b] mb-8 leading-relaxed font-medium"
+          variants={textVariants}
+        >
+          Мы обучаем плаванию детей от 3 месяцев до 10 лет по уникальной
+          методике, превращая каждый урок в увлекательное приключение. Наши
+          современные бассейны оснащены системами глубокой очистки и поддержания
+          идеальной температуры воды.
+        </motion.p>
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
             <div className="w-full lg:w-1/2">
@@ -165,30 +187,6 @@ const BenefitsComponent: FC = () => {
                 },
               }}
             >
-              <motion.div
-                className="inline-flex items-center px-5 py-3 mb-6 bg-gradient-to-r from-[#9F1EEB] to-[#301EEB] text-white rounded-full text-base font-bold shadow-lg"
-                variants={textVariants}
-              >
-                <Waves className="h-5 w-5 mr-2" />О нашем центре
-              </motion.div>
-
-              <motion.h2
-                className="text-4xl md:text-5xl font-extrabold mb-8 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-transparent bg-clip-text"
-                variants={textVariants}
-              >
-                Современный центр плавания для детей
-              </motion.h2>
-
-              <motion.p
-                className="text-xl text-[#1e293b] mb-8 leading-relaxed font-medium"
-                variants={textVariants}
-              >
-                Мы обучаем плаванию детей от 3 месяцев до 10 лет по уникальной
-                методике, превращая каждый урок в увлекательное приключение.
-                Наши современные бассейны оснащены системами глубокой очистки и
-                поддержания идеальной температуры воды.
-              </motion.p>
-
               <motion.div
                 className="mb-10 p-6 rounded-2xl bg-white border border-blue-200 shadow-lg"
                 variants={textVariants}

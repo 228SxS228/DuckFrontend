@@ -324,14 +324,13 @@ const Rentalcomponent: FC = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-[#0f0728] to-[#1e0b42] relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-blue-50 to-blue-100 relative overflow-hidden">
       {/* Пузырьки фона */}
       <BubbleComponent
         count={120}
         speed={3}
         color="#8E2DE2"
         size={{ base: 15, sm: 25, md: 35 }}
-       
       />
 
       <div className="absolute inset-0 bg-grid-white/[0.03] bg-[length:40px_40px] z-0" />
@@ -362,7 +361,7 @@ const Rentalcomponent: FC = () => {
           </motion.h2>
 
           <motion.p
-            className="text-xl text-white/80 mb-10 leading-relaxed font-medium max-w-2xl mx-auto"
+            className="text-xl text-[#301EEB] mb-10 leading-relaxed font-medium max-w-2xl mx-auto"
             variants={textVariants}
           >
             Создайте волшебный праздник для вашего ребенка в нашем аквацентре с
@@ -370,7 +369,7 @@ const Rentalcomponent: FC = () => {
           </motion.p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="items-center">
           {/* Галерея */}
           <motion.div
             className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl shadow-[#4A00E0]/30 border border-white/10"
@@ -383,7 +382,6 @@ const Rentalcomponent: FC = () => {
               images={images}
               interval={3500}
               height="h-full"
-              
             />
             <div className="absolute bottom-0 left-0 p-8 w-full">
               <div className="inline-flex items-center px-5 py-2 mb-3 bg-gradient-to-r from-[#FFD700] to-[#ffa800] text-black font-bold rounded-full">
@@ -397,7 +395,7 @@ const Rentalcomponent: FC = () => {
           </motion.div>
 
           {/* Пакеты */}
-          <div className="space-y-12">
+          {/* <div className="space-y-12">
             <motion.div
               className="bg-gradient-to-br from-[#1a093f] to-[#0d0525] p-8 rounded-3xl border border-white/10 shadow-xl shadow-[#4A00E0]/10"
               initial={{ opacity: 0, y: 30 }}
@@ -482,7 +480,7 @@ const Rentalcomponent: FC = () => {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
 
         <motion.div
@@ -493,13 +491,13 @@ const Rentalcomponent: FC = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <div className="inline-block mb-8">
-            <div className="text-white/60 mb-4 text-lg">
+            <div className="text-[#301EEB] mb-4 text-lg">
               Индивидуальные решения
             </div>
             <div className="h-[2px] w-24 bg-gradient-to-r from-transparent via-[#8E2DE2] to-transparent mx-auto"></div>
           </div>
 
-          <p className="text-white/80 max-w-3xl mx-auto text-xl mb-10">
+          <p className="text-[#301EEB] max-w-3xl mx-auto text-xl mb-10">
             Мы создаем уникальные программы для корпоративных мероприятий,
             школьных групп и спортивных команд. Расскажите нам о вашем событии,
             и мы предложим оптимальное решение.

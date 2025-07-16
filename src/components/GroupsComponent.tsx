@@ -139,7 +139,7 @@ const GroupsComponent: FC = () => {
         color="#9F1EEB"
         size={{ base: 20, sm: 30, md: 40 }}
       />
-
+      
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           className="text-center max-w-3xl mx-auto mb-16"
@@ -190,6 +190,7 @@ const GroupsComponent: FC = () => {
               <LiquidGlass
                 glassColor="#ffffff"
                 opacity={0.7}
+                hoverOpacity={0.9}
                 blurStrength={10}
                 borderRadius={24}
                 className="h-full rounded-3xl p-6 transition-all"

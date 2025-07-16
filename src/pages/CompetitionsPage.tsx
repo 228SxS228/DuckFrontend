@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Award, Calendar, Clock, MapPin, Trophy, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import BubbleComponent from "@/components/ui/Buble";
 
 const CompetitionsPage: FC = () => {
   const upcomingCompetitions = [
@@ -63,7 +64,13 @@ const CompetitionsPage: FC = () => {
   };
 
   return (
-    <section className="min-h-screen pt-15">
+    <section className="min-h-screen bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] pt-15">
+      <BubbleComponent
+        count={80}
+        speed={1}
+        color="#ffff"
+        size={{ base: 15, sm: 25, md: 35 }}
+      />
       <section className="container overflow-hidden mx-auto px-4">
         <div className="container px-4">
           <div className="text-center max-w-2x">

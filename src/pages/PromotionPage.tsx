@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge, Calendar, Clock, Tag, Users } from "lucide-react";
 import { FC } from "react";
 import { motion } from "framer-motion";
+import BubbleComponent from "@/components/ui/Buble";
 
 const PromotionPage: FC = () => {
   const promotions = [
@@ -106,9 +107,15 @@ const PromotionPage: FC = () => {
     },
   ];
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#301EEB] to-[#9F1EEB]">
       {/* Header */}
-      <section className="grid grid-flow-col justify-items-center bg-gradient-to-r items-center from-blue-900 to-blue-700 py-16 md:py-24">
+      <BubbleComponent
+        count={80}
+        speed={1}
+        color="#ffff"
+        size={{ base: 15, sm: 25, md: 35 }}
+      />
+      <section className="grid grid-flow-col justify-items-center  items-center py-16 md:py-24">
         <div className="container px-4 ">
           <div className="text-center max-w-2x">
             <motion.h1
@@ -211,7 +218,7 @@ const PromotionPage: FC = () => {
       </div>
 
       {/* Newsletter Section */}
-      <div className="container mx-auto px-4 py-12 mb-16">
+      {/* <div className="container mx-auto px-4 py-12 mb-16">
         <div className="bg-white rounded-2xl p-8 md:p-12 border border-gray-100">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-blue-900 mb-4">
@@ -233,10 +240,10 @@ const PromotionPage: FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* FAQ Section */}
-      <div className="container mx-auto px-4 py-12 mb-16">
+      <div className="container  mx-auto px-4 py-12 mb-16">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold text-blue-900 mb-8 text-center">
             Часто задаваемые вопросы

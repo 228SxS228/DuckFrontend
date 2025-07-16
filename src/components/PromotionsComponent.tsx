@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 import Modal from "./Modal";
 import { motion } from "framer-motion";
 import BubbleComponent from "./ui/Buble";
+import { LiquidGlass } from "./ui/LiquidGlass";
 
 const PromotionsComponent: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -114,13 +115,14 @@ const PromotionsComponent: FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {promotions.map((promo, index) => (
-            <motion.div
+            <LiquidGlass
               key={index}
               className="bg-white rounded-2xl p-6 border border-blue-200 shadow-lg transition-all hover:shadow-xl hover:-translate-y-2"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              glassColor="#ffffff"
+                opacity={0.7}
+                hoverOpacity={0.9}
+                blurStrength={10}
+                borderRadius={24}
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-start">
@@ -167,7 +169,7 @@ const PromotionsComponent: FC = () => {
               >
                 Воспользоваться акцией
               </Button>
-            </motion.div>
+            </LiquidGlass>
           ))}
         </div>
 

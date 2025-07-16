@@ -12,6 +12,7 @@ import DuckComponent from "./DuckComponent";
 import { motion, Variants } from "framer-motion";
 import Modal from "./Modal";
 import { Input } from "./ui/input";
+import { LiquidGlass } from "./ui/LiquidGlass";
 
 const ProgramsComponent: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -89,7 +90,14 @@ const ProgramsComponent: FC = () => {
             whileHover="hover"
             viewport={{ once: true, margin: "-100px" }}
           >
-            <div className="relative">
+            <LiquidGlass  
+              glassColor="#ffffff"
+              opacity={0.7}
+              hoverOpacity={0.9}
+              blurStrength={10}
+              borderRadius={24}
+              className="h-full rounded-3xl p-6 transition-all"
+            >
               <div className="flex items-center mb-4 md:mb-6">
                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#EBA31E] flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
                   <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-white" />
@@ -132,7 +140,7 @@ const ProgramsComponent: FC = () => {
                     </h4>
                   </div>
 
-                  <div className="bg-gray-100 bg-opacity-10 rounded-lg p-4">
+                  <div className="rounded-lg p-4">
                     <ul className="space-y-3">
                       <li className="flex justify-between items-center">
                         <span className="text-gray-700">Разовое посещение</span>
@@ -204,7 +212,7 @@ const ProgramsComponent: FC = () => {
               >
                 Записаться
               </Button>
-            </div>
+            </LiquidGlass>
           </motion.div>
 
           {/* Утенок Продолжение */}

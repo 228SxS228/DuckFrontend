@@ -9,7 +9,7 @@ const Layout: FC = () => {
   return (
     <div className="relative flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 bg-gradient-to-r from-blue-900 to-blue-700 text-white via-blue-300 overflow-hidden relative flex flex-col">
+      <main className="flex-1 text-white  overflow-hidden relative flex flex-col">
         <Outlet />
       </main>
       <Footer />

@@ -39,9 +39,9 @@ export default function SaltCavePage() {
   // const safeVideoSrc = validateMediaSource(import.meta.env.VITE_VIDEO_SALT_SRC);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] flex-col">
       {/* Header */}
-      <div className="grid grid-flow-col justify-items-center bg-gradient-to-r items-center from-blue-900 to-blue-700 py-16 md:py-24">
+      <div className="grid grid-flow-col justify-items-center py-16 md:py-24">
         <div className="container px-4 ">
           <div className="text-center max-w-2x">
             <motion.h1
@@ -131,9 +131,9 @@ export default function SaltCavePage() {
         opacity={0.55}
         blurStrength={12}
         borderRadius={32}
-        className="py-12"
+        className="py-12 "
       >
-        <div className="mx-auto px-4">
+        <div className="mx-auto  px-4">
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
               <h2 className="mb-6 text-2xl font-bold text-sky-800">
