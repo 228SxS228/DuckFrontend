@@ -300,8 +300,7 @@ import Modal from "../components/Modal";
 import {
   GraduationCap,
   Medal,
-  Heart,
-  Star,
+   Star,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -344,9 +343,7 @@ const TrainersPage: FC = () => {
     setIsModalOpen(true);
   };
 
-  // Функция для генерации случайного стажа
-  const getRandomExperience = () => Math.floor(Math.random() * 15) + 3;
-
+  
   // Данные тренеров с дополненной информацией
   const trainers: Trainer[] = [
     {
@@ -555,7 +552,7 @@ const TrainersPage: FC = () => {
         </div>
 
         {/* Сетка тренеров */}
-        <div className="grid overflow-hidden gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid  overflow-hidden gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {trainers.map((trainer) => (
             <LiquidGlass
               key={trainer.Id}
@@ -565,7 +562,7 @@ const TrainersPage: FC = () => {
               borderRadius={32}
               className="group overflow-hidden rounded-2xl bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
             >
-              <div className="relative h-100 overflow-hidden">
+              <div className="relative h-130 overflow-hidden">
                 <img
                   src={trainer.TrainerPhotoUrl}
                   alt={trainer.TrainerName}

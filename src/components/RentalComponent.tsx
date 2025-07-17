@@ -244,10 +244,6 @@
 
 import { FC } from "react";
 import {
-  Gift,
-  Calendar,
-  Users,
-  Star,
   ChevronRight,
   PartyPopper,
 } from "lucide-react";
@@ -255,60 +251,60 @@ import ImageGalleryBanner from "./ui/ImageGalleryBanner";
 import photo2 from "@/static/utenokpro_animatory.jpg";
 import photo3 from "@/static/utenokpro_programma.jpg";
 import { motion, Variants } from "framer-motion";
-import { LiquidGlass } from "./ui/LiquidGlass";
+
 import BubbleComponent from "./ui/Buble";
 import { Button } from "./ui/button";
 
 const images = [photo2, photo3];
 
 const Rentalcomponent: FC = () => {
-  const packages = [
-    {
-      title: "Праздничный пакет 'Утенок'",
-      icon: <Star className="h-6 w-6 text-[#FFD700]" />,
-      color: "bg-gradient-to-r from-[#4A00E0] to-[#8E2DE2]",
-      price: "от 8 900 ₽",
-      features: [
-        "1 час аренды детского бассейна",
-        "Профессиональный аниматор",
-        "Праздничное угощение",
-        "Подарки для всех гостей",
-        "Фотосессия (10 цифровых фото)",
-      ],
-    },
-    {
-      title: "Праздничный пакет 'Дельфин'",
-      icon: <Gift className="h-6 w-6 text-[#FFD700]" />,
-      color: "bg-gradient-to-r from-[#8E2DE2] to-[#4A00E0]",
-      price: "от 15 900 ₽",
-      features: [
-        "2 часа аренды бассейна",
-        "2 профессиональных аниматора",
-        "Премиальное угощение",
-        "Эксклюзивные подарки",
-        "Профессиональная фотосессия",
-        "Видеомонтаж праздника",
-      ],
-    },
-  ];
+  // const packages = [
+  //   {
+  //     title: "Праздничный пакет 'Утенок'",
+  //     icon: <Star className="h-6 w-6 text-[#FFD700]" />,
+  //     color: "bg-gradient-to-r from-[#4A00E0] to-[#8E2DE2]",
+  //     price: "от 8 900 ₽",
+  //     features: [
+  //       "1 час аренды детского бассейна",
+  //       "Профессиональный аниматор",
+  //       "Праздничное угощение",
+  //       "Подарки для всех гостей",
+  //       "Фотосессия (10 цифровых фото)",
+  //     ],
+  //   },
+  //   {
+  //     title: "Праздничный пакет 'Дельфин'",
+  //     icon: <Gift className="h-6 w-6 text-[#FFD700]" />,
+  //     color: "bg-gradient-to-r from-[#8E2DE2] to-[#4A00E0]",
+  //     price: "от 15 900 ₽",
+  //     features: [
+  //       "2 часа аренды бассейна",
+  //       "2 профессиональных аниматора",
+  //       "Премиальное угощение",
+  //       "Эксклюзивные подарки",
+  //       "Профессиональная фотосессия",
+  //       "Видеомонтаж праздника",
+  //     ],
+  //   },
+  // ];
 
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-    hover: {
-      y: -15,
-      scale: 1.03,
-      boxShadow: "0 25px 50px -12px rgba(142, 45, 226, 0.25)",
-      transition: { duration: 0.4 },
-    },
-  };
+  // const cardVariants: Variants = {
+  //   hidden: { opacity: 0, y: 30 },
+  //   visible: {
+  //     opacity: 1,
+  //     y: 0,
+  //     transition: {
+  //       duration: 0.6,
+  //       ease: "easeOut",
+  //     },
+  //   },
+  //   hover: {
+  //     y: -15,
+  //     scale: 1.03,
+  //     boxShadow: "0 25px 50px -12px rgba(142, 45, 226, 0.25)",
+  //     transition: { duration: 0.4 },
+  //   },
+  // };
 
   const textVariants: Variants = {
     hidden: { opacity: 0, y: 20 },

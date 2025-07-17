@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Badge, Calendar, Clock, Tag, Users } from "lucide-react";
 import { FC } from "react";
 import { motion } from "framer-motion";
