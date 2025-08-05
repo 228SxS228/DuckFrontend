@@ -7,7 +7,6 @@
 //   selectTimeTableData,
 // } from "../store/slices/timeTableSlice";
 
-
 // const TimeTablePage: FC = () => {
 //   const dispatch = useAppDiscpatch();
 
@@ -145,7 +144,7 @@
 //               {daysOfWeek.map((day) => (
 //                 <div
 //                   key={`${day}-${time}`}
-//                   className="bg-white p-3 text-sm text-gray-700 text-center 
+//                   className="bg-white p-3 text-sm text-gray-700 text-center
 //                     hover:bg-blue-50 transition-colors border-b"
 //                 >
 //                   {getCellData(day, time, activeTimeTable)}
@@ -161,91 +160,66 @@
 
 // export default TimeTablePage;
 
-
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { TimeTable, TimeTableDay } from "../model/model";
-import {  useAppSelector } from "../hooks/reduxe";
-// import { fetchTimeTable } from "../store/action/timeTableAction";
+import { TimeTableDay } from "../model/model";
+import { useAppDiscpatch, useAppSelector } from "../hooks/reduxe";
+import { fetchTimeTable } from "../store/action/timeTableAction";
 import {
   selectTimeTableInfo,
   selectTimeTableData,
 } from "../store/slices/timeTableSlice";
 
 const TimeTablePage: FC = () => {
-  // const dispatch = useAppDiscpatch();
+  const dispatch = useAppDiscpatch();
   const { loading, error } = useAppSelector(selectTimeTableInfo);
   const allTimeTables = useAppSelector(selectTimeTableData);
   const [activeTimeTableId, setActiveTimeTableId] = useState<number | null>(
     null
   );
 
-  // useEffect(() => {
-  //   dispatch(fetchTimeTable());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchTimeTable());
+  }, [dispatch]);
 
   useEffect(() => {
     if (allTimeTables.length > 0 && !activeTimeTableId) {
-      setActiveTimeTableId(allTimeTables[0]?.Id);
+      setActiveTimeTableId(allTimeTables[0]?.id);
     }
   }, [allTimeTables, activeTimeTableId]);
 
-    const getCellData = useMemo(
-      () => (day: string, time: string, timeTable: TimeTable) => {
-        if (!timeTable?.TimeTableDay) return "Нет данных";
+  const convertDayName = (shortDay: string) => {
+    const daysMap: Record<string, string> = {
+      Пн: "Понедельник",
+      Вт: "Вторник",
+      Ср: "Среда",
+      Чт: "Четверг",
+      Пт: "Пятница",
+      Сб: "Суббота",
+      Вс: "Воскресенье",
+    };
+    return daysMap[shortDay] || shortDay;
+  };
 
-        const entry = timeTable.TimeTableDay.find(
-          (entry) => entry.DayName === day && entry.Time === time
-        );
-
-        return entry?.Class && entry?.Trainer
-          ? `${entry.Class.ClassName} (${entry.Trainer.TrainerName})`
-          : "Свободно";
-      },
-      []
-    );
-
-  // Группировка занятий по дням недели
+  // Обновляем groupByDay
   const groupByDay = (timetableDays: TimeTableDay[]) => {
     return timetableDays.reduce((acc: Record<string, TimeTableDay[]>, day) => {
-      if (!acc[day.DayName]) {
-        acc[day.DayName] = [];
+      const fullDayName = convertDayName(day.day);
+      if (!acc[fullDayName]) {
+        acc[fullDayName] = [];
       }
-      acc[day.DayName].push(day);
+      acc[fullDayName].push(day);
       return acc;
     }, {});
   };
 
-  // Функция для определения цвета типа занятия
-  const getTypeColor = (type?: string) => {
-    if (!type) return "bg-gray-100 text-gray-800";
-    if (type.includes("Начинающие")) return "bg-green-100 text-green-800";
-    if (type.includes("Продолжающие") || type.includes("Продвинутый"))
-      return "bg-blue-100 text-blue-800";
-    if (
-      type.includes("Спортивная") ||
-      type.includes("соревнованиям") ||
-      type.includes("Сборная")
-    )
-      return "bg-purple-100 text-purple-800";
-    if (
-      type.includes("С родителями") ||
-      type.includes("мам") ||
-      type.includes("Семейное")
-    )
-      return "bg-yellow-100 text-yellow-800";
-    if (type.includes("Смешанная") || type.includes("Все"))
-      return "bg-orange-100 text-orange-800";
-    if (type.includes("Специальный") || type.includes("Реабилитационное"))
-      return "bg-pink-100 text-pink-800";
-    if (type.includes("Синхронное") || type.includes("поло"))
-      return "bg-indigo-100 text-indigo-800";
-    if (type.includes("Техника") || type.includes("Мастер-класс"))
-      return "bg-teal-100 text-teal-800";
-    return "bg-gray-100 text-gray-800";
+  // Обновляем getTypeColor
+  const getTypeColor = (name?: string) => {
+    if (!name) return "bg-gray-100 text-gray-800";
+    if (name.includes("Индивидуал")) return "bg-green-100 text-green-800";
+    return "bg-blue-100 text-blue-800";
   };
-
   if (loading) return <div className="text-center py-8">Загрузка...</div>;
   if (error)
     return <div className="text-center py-8 text-red-500">{error}</div>;
@@ -270,22 +244,22 @@ const TimeTablePage: FC = () => {
 
         <section className="py-12">
           <div className="container mx-auto px-4">
-            <Tabs defaultValue={allTimeTables[0]?.Id.toString()}>
-              <TabsList className="mb-6 grid w-full grid-cols-2">
+            <Tabs defaultValue={allTimeTables[0]?.id.toString()}>
+              <TabsList className="mb-6 flex flex-wrap">
                 {allTimeTables.map((timeTable) => (
                   <TabsTrigger
-                    key={timeTable.Id}
+                    key={timeTable.id}
                     value={timeTable.Id.toString()}
-                    className="text-base"
-                    onClick={() => setActiveTimeTableId(timeTable.Id)}
+                    className="text-base mb-2"
+                    onClick={() => setActiveTimeTableId(timeTable.id)}
                   >
-                    {timeTable.Name}
+                    {timeTable.name}
                   </TabsTrigger>
                 ))}
               </TabsList>
 
               {allTimeTables.map((timeTable) => {
-                const groupedDays = groupByDay(timeTable.TimeTableDay);
+                const groupedDays = groupByDay(timeTable.timeTableDay);
                 const daysOrder = [
                   "Понедельник",
                   "Вторник",
@@ -298,60 +272,66 @@ const TimeTablePage: FC = () => {
 
                 return (
                   <TabsContent
-                    key={timeTable.Id}
-                    value={timeTable.Id.toString()}
+                    key={timeTable.id}
+                    value={timeTable.id.toString()}
                   >
-                    <div className="mb-4">
-                      <h2 className="mb-2 text-xl font-bold text-sky-800">
-                        Расписание центра "{timeTable.Name}"
+                    <div className="mb-8">
+                      <h2 className="mb-6 text-2xl font-bold text-sky-800 text-center">
+                        Расписание: {timeTable.className}
                       </h2>
-                      {/* <p className="text-gray-600">{timeTable.Description}</p> */}
-                    </div>
 
-                    <div className="mb-8 overflow-x-auto">
-                      <div className="min-w-[900px]">
-                        <div className="grid grid-cols-7 gap-2">
-                          {daysOrder.map((dayName) => (
-                            <div key={dayName} className="flex flex-col">
-                              <div className="bg-sky-700 p-2 text-center font-bold text-white">
-                                {dayName}
-                              </div>
-                              <div className="flex h-full flex-col gap-2 bg-sky-50 p-2">
-                                {groupedDays[dayName]?.map((session) => (
-                                  <div
-                                    key={session.Id}
-                                    className="rounded-md bg-white p-3 shadow-sm"
-                                  >
-                                    <p className="font-bold text-sky-800">
-                                      {session.Time}
-                                    </p>
-                                    <p className="text-sm text-gray-700">
-                                      {session.Class?.ClassName || "Занятие"} (
-                                      {/* {session.Trainer?.TrainerName ||
-                                        "Тренер не указан"} */}
-                                      )
-                                    </p>
-                                    {session.Class?.ClassName && (
-                                      <span
-                                        className={`mt-1 inline-flex rounded-full px-2 py-1 text-xs font-semibold ${getTypeColor(
-                                          session.Trainer?.TrainerName
-                                        )}`}
-                                      >
-                                        {session.Trainer?.TrainerName}
-                                      </span>
-                                    )}
-                                  </div>
-                                ))}
-                                {!groupedDays[dayName] && (
-                                  <div className="p-3 text-sm text-gray-500 text-center">
-                                    Нет занятий
-                                    {getCellData(dayName, dayName, timeTable)}
-                                  </div>
-                                )}
-                              </div>
+                      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+                        {daysOrder.map((dayName) => (
+                          <div
+                            key={dayName}
+                            className="bg-white rounded-lg shadow-md overflow-hidden"
+                          >
+                            <div className="bg-sky-700 p-3 text-center font-bold text-white">
+                              {dayName}
                             </div>
-                          ))}
-                        </div>
+
+                            <div className="p-3">
+                              {groupedDays[dayName]?.length ? (
+                                groupedDays[dayName]
+                                  .filter(
+                                    (session) =>
+                                      session.className.includes(
+                                        "Индивидуал"
+                                      ) ||
+                                      session.className.includes("Персональное")
+                                  )
+                                  .sort((a, b) => a.time.localeCompare(b.time))
+                                  .map((session) => (
+                                    <div
+                                      key={session.id}
+                                      className="mb-3 p-3 bg-sky-50 rounded-md border border-sky-100"
+                                    >
+                                      <div className="flex justify-between items-start">
+                                        <span className="font-bold text-sky-800">
+                                          {session.time}
+                                        </span>
+                                        <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                                          Индивидуальное
+                                        </span>
+                                      </div>
+                                      <div className="mt-2">
+                                        <p className="font-medium">
+                                          {session.className}
+                                        </p>
+                                        <p className="text-sm text-gray-700 mt-1">
+                                          Тренер: {session.trainerName}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  ))
+                              ) : (
+                                <p className="text-gray-500 text-center py-4">
+                                  Нет индивидуальных занятий
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </TabsContent>

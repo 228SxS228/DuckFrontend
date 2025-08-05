@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
-import { TimeTable } from "../../model/model";
+import {  TimeTableDay } from "../../model/model";
 import { fetchTimeTableById } from "../action/timeTableAction";
 import { RootState } from "../index"; // Убедитесь, что у вас есть тип RootState
 
 interface TimeTableState {
-  timeTable: TimeTable[];
+  timeTable: TimeTableDay[];
   loading: boolean;
   error: string | null;
 }
@@ -22,7 +22,7 @@ export const timeTableSlice = createSlice({
     fetching(state) {
       state.loading = true;
     },
-    fetchSuccess(state, action: PayloadAction<TimeTable[]>) {
+    fetchSuccess(state, action: PayloadAction<TimeTableDay[]>) {
       state.loading = false;
       state.timeTable = action.payload;
     },
@@ -39,7 +39,7 @@ export const timeTableSlice = createSlice({
       })
       .addCase(
         fetchTimeTableById.fulfilled,
-        (state, action: PayloadAction<TimeTable[]>) => {
+        (state, action: PayloadAction<TimeTableDay[]>) => {
           state.loading = false;
           state.timeTable = action.payload; // Теперь с гарантированной типизацией
         }

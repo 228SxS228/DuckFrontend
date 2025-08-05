@@ -1,19 +1,32 @@
-export interface TimeTable {
-  Id: number; // Уникальный идентификатор
-  Name: string; // Название расписания
-  TimeTableDay: TimeTableDay[]; // Список дней расписания
+// export interface TimeTable {
+//   Id: number; // Уникальный идентификатор
+//   Name: string; // Название расписания
+//   TimeTableDay: TimeTableDay[]; // Список дней расписания
+// }
+
+// export interface TimeTableDay {
+//   Id: number; // Уникальный идентификатор
+//   DayName: string; // Название дня
+//   Time: string; // Время проведения занятия
+//   TimeTableId: number; // Внешний ключ на TimeTable
+//   TrainerId: number; // Внешний ключ на Trainer
+//   ClassId: number; // Внешний ключ на Class
+//   Class?: Class; // Связанное занятие 
+//   Trainer?: Trainer; // Связанный тренер 
+// } 
+export interface TimeTableDay {
+  id?: number;
+  className: string;
+  day: Date;
+  trainerName: string;
+  time: string;
 }
 
-export interface TimeTableDay {
-  Id: number; // Уникальный идентификатор
-  DayName: string; // Название дня
-  Time: string; // Время проведения занятия
-  TimeTableId: number; // Внешний ключ на TimeTable
-  TrainerId: number; // Внешний ключ на Trainer
-  ClassId: number; // Внешний ключ на Class
-  Class?: Class; // Связанное занятие 
-  Trainer?: Trainer; // Связанный тренер 
-}
+// export interface TimeTable {
+//   id: number;
+//   name: string;
+//   timeTableDay: TimeTableDay[];
+// }
 
 export interface Trainer {
   Id: number; // Уникальный идентификатор
