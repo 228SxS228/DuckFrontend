@@ -1,16 +1,17 @@
 import { FC, useState } from "react";
-import { ImageTextBlockProps} from "../types";
+import { ImageTextBlockProps } from "../model/types";
 import styles from "../pages/mainpage/MainPage.module.css";
 
-
-const FeedbackComponent: FC<ImageTextBlockProps> = ({mediaItems}) => {
-    const [currentMediaIndex, 
-      // setCurrentMediaIndex
-    ] = useState(0);
-    const currentMedia = mediaItems[currentMediaIndex];
-    const [iframeError, 
-      // setIframeError
-    ] = useState(false);
+const FeedbackComponent: FC<ImageTextBlockProps> = ({ mediaItems }) => {
+  const [
+    currentMediaIndex,
+    // setCurrentMediaIndex
+  ] = useState(0);
+  const currentMedia = mediaItems[currentMediaIndex];
+  const [
+    iframeError,
+    // setIframeError
+  ] = useState(false);
   return (
     <div>
       {!iframeError ? (

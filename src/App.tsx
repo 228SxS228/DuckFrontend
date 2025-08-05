@@ -17,7 +17,6 @@ function App() {
   return (
     <>
       {isLoading && <DuckLoader />}
-      {/* <RouterProvider router={appRouter} /> */}
       <div className={isLoading ? "hidden" : "block"}>
         <AppRoutes />
       </div>

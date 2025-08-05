@@ -1,7 +1,6 @@
-import { FC} from "react";
+import { FC } from "react";
 // import { ChevronDown, ChevronUp } from "lucide-react";
-import { FaqText } from "@/types";
-
+import { FaqText } from "@/model/types";
 
 // const faqs = [
 //   {
@@ -36,9 +35,7 @@ import { FaqText } from "@/types";
 //   },
 // ];
 
-
 const FaqComponent: FC<FaqText> = () => {
-  
   // сохранение состояния открытого вопроса
   // const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -88,6 +85,6 @@ const FaqComponent: FC<FaqText> = () => {
       </div>
     </section>
   );
-}
+};
 
 export default FaqComponent;

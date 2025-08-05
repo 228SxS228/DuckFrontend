@@ -300,7 +300,7 @@ import Modal from "../components/Modal";
 import {
   GraduationCap,
   Medal,
-   Star,
+  Star,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -343,7 +343,6 @@ const TrainersPage: FC = () => {
     setIsModalOpen(true);
   };
 
-  
   // Данные тренеров с дополненной информацией
   const trainers: Trainer[] = [
     {
@@ -528,10 +527,6 @@ const TrainersPage: FC = () => {
       <div className="container overflow-hidden mx-auto px-4">
         {/* Заголовок */}
         <div className="text-center  mb-16">
-          {/* <div className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2 rounded-full mb-4">
-            <Waves className="inline mr-2" size={20} />
-            Наша команда
-          </div> */}
           <motion.h1
             className="text-3xl md:text-5xl font-bold text-white mb-4"
             initial={{ opacity: 0, y: -20 }}
@@ -585,16 +580,6 @@ const TrainersPage: FC = () => {
               </div>
 
               <div className="p-5">
-                {/* <div className="flex items-start mb-3">
-                  <GraduationCap
-                    className="mt-1 mr-2 text-sky-600 flex-shrink-0"
-                    size={18}
-                  />
-                  {/* <p className="text-sm text-gray-700">
-                    {trainer.TrainerDescription}
-                  </p> 
-                </div> */}
-
                 <Button
                   onClick={() => handleTrainerClick(trainer)}
                   className="w-full text-blue-50 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700"
@@ -605,23 +590,6 @@ const TrainersPage: FC = () => {
             </LiquidGlass>
           ))}
         </div>
-
-        {/* Блок призыва к действию */}
-        {/* <div className="mt-16 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-600 p-8 text-center text-white">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="mb-4 text-2xl font-bold text-white">
-              Хотите присоединиться к нашей команде?
-            </h2>
-            <p className="mb-6 text-white">
-              Мы всегда рады талантливым и увлеченным тренерам. Если вы любите
-              работать с детьми и имеете опыт в обучении плаванию, отправьте нам
-              свое резюме.
-            </p>
-            <Button className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-6 text-lg font-bold">
-              Отправить резюме
-            </Button>
-          </div>
-        </div> */}
       </div>
 
       {/* Модальное окно с детальной информацией о тренере */}
@@ -676,12 +644,6 @@ const TrainersPage: FC = () => {
                 <h2 className="text-3xl font-bold text-blue-900 mb-2">
                   {selectedTrainer.TrainerName}
                 </h2>
-
-                {/* <div className="flex items-center mb-2">
-                  <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium mr-3">
-                    Стаж: {selectedTrainer.experience} лет
-                  </div>
-                </div> */}
               </div>
 
               {/* Образование */}
@@ -726,37 +688,10 @@ const TrainersPage: FC = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Философия обучения */}
-              {/* <div className="p-4 bg-sky-50 rounded-xl">
-                <div className="flex items-start">
-                  <Heart
-                    className="mt-1 mr-3 text-pink-500 flex-shrink-0"
-                    size={24}
-                  />
-                  <div>
-                    <h3 className="font-bold text-lg text-sky-800 mb-1">
-                      Подход к обучению
-                    </h3>
-                    <p className="text-gray-700">
-                      Создаю дружелюбную и безопасную атмосферу для детей, где
-                      каждый ребенок чувствует себя уверенно в воде. Использую
-                      игровые методики, которые делают обучение плаванию
-                      увлекательным и эффективным.
-                    </p>
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Кнопка записи */}
-              {/* <Button className="mt-6 w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 py-6 text-lg text-white">
-                Записаться к тренеру
-              </Button> */}
             </div>
           </div>
         )}
       </Modal>
-      {/* Стили для анимации волн */}
     </section>
   );
 };

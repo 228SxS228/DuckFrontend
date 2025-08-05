@@ -1,64 +1,69 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
-import {  TimeTableDay } from "../../model/model";
-import { fetchTimeTableById } from "../action/timeTableAction";
-import { RootState } from "../index"; // Убедитесь, что у вас есть тип RootState
+import { TimeTableItem } from "../../model/model";
+import { fetchTimeTable, bookSession } from "../action/timeTableAction";
+import { RootState } from "../index";
 
 interface TimeTableState {
-  timeTable: TimeTableDay[];
+  items: TimeTableItem[];
   loading: boolean;
   error: string | null;
+  bookingStatus: "idle" | "loading" | "success" | "error";
 }
 
 const initialState: TimeTableState = {
+  items: [],
   loading: false,
   error: null,
-  timeTable: [],
+  bookingStatus: "idle",
 };
 
 export const timeTableSlice = createSlice({
   name: "timeTable",
   initialState,
   reducers: {
-    fetching(state) {
-      state.loading = true;
-    },
-    fetchSuccess(state, action: PayloadAction<TimeTableDay[]>) {
-      state.loading = false;
-      state.timeTable = action.payload;
-    },
-    fetchError(state, action: PayloadAction<string>) {
-      state.loading = false;
-      state.error = action.payload;
+    resetBookingStatus: (state) => {
+      state.bookingStatus = "idle";
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchTimeTableById.pending, (state) => {
+      .addCase(fetchTimeTable.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        fetchTimeTableById.fulfilled,
-        (state, action: PayloadAction<TimeTableDay[]>) => {
+        fetchTimeTable.fulfilled,
+        (state, action: PayloadAction<TimeTableItem[]>) => {
           state.loading = false;
-          state.timeTable = action.payload; // Теперь с гарантированной типизацией
+          state.items = action.payload;
         }
       )
-      // .addCase(fetchTimeTableById.fulfilled, (state, action) => {
-      //   if (Array.isArray(action.payload)) {
-      //     state.timeTable = action.payload;
-      //   } else {
-      //     state.error = "Invalid response format";
-      //   }
-      // })
-      .addCase(fetchTimeTableById.rejected, (state, action) => {
+      .addCase(fetchTimeTable.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Unknown error";
+        state.error = action.error.message || "Ошибка загрузки расписания";
+      })
+      .addCase(bookSession.pending, (state) => {
+        state.bookingStatus = "loading";
+      })
+      .addCase(
+        bookSession.fulfilled,
+        (state, action: PayloadAction<TimeTableItem>) => {
+          state.bookingStatus = "success";
+          const index = state.items.findIndex(
+            (item) => item.id === action.payload.id
+          );
+          if (index !== -1) {
+            state.items[index] = action.payload;
+          }
+        }
+      )
+      .addCase(bookSession.rejected, (state) => {
+        state.bookingStatus = "error";
       });
   },
 });
 
-// Базовые селекторы
+// Селекторы
 const selectTimeTableState = (state: RootState) => state.timeTable;
 
 export const selectLoading = createSelector(
@@ -71,20 +76,26 @@ export const selectError = createSelector(
   (state) => state.error
 );
 
-export const selectTimeTableData = createSelector(
+export const selectItems = createSelector(
   [selectTimeTableState],
-  (state) => state.timeTable
+  (state) => state.items
 );
 
-// Мемоизированный селектор для комплексных данных
+export const selectBookingStatus = createSelector(
+  [selectTimeTableState],
+  (state) => state.bookingStatus
+);
+
 export const selectTimeTableInfo = createSelector(
-  [selectLoading, selectError, selectTimeTableData],
-  (loading, error, timeTable) => ({
+  [selectLoading, selectError, selectItems, selectBookingStatus],
+  (loading, error, items, bookingStatus) => ({
     loading,
     error,
-    timeTable,
-    hasData: timeTable.length > 0,
+    items,
+    bookingStatus,
+    hasData: items.length > 0,
   })
 );
 
+export const { resetBookingStatus } = timeTableSlice.actions;
 export default timeTableSlice.reducer;

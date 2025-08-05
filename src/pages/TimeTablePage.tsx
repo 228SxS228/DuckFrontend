@@ -1,157 +1,159 @@
-// import React, { FC, useEffect, useState, useMemo } from "react";
-// import { TimeTable } from "../model/model";
-// import { useAppDiscpatch, useAppSelector } from "../hooks/reduxe";
-// import { fetchTimeTable } from "../store/action/timeTableAction";
-// import {
-//   selectTimeTableInfo,
-//   selectTimeTableData,
-// } from "../store/slices/timeTableSlice";
+// import { FC, useEffect, useState } from "react";
+// import { useAppDispatch, useAppSelector } from "../hooks/reduxe";
+// import { bookSession, fetchTimeTable } from "../store/action/timeTableAction";
+// import { selectTimeTableInfo } from "../store/slices/timeTableSlice";
+// import { TimeTableItem } from "../model/model";
 
 // const TimeTablePage: FC = () => {
-//   const dispatch = useAppDiscpatch();
-
-//   // Используем мемоизированные селекторы
-//   const {
-//     loading,
-//     error,
-//     timeTable: [],
-//   } = useAppSelector(selectTimeTableInfo);
-//   const allTimeTables = useAppSelector(selectTimeTableData);
-
-//   const [activeTimeTableId, setActiveTimeTableId] = useState<number | null>(
+//   const dispatch = useAppDispatch();
+//   const { loading, error, items } = useAppSelector(selectTimeTableInfo);
+//   const [selectedSession, setSelectedSession] = useState<TimeTableItem | null>(
 //     null
 //   );
+//   const [showModal, setShowModal] = useState(false);
 
+//   // Загрузка данных при монтировании
 //   useEffect(() => {
 //     dispatch(fetchTimeTable());
 //   }, [dispatch]);
 
-//   // Мемоизированные константы
-//   const timeSlots = useMemo(
-//     () => Array.from({ length: 12 }, (_, i) => `${i + 9}:00`),
-//     []
-//   );
-
-//   const daysOfWeek = useMemo(
-//     () => [
-//       "Понедельник",
-//       "Вторник",
-//       "Среда",
-//       "Четверг",
-//       "Пятница",
-//       "Суббота",
-//       "Воскресенье",
-//     ],
-//     []
-//   );
-
-//   // Оптимизированная функция для получения данных ячейки
-//   const getCellData = useMemo(
-//     () => (day: string, time: string, timeTable: TimeTable) => {
-//       if (!timeTable?.TimeTableDay) return "Нет данных";
-
-//       const entry = timeTable.TimeTableDay.find(
-//         (entry) => entry.DayName === day && entry.Time === time
-//       );
-
-//       return entry?.Class && entry?.Trainer
-//         ? `${entry.Class.ClassName} (${entry.Trainer.TrainerName})`
-//         : "Свободно";
-//     },
-//     []
-//   );
-
-//   // Автовыбор первого расписания
-//   useEffect(() => {
-//     if (allTimeTables.length > 0 && !activeTimeTableId) {
-//       setActiveTimeTableId(allTimeTables[0]?.Id);
+//   // Обработчик клика по занятию
+//   const handleSessionClick = (session: TimeTableItem) => {
+//     if (session.isFree) {
+//       setSelectedSession(session);
+//       setShowModal(true);
 //     }
-//   }, [allTimeTables, activeTimeTableId]);
+//   };
 
-//   // Активное расписание с мемоизацией
-//   const activeTimeTable = useMemo(
-//     () => allTimeTables.find((t) => t.Id === activeTimeTableId),
-//     [allTimeTables, activeTimeTableId]
-//   );
+//   // Группировка занятий по дням недели
+//   const groupByDay = (sessions: TimeTableItem[]) => {
+//     const daysMap: Record<string, TimeTableItem[]> = {};
 
-//   if (loading) {
-//     return <div className="text-center py-8">Загрузка...</div>;
-//   }
+//     sessions.forEach((session) => {
+//       const date = new Date(session.day);
+//       const dayName = date.toLocaleDateString("ru-RU", { weekday: "long" });
 
-//   if (error) {
-//     return <div className="text-center py-8 text-red-500">{error}</div>;
-//   }
+//       if (!daysMap[dayName]) {
+//         daysMap[dayName] = [];
+//       }
+//       daysMap[dayName].push(session);
+//     });
 
-//   if (!allTimeTables.length) {
-//     return <div className="text-center py-8">Данные не найдены</div>;
-//   }
+//     // Сортируем дни недели в правильном порядке
+//     const daysOrder = [
+//       "понедельник",
+//       "вторник",
+//       "среда",
+//       "четверг",
+//       "пятница",
+//       "суббота",
+//       "воскресенье",
+//     ];
+
+//     const sortedDays: Record<string, TimeTableItem[]> = {};
+//     daysOrder.forEach((day) => {
+//       if (daysMap[day]) {
+//         sortedDays[day] = daysMap[day].sort((a, b) =>
+//           a.time.localeCompare(b.time)
+//         );
+//       }
+//     });
+
+//     return sortedDays;
+//   };
+
+//   // Состояния загрузки
+//   if (loading)
+//     return <div className="text-center py-8">Загрузка расписания...</div>;
+//   if (error)
+//     return <div className="text-center py-8 text-red-500">Ошибка: {error}</div>;
+//   if (!items.length)
+//     return <div className="text-center py-8">Нет доступных занятий</div>;
+
+//   const groupedSessions = groupByDay(items);
 
 //   return (
-//     <div className="flex min-h-screen flex-col">
-//       <main className="flex-1">
-//         <section className="bg-gradient-to-b from-sky-100 to-white py-12 md:py-20">
-//           <div className="container mx-auto px-4">
-//             <div className="text-center">
-//               <h1 className="mb-6 text-3xl font-bold text-sky-800 md:text-4xl lg:text-5xl">
-//                 Расписание занятий
-//               </h1>
-//               <p className="mx-auto mb-8 max-w-2xl text-lg text-sky-700">
-//                 Выберите удобное время для занятий плаванием в нашем центре
-//               </p>
+//     <div className="container mx-auto px-4 py-8">
+//       <h1 className="text-2xl font-bold text-center mb-8">
+//         Расписание занятий
+//       </h1>
+
+//       <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+//         {Object.entries(groupedSessions).map(([dayName, sessions]) => (
+//           <div key={dayName} className="border rounded-lg overflow-hidden">
+//             <div className="bg-blue-600 p-3 text-center text-white font-bold">
+//               {dayName.charAt(0).toUpperCase() + dayName.slice(1)}
+//             </div>
+//             <div className="p-2">
+//               {sessions.map((session) => (
+//                 <div
+//                   key={`${session.day}-${session.time}`}
+//                   onClick={() => handleSessionClick(session)}
+//                   className={`p-3 mb-2 rounded border cursor-pointer ${
+//                     session.isFree
+//                       ? "bg-green-50 border-green-200 hover:bg-green-100"
+//                       : "bg-gray-100 border-gray-300 cursor-not-allowed"
+//                   }`}
+//                 >
+//                   <div className="flex justify-between">
+//                     <span className="font-medium">{session.time}</span>
+//                     {!session.isFree && (
+//                       <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+//                         Занято
+//                       </span>
+//                     )}
+//                   </div>
+//                   <div className="mt-1 text-sm">
+//                     <p>{session.className}</p>
+//                     <p className="text-gray-600">
+//                       Тренер: {session.trainerName}
+//                     </p>
+//                   </div>
+//                 </div>
+//               ))}
 //             </div>
 //           </div>
-//         </section>
-//       </main>
-
-//       {/* Вкладки */}
-//       <div className="flex flex-wrap gap-2 mb-8">
-//         {allTimeTables.map((timeTable) => (
-//           <button
-//             key={timeTable.Id}
-//             onClick={() => setActiveTimeTableId(timeTable.Id)}
-//             className={`px-4 py-2 rounded-lg transition-colors text-sm font-medium
-//               ${
-//                 activeTimeTableId === timeTable.Id
-//                   ? "bg-blue-600 text-white shadow-md"
-//                   : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-//               }`}
-//           >
-//             {timeTable.Name}
-//           </button>
 //         ))}
 //       </div>
 
-//       {/* Таблица */}
-//       {activeTimeTable && (
-//         <div className="grid grid-cols-8 gap-px bg-gray-100 border rounded-lg overflow-hidden">
-//           {/* Заголовки */}
-//           <div className="bg-white p-3 font-semibold text-gray-600">Время</div>
-//           {daysOfWeek.map((day) => (
-//             <div
-//               key={day}
-//               className="bg-white p-3 font-semibold text-gray-600 text-center"
-//             >
-//               {day}
+//       {/* Модальное окно записи */}
+//       {showModal && selectedSession && (
+//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+//           <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+//             <h3 className="text-xl font-bold mb-4">Запись на занятие</h3>
+//             <div className="space-y-2 mb-4">
+//               <p>
+//                 <b>Дата:</b>{" "}
+//                 {new Date(selectedSession.day).toLocaleDateString("ru-RU")}
+//               </p>
+//               <p>
+//                 <b>Время:</b> {selectedSession.time}
+//               </p>
+//               <p>
+//                 <b>Тренер:</b> {selectedSession.trainerName}
+//               </p>
+//               <p>
+//                 <b>Тип:</b> {selectedSession.className}
+//               </p>
 //             </div>
-//           ))}
-
-//           {/* Строки */}
-//           {timeSlots.map((time) => (
-//             <React.Fragment key={time}>
-//               <div className="bg-white p-3 font-medium text-gray-500">
-//                 {time}
-//               </div>
-//               {daysOfWeek.map((day) => (
-//                 <div
-//                   key={`${day}-${time}`}
-//                   className="bg-white p-3 text-sm text-gray-700 text-center
-//                     hover:bg-blue-50 transition-colors border-b"
-//                 >
-//                   {getCellData(day, time, activeTimeTable)}
-//                 </div>
-//               ))}
-//             </React.Fragment>
-//           ))}
+//             <div className="flex justify-end gap-2">
+//               <button
+//                 onClick={() => setShowModal(false)}
+//                 className="px-4 py-2 border rounded hover:bg-gray-100"
+//               >
+//                 Отмена
+//               </button>
+//               <button
+//                 onClick={() => {
+//                   dispatch(bookSession({ sessionId: selectedSession.id! }));
+//                   setShowModal(false);
+//                 }}
+//                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+//               >
+//                 Записаться
+//               </button>
+//             </div>
+//           </div>
 //         </div>
 //       )}
 //     </div>
@@ -161,230 +163,403 @@
 // export default TimeTablePage;
 
 import { FC, useEffect, useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link } from "react-router-dom";
-import { TimeTableDay } from "../model/model";
-import { useAppDiscpatch, useAppSelector } from "../hooks/reduxe";
-import { fetchTimeTable } from "../store/action/timeTableAction";
-import {
-  selectTimeTableInfo,
-  selectTimeTableData,
-} from "../store/slices/timeTableSlice";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxe";
+import { bookSession, fetchTimeTable } from "../store/action/timeTableAction";
+import { selectTimeTableInfo } from "../store/slices/timeTableSlice";
+import { TimeTableItem } from "../model/model";
 
 const TimeTablePage: FC = () => {
-  const dispatch = useAppDiscpatch();
-  const { loading, error } = useAppSelector(selectTimeTableInfo);
-  const allTimeTables = useAppSelector(selectTimeTableData);
-  const [activeTimeTableId, setActiveTimeTableId] = useState<number | null>(
+  const dispatch = useAppDispatch();
+  const { loading, error, items } = useAppSelector(selectTimeTableInfo);
+  const [selectedSession, setSelectedSession] = useState<TimeTableItem | null>(
     null
   );
+  const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchTimeTable());
+    const loadData = async () => {
+      await dispatch(fetchTimeTable());
+      // Имитация загрузки для демонстрации лоадера
+      setTimeout(() => setIsLoading(false), 1000);
+    };
+    loadData();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (allTimeTables.length > 0 && !activeTimeTableId) {
-      setActiveTimeTableId(allTimeTables[0]?.id);
+  const handleSessionClick = (session: TimeTableItem) => {
+    if (session.isFree) {
+      setSelectedSession(session);
+      setShowModal(true);
     }
-  }, [allTimeTables, activeTimeTableId]);
-
-  const convertDayName = (shortDay: string) => {
-    const daysMap: Record<string, string> = {
-      Пн: "Понедельник",
-      Вт: "Вторник",
-      Ср: "Среда",
-      Чт: "Четверг",
-      Пт: "Пятница",
-      Сб: "Суббота",
-      Вс: "Воскресенье",
-    };
-    return daysMap[shortDay] || shortDay;
   };
 
-  // Обновляем groupByDay
-  const groupByDay = (timetableDays: TimeTableDay[]) => {
-    return timetableDays.reduce((acc: Record<string, TimeTableDay[]>, day) => {
-      const fullDayName = convertDayName(day.day);
-      if (!acc[fullDayName]) {
-        acc[fullDayName] = [];
+  const groupByDay = (sessions: TimeTableItem[]) => {
+    const daysMap: Record<string, TimeTableItem[]> = {};
+
+    sessions.forEach((session) => {
+      const date = new Date(session.day);
+      const dayName = date.toLocaleDateString("ru-RU", { weekday: "long" });
+
+      if (!daysMap[dayName]) {
+        daysMap[dayName] = [];
       }
-      acc[fullDayName].push(day);
-      return acc;
-    }, {});
+      daysMap[dayName].push(session);
+    });
+
+    const daysOrder = [
+      "понедельник",
+      "вторник",
+      "среда",
+      "четверг",
+      "пятница",
+      "суббота",
+      "воскресенье",
+    ];
+
+    const sortedDays: Record<string, TimeTableItem[]> = {};
+    daysOrder.forEach((day) => {
+      if (daysMap[day]) {
+        sortedDays[day] = daysMap[day].sort((a, b) =>
+          a.time.localeCompare(b.time)
+        );
+      } else {
+        sortedDays[day] = [];
+      }
+    });
+
+    return sortedDays;
   };
 
-  // Обновляем getTypeColor
-  const getTypeColor = (name?: string) => {
-    if (!name) return "bg-gray-100 text-gray-800";
-    if (name.includes("Индивидуал")) return "bg-green-100 text-green-800";
-    return "bg-blue-100 text-blue-800";
-  };
-  if (loading) return <div className="text-center py-8">Загрузка...</div>;
+  if (isLoading || loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-sky-50 to-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-sky-600 mx-auto mb-4"></div>
+          <p className="text-sky-700 font-medium">Загружаем расписание...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (error)
-    return <div className="text-center py-8 text-red-500">{error}</div>;
-  if (!allTimeTables.length)
-    return <div className="text-center py-8">Данные не найдены</div>;
+    return (
+      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-sky-50 to-white">
+        <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-red-200 max-w-md mx-4">
+          <div className="text-red-500 text-5xl mb-4">⚠️</div>
+          <h2 className="text-xl font-bold text-red-700 mb-2">
+            Ошибка загрузки
+          </h2>
+          <p className="text-gray-700 mb-4">{error}</p>
+          <button
+            onClick={() => {
+              setIsLoading(true);
+              dispatch(fetchTimeTable());
+            }}
+            className="bg-sky-600 hover:bg-sky-700 text-white py-2 px-6 rounded-full transition-colors"
+          >
+            Попробовать снова
+          </button>
+        </div>
+      </div>
+    );
+
+  if (!items.length)
+    return (
+      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-sky-50 to-white">
+        <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-sky-200 max-w-md mx-4">
+          <div className="text-sky-500 text-5xl mb-4">⏰</div>
+          <h2 className="text-xl font-bold text-sky-800 mb-2">
+            Расписание отсутствует
+          </h2>
+          <p className="text-gray-700 mb-4">
+            На этой неделе нет доступных занятий. Пожалуйста, проверьте позже.
+          </p>
+          <button
+            onClick={() => {
+              setIsLoading(true);
+              dispatch(fetchTimeTable());
+            }}
+            className="bg-sky-600 hover:bg-sky-700 text-white py-2 px-6 rounded-full transition-colors"
+          >
+            Обновить
+          </button>
+        </div>
+      </div>
+    );
+
+  const groupedSessions = groupByDay(items);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <main className="flex-1">
-        <section className="bg-gradient-to-b from-sky-100 to-white py-12 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="text-center">
-              <h1 className="mb-6 text-3xl font-bold text-sky-800 md:text-4xl lg:text-5xl">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-sky-50 to-white">
+      {/* Плавающие пузыри фона */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 right-10 w-64 h-64 bg-sky-100 rounded-full opacity-30 blur-3xl"></div>
+        <div className="absolute bottom-10 left-10 w-48 h-48 bg-yellow-100 rounded-full opacity-30 blur-3xl"></div>
+        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
+      </div>
+
+      <main className="flex-1 relative z-10">
+        {/* Верхний баннер */}
+        <section className="bg-gradient-to-r from-sky-500 to-blue-600 py-16 md:py-24 relative overflow-hidden">
+          <div className="absolute inset-0">
+            <div className="absolute top-10 right-10 w-40 h-40 bg-white rounded-full opacity-10"></div>
+            <div className="absolute bottom-10 left-10 w-32 h-32 bg-white rounded-full opacity-10"></div>
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
                 Расписание занятий
               </h1>
-              <p className="mx-auto mb-8 max-w-2xl text-lg text-sky-700">
-                Выберите удобное время для занятий плаванием в нашем центре
+              <p className="text-xl text-sky-100 mb-8">
+                Выберите удобное время для занятий плаванием
               </p>
+              <div className="inline-flex space-x-4">
+                <div className="bg-white/20 backdrop-blur-sm py-2 px-6 rounded-full">
+                  <span className="font-semibold text-white">
+                    {items.filter((i) => i.isFree).length}
+                  </span>{" "}
+                  <span className="text-sky-100">свободных занятий</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="py-12">
+        {/* Основное расписание */}
+        <section className="py-16 relative">
           <div className="container mx-auto px-4">
-            <Tabs defaultValue={allTimeTables[0]?.id.toString()}>
-              <TabsList className="mb-6 flex flex-wrap">
-                {allTimeTables.map((timeTable) => (
-                  <TabsTrigger
-                    key={timeTable.id}
-                    value={timeTable.Id.toString()}
-                    className="text-base mb-2"
-                    onClick={() => setActiveTimeTableId(timeTable.id)}
-                  >
-                    {timeTable.name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-
-              {allTimeTables.map((timeTable) => {
-                const groupedDays = groupByDay(timeTable.timeTableDay);
-                const daysOrder = [
-                  "Понедельник",
-                  "Вторник",
-                  "Среда",
-                  "Четверг",
-                  "Пятница",
-                  "Суббота",
-                  "Воскресенье",
-                ];
-
-                return (
-                  <TabsContent
-                    key={timeTable.id}
-                    value={timeTable.id.toString()}
-                  >
-                    <div className="mb-8">
-                      <h2 className="mb-6 text-2xl font-bold text-sky-800 text-center">
-                        Расписание: {timeTable.className}
-                      </h2>
-
-                      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-                        {daysOrder.map((dayName) => (
-                          <div
-                            key={dayName}
-                            className="bg-white rounded-lg shadow-md overflow-hidden"
-                          >
-                            <div className="bg-sky-700 p-3 text-center font-bold text-white">
-                              {dayName}
-                            </div>
-
-                            <div className="p-3">
-                              {groupedDays[dayName]?.length ? (
-                                groupedDays[dayName]
-                                  .filter(
-                                    (session) =>
-                                      session.className.includes(
-                                        "Индивидуал"
-                                      ) ||
-                                      session.className.includes("Персональное")
-                                  )
-                                  .sort((a, b) => a.time.localeCompare(b.time))
-                                  .map((session) => (
-                                    <div
-                                      key={session.id}
-                                      className="mb-3 p-3 bg-sky-50 rounded-md border border-sky-100"
-                                    >
-                                      <div className="flex justify-between items-start">
-                                        <span className="font-bold text-sky-800">
-                                          {session.time}
-                                        </span>
-                                        <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                                          Индивидуальное
-                                        </span>
-                                      </div>
-                                      <div className="mt-2">
-                                        <p className="font-medium">
-                                          {session.className}
-                                        </p>
-                                        <p className="text-sm text-gray-700 mt-1">
-                                          Тренер: {session.trainerName}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  ))
-                              ) : (
-                                <p className="text-gray-500 text-center py-4">
-                                  Нет индивидуальных занятий
-                                </p>
-                              )}
-                            </div>
+            <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
+              {Object.entries(groupedSessions).map(([dayName, sessions]) => (
+                <div
+                  key={dayName}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden border border-sky-100 transform transition-transform hover:scale-[1.02]"
+                >
+                  <div className="bg-gradient-to-r from-sky-600 to-blue-700 p-4 text-center font-bold text-white text-lg">
+                    {dayName.charAt(0).toUpperCase() + dayName.slice(1)}
+                  </div>
+                  <div className="p-4">
+                    {sessions.length > 0 ? (
+                      sessions.map((session) => (
+                        <div
+                          key={`${session.day}-${session.time}`}
+                          onClick={() => handleSessionClick(session)}
+                          className={`p-4 mb-3 rounded-xl border-2 transition-all ${
+                            session.isFree
+                              ? "border-sky-200 hover:bg-sky-50 hover:border-sky-300 cursor-pointer"
+                              : "border-gray-200 bg-gray-50 cursor-not-allowed"
+                          }`}
+                        >
+                          <div className="flex justify-between items-start">
+                            <span className="font-bold text-lg text-sky-800">
+                              {session.time}
+                            </span>
+                            {!session.isFree ? (
+                              <span className="bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full">
+                                Занято
+                              </span>
+                            ) : (
+                              <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">
+                                Свободно
+                              </span>
+                            )}
                           </div>
-                        ))}
+                          <div className="mt-3">
+                            <p className="font-semibold text-gray-800">
+                              {session.className}
+                            </p>
+                            <p className="text-sm text-gray-600 mt-2 flex items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 mr-2 text-sky-600"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              {session.trainerName}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-6">
+                        <p className="text-gray-500">Нет занятий</p>
                       </div>
-                    </div>
-                  </TabsContent>
-                );
-              })}
-            </Tabs>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
 
-            {/* Блок записи остается без изменений */}
-            <div className="mt-8 rounded-lg bg-sky-50 p-6">
-              <h2 className="mb-4 text-xl font-bold text-sky-800">
-                Записаться на занятие
-              </h2>
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  to="tel:+71234567890"
-                  className="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 font-medium text-white transition-colors hover:bg-sky-700"
-                >
-                  {/* Иконка телефона */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mr-2 h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+            {/* Призыв к действию */}
+            <div className="mt-16 bg-gradient-to-r from-sky-400 to-blue-500 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+              <div className="absolute inset-0">
+                <div className="absolute top-10 right-10 w-40 h-40 bg-white rounded-full opacity-10"></div>
+                <div className="absolute bottom-10 left-10 w-32 h-32 bg-white rounded-full opacity-10"></div>
+              </div>
+
+              <div className="relative z-10 max-w-3xl mx-auto text-center">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                  Готовы начать занятия?
+                </h2>
+                <p className="text-sky-100 mb-6 text-lg">
+                  Запишитесь на пробное занятие и погрузитесь в мир плавания
+                </p>
+
+                <div className="flex flex-wrap justify-center gap-4">
+                  <button
+                    onClick={() => {
+                      const firstFree = items.find((i) => i.isFree);
+                      if (firstFree) {
+                        setSelectedSession(firstFree);
+                        setShowModal(true);
+                      }
+                    }}
+                    className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg flex items-center"
                   >
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                  </svg>
-                  Позвонить
-                </Link>
-                <Link
-                  to="/contacts"
-                  className="inline-flex items-center rounded-md border border-sky-600 bg-white px-4 py-2 font-medium text-sky-600 transition-colors hover:bg-sky-50"
-                >
-                  {/* Иконка формы */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mr-2 h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Записаться на занятие
+                  </button>
+
+                  <a
+                    href="/contacts"
+                    className="bg-white/20 hover:bg-white/30 text-white font-medium py-3 px-8 rounded-full transition-all border border-white/30 flex items-center"
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Заполнить форму
-                </Link>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-2"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Контакты
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </section>
       </main>
+
+      {/* Модальное окно записи */}
+      {showModal && selectedSession && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div className="bg-gradient-to-r from-sky-600 to-blue-700 p-6 text-white">
+              <h3 className="text-2xl font-bold">Запись на занятие</h3>
+              <p className="text-sky-100 mt-1">
+                Подтвердите ваше участие в занятии
+              </p>
+            </div>
+
+            <div className="p-6">
+              <div className="flex items-center mb-5">
+                <div className="bg-sky-100 text-sky-800 rounded-lg p-3 mr-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-bold text-lg">
+                    {selectedSession.time}
+                  </div>
+                  <div className="text-gray-600">
+                    {new Date(selectedSession.day).toLocaleDateString("ru-RU", {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <div className="text-gray-500 w-28">Тип занятия:</div>
+                  <div className="font-medium">{selectedSession.className}</div>
+                </div>
+
+                <div className="flex items-center">
+                  <div className="text-gray-500 w-28">Тренер:</div>
+                  <div className="font-medium">
+                    {selectedSession.trainerName}
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <label className="block text-gray-700 mb-2">Ваше имя:</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                    placeholder="Введите ваше имя"
+                  />
+                </div>
+
+                <div className="pt-2">
+                  <label className="block text-gray-700 mb-2">
+                    Ваш телефон:
+                  </label>
+                  <input
+                    type="tel"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                    placeholder="+7 (___) ___-__-__"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 flex justify-end space-x-3">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                >
+                  Отмена
+                </button>
+                <button
+                  onClick={() => {
+                    dispatch(bookSession({ sessionId: selectedSession.id! }));
+                    setShowModal(false);
+                  }}
+                  className="px-5 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-lg hover:from-sky-600 hover:to-blue-700 transition-all shadow-md"
+                >
+                  Подтвердить запись
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 export default TimeTablePage;

@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { FC, useState } from "react";
 import { Button } from "./ui/button";
-import { Program } from "@/types";
+import { Program } from "@/model/types";
 import Modal from "./Modal";
 import photo from "@/static/utenok_g4.jpg";
 import { motion, Variants } from "framer-motion";
@@ -139,7 +139,7 @@ const GroupsComponent: FC = () => {
         color="#9F1EEB"
         size={{ base: 20, sm: 30, md: 40 }}
       />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           className="text-center max-w-3xl mx-auto mb-16"
