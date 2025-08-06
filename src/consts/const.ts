@@ -1,4 +1,4 @@
-import { RouteNames } from "./router";
+import { RouteNames } from "../router";
 
 export const menuLinks = [
   { name: "Главная", path: RouteNames.HOME },

@@ -11,11 +11,11 @@ import sandra from "@/static/trainers/sandra.jpg";
 import sheremeta from "@/static/trainers/sheremeta.jpg";
 import volkov from "@/static/trainers/volkov.jpg";
 import zilina from "@/static/trainers/zilina.jpg";
-import { Trainer } from "@/model/model";
+
 import { Users } from "lucide-react";
 
 const TrenerComponents: FC = () => {
-  const trainers: Trainer[] = [
+  const trainers = [
     {
       Id: 1,
       TrainerName: "Сергей Евгеньевич Кирьянов",

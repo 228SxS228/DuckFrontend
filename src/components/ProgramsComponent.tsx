@@ -908,18 +908,7 @@ const ProgramsComponent: FC = () => {
     },
   };
 
-  const waveVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.5,
-        ease: "easeOut",
-      },
-    },
-  };
-
+  
   return (
     <section className="py-12 md:py-20 overflow-hidden relative flex flex-col bg-gradient-to-b from-[#1a1466] to-[#301EEB]">
       {/* Фоновые волны */}
