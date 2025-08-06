@@ -42,13 +42,17 @@ export const timeTableSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Ошибка загрузки расписания";
       })
+      //Post запрос с проверкой
       .addCase(bookSession.pending, (state) => {
         state.bookingStatus = "loading";
+        console.log("Запись на занятие: отправка данных...");
       })
       .addCase(
         bookSession.fulfilled,
         (state, action: PayloadAction<TimeTableItem>) => {
           state.bookingStatus = "success";
+          console.log("Запись успешно подтверждена:", action.payload);
+
           const index = state.items.findIndex(
             (item) => item.id === action.payload.id
           );
@@ -57,8 +61,9 @@ export const timeTableSlice = createSlice({
           }
         }
       )
-      .addCase(bookSession.rejected, (state) => {
+      .addCase(bookSession.rejected, (state, action) => {
         state.bookingStatus = "error";
+        console.error("Ошибка записи:", action.error);
       });
   },
 });

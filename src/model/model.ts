@@ -7,3 +7,11 @@ export interface TimeTableItem {
   className: string; // Тип занятия
   isFree: boolean; // Свободна запись?
 }
+export interface BookingData {
+  sessionId: number;
+  name: string;
+  phone: string;
+  day: string;
+  time: string;
+  paid: boolean;
+}

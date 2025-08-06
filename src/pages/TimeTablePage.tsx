@@ -176,6 +176,16 @@ const TimeTablePage: FC = () => {
   );
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    paid: false, // По умолчанию не оплачено
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -520,8 +530,12 @@ const TimeTablePage: FC = () => {
                   <label className="block text-gray-700 mb-2">Ваше имя:</label>
                   <input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                     placeholder="Введите ваше имя"
+                    required
                   />
                 </div>
 
@@ -531,23 +545,66 @@ const TimeTablePage: FC = () => {
                   </label>
                   <input
                     type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                     placeholder="+7 (___) ___-__-__"
+                    required
                   />
+                </div>
+                <div className="mt-4 flex items-center">
+                  <input
+                    type="checkbox"
+                    id="paid"
+                    name="paid"
+                    checked={formData.paid}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        paid: e.target.checked,
+                      }))
+                    }
+                    className="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded"
+                  />
+                  <label
+                    htmlFor="paid"
+                    className="ml-2 block text-sm text-gray-700"
+                  >
+                    Оплачено
+                  </label>
                 </div>
               </div>
 
               <div className="mt-8 flex justify-end space-x-3">
                 <button
-                  onClick={() => setShowModal(false)}
+                  onClick={() => {
+                    setShowModal(false);
+                    setFormData({ name: "", phone: "", paid: false });
+                  }}
                   className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
                 >
                   Отмена
                 </button>
                 <button
                   onClick={() => {
-                    dispatch(bookSession({ sessionId: selectedSession.id! }));
+                    if (!formData.name || !formData.phone) {
+                      alert("Пожалуйста, заполните имя и телефон");
+                      return;
+                    }
+                    //доп проверка и отправление на апи
+                    dispatch(
+                      bookSession({
+                        sessionId: selectedSession.id!,
+                        name: formData.name,
+                        phone: formData.phone,
+                        day: selectedSession.day,
+                        time: selectedSession.time,
+                        paid: formData.paid,
+                      })
+                    );
                     setShowModal(false);
+                    setFormData({ name: "", phone: "", paid: false });
                   }}
                   className="px-5 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-lg hover:from-sky-600 hover:to-blue-700 transition-all shadow-md"
                 >
