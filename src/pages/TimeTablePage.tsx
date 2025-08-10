@@ -164,9 +164,17 @@
 
 import { FC, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxe";
-import { bookSession, fetchTimeTable } from "../store/action/timeTableAction";
+import {
+  bookSession,
+  fetchTimeTable,
+  fetchTimeTablePro,
+} from "../store/action/timeTableAction";
 import { selectTimeTableInfo } from "../store/slices/timeTableSlice";
 import { TimeTableItem } from "../model/model";
+import { motion } from "framer-motion";
+import { ArrowRight, Check, Clock, User, X } from "lucide-react";
+
+type ActiveTab = "pool" | "poolpro" | "saltacave";
 
 const TimeTablePage: FC = () => {
   const dispatch = useAppDispatch();
@@ -179,8 +187,10 @@ const TimeTablePage: FC = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    paid: false, // По умолчанию не оплачено
+    email: "",
+    paid: false,
   });
+  const [activeTab, setActiveTab] = useState<ActiveTab>("pool");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -189,12 +199,16 @@ const TimeTablePage: FC = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      setIsLoading(true);
       await dispatch(fetchTimeTable());
-      // Имитация загрузки для демонстрации лоадера
+      await dispatch(fetchTimeTablePro());
       setTimeout(() => setIsLoading(false), 1000);
     };
     loadData();
   }, [dispatch]);
+
+  // Фильтрация по типу занятия
+  const filteredItems = items.filter((item) => item.type === activeTab);
 
   const handleSessionClick = (session: TimeTableItem) => {
     if (session.isFree) {
@@ -297,180 +311,123 @@ const TimeTablePage: FC = () => {
       </div>
     );
 
-  const groupedSessions = groupByDay(items);
+  const groupedSessions = groupByDay(filteredItems);
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-sky-50 to-white">
-      {/* Плавающие пузыри фона */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-64 h-64 bg-sky-100 rounded-full opacity-30 blur-3xl"></div>
-        <div className="absolute bottom-10 left-10 w-48 h-48 bg-yellow-100 rounded-full opacity-30 blur-3xl"></div>
-        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-blue-100 rounded-full opacity-20 blur-3xl"></div>
+    <section className="min-h-screen overflow-hidden bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] py-12">
+      {/* Верхний баннер */}
+      <div className="text-center mb-16">
+        <motion.h1
+          className="text-3xl md:text-5xl font-bold text-white mb-4"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          Расписание занятий
+        </motion.h1>
+        <motion.div
+          className="mx-auto mb-8 max-w-2xl text-blue-100 text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+        >
+          Выберите удобное время для занятий плаванием.
+        </motion.div>
+
+        {/* Переключатель вкладок */}
+        <div className="flex justify-center mb-8">
+          <div className="bg-white/20 backdrop-blur-sm rounded-full p-1 inline-flex">
+            {/* Кнопка для pool */}
+            <button
+              className={`px-6 py-2 rounded-full transition-colors ${
+                activeTab === "pool"
+                  ? "bg-blue-600 text-white"
+                  : "text-blue-100 hover:bg-white/10"
+              }`}
+              onClick={() => setActiveTab("pool")}
+            >
+              Утенок
+            </button>
+
+            {/* Кнопка для poolpro */}
+            <button
+              className={`px-6 py-2 rounded-full transition-colors ${
+                activeTab === "poolpro"
+                  ? "bg-yellow-400 text-blue-900"
+                  : "text-blue-100 hover:bg-white/10"
+              }`}
+              onClick={() => setActiveTab("poolpro")}
+            >
+              УтенокПродолжение
+            </button>
+          </div>
+        </div>
       </div>
 
-      <main className="flex-1 relative z-10">
-        {/* Верхний баннер */}
-        <section className="bg-gradient-to-r from-sky-500 to-blue-600 py-16 md:py-24 relative overflow-hidden">
-          <div className="absolute inset-0">
-            <div className="absolute top-10 right-10 w-40 h-40 bg-white rounded-full opacity-10"></div>
-            <div className="absolute bottom-10 left-10 w-32 h-32 bg-white rounded-full opacity-10"></div>
-          </div>
-
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-3xl mx-auto">
-              <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
-                Расписание занятий
-              </h1>
-              <p className="text-xl text-sky-100 mb-8">
-                Выберите удобное время для занятий плаванием
-              </p>
-              <div className="inline-flex space-x-4">
-                <div className="bg-white/20 backdrop-blur-sm py-2 px-6 rounded-full">
-                  <span className="font-semibold text-white">
-                    {items.filter((i) => i.isFree).length}
-                  </span>{" "}
-                  <span className="text-sky-100">свободных занятий</span>
+      {/* Основное расписание */}
+      <section className="py-16 relative">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
+            {Object.entries(groupedSessions).map(([dayName, sessions]) => (
+              <motion.div
+                key={dayName}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-sky-100"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="bg-gradient-to-r from-sky-600 to-blue-700 p-4 text-center font-bold text-white text-lg">
+                  {dayName.charAt(0).toUpperCase() + dayName.slice(1)}
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Основное расписание */}
-        <section className="py-16 relative">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
-              {Object.entries(groupedSessions).map(([dayName, sessions]) => (
-                <div
-                  key={dayName}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden border border-sky-100 transform transition-transform hover:scale-[1.02]"
-                >
-                  <div className="bg-gradient-to-r from-sky-600 to-blue-700 p-4 text-center font-bold text-white text-lg">
-                    {dayName.charAt(0).toUpperCase() + dayName.slice(1)}
-                  </div>
-                  <div className="p-4">
-                    {sessions.length > 0 ? (
-                      sessions.map((session) => (
-                        <div
-                          key={`${session.day}-${session.time}`}
-                          onClick={() => handleSessionClick(session)}
-                          className={`p-4 mb-3 rounded-xl border-2 transition-all ${
-                            session.isFree
-                              ? "border-sky-200 hover:bg-sky-50 hover:border-sky-300 cursor-pointer"
-                              : "border-gray-200 bg-gray-50 cursor-not-allowed"
-                          }`}
-                        >
-                          <div className="flex justify-between items-start">
-                            <span className="font-bold text-lg text-sky-800">
-                              {session.time}
+                <div className="p-4">
+                  {sessions.length > 0 ? (
+                    sessions.map((session) => (
+                      <motion.div
+                        key={`${session.day}-${session.time}`}
+                        onClick={() => handleSessionClick(session)}
+                        className={`p-4 mb-3 rounded-xl border-2 transition-all ${
+                          session.isFree
+                            ? "border-sky-200 hover:bg-sky-50 hover:border-sky-300 cursor-pointer"
+                            : "border-gray-200 bg-gray-50 cursor-not-allowed"
+                        }`}
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <div className="flex justify-between items-start">
+                          <span className="font-bold text-lg text-sky-800">
+                            {session.time}
+                          </span>
+                          {!session.isFree ? (
+                            <span className="bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full">
+                              Занято
                             </span>
-                            {!session.isFree ? (
-                              <span className="bg-red-100 text-red-800 text-xs px-3 py-1 rounded-full">
-                                Занято
-                              </span>
-                            ) : (
-                              <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">
-                                Свободно
-                              </span>
-                            )}
-                          </div>
-                          <div className="mt-3">
-                            <p className="font-semibold text-gray-800">
-                              {session.className}
-                            </p>
-                            <p className="text-sm text-gray-600 mt-2 flex items-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-4 w-4 mr-2 text-sky-600"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                  clipRule="evenodd"
-                                />
-                              </svg>
-                              {session.trainerName}
-                            </p>
-                          </div>
+                          ) : (
+                            <span className="bg-green-100 text-green-800 text-xs px-3 py-1 rounded-full">
+                              Свободно
+                            </span>
+                          )}
                         </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-6">
-                        <p className="text-gray-500">Нет занятий</p>
-                      </div>
-                    )}
-                  </div>
+                        <div className="mt-3">
+                          <p className="font-semibold text-gray-800">
+                            {session.className}
+                          </p>
+                          <p className="text-sm text-gray-600 mt-2 flex items-center">
+                            <User className="h-4 w-4 mr-2 text-sky-600" />
+                            {session.trainerName}
+                          </p>
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="text-center py-6">
+                      <p className="text-gray-500">Нет занятий</p>
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
-
-            {/* Призыв к действию */}
-            <div className="mt-16 bg-gradient-to-r from-sky-400 to-blue-500 rounded-3xl p-8 md:p-12 relative overflow-hidden">
-              <div className="absolute inset-0">
-                <div className="absolute top-10 right-10 w-40 h-40 bg-white rounded-full opacity-10"></div>
-                <div className="absolute bottom-10 left-10 w-32 h-32 bg-white rounded-full opacity-10"></div>
-              </div>
-
-              <div className="relative z-10 max-w-3xl mx-auto text-center">
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                  Готовы начать занятия?
-                </h2>
-                <p className="text-sky-100 mb-6 text-lg">
-                  Запишитесь на пробное занятие и погрузитесь в мир плавания
-                </p>
-
-                <div className="flex flex-wrap justify-center gap-4">
-                  <button
-                    onClick={() => {
-                      const firstFree = items.find((i) => i.isFree);
-                      if (firstFree) {
-                        setSelectedSession(firstFree);
-                        setShowModal(true);
-                      }
-                    }}
-                    className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 shadow-lg flex items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Записаться на занятие
-                  </button>
-
-                  <a
-                    href="/contacts"
-                    className="bg-white/20 hover:bg-white/30 text-white font-medium py-3 px-8 rounded-full transition-all border border-white/30 flex items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Контакты
-                  </a>
-                </div>
-              </div>
-            </div>
+              </motion.div>
+            ))}
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       {/* Модальное окно записи */}
       {showModal && selectedSession && (
@@ -481,23 +438,18 @@ const TimeTablePage: FC = () => {
               <p className="text-sky-100 mt-1">
                 Подтвердите ваше участие в занятии
               </p>
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute top-4 right-4 text-white/80 hover:text-white"
+              >
+                <X size={24} />
+              </button>
             </div>
 
             <div className="p-6">
               <div className="flex items-center mb-5">
                 <div className="bg-sky-100 text-sky-800 rounded-lg p-3 mr-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <Clock className="h-8 w-8" />
                 </div>
                 <div>
                   <div className="font-bold text-lg">
@@ -527,7 +479,10 @@ const TimeTablePage: FC = () => {
                 </div>
 
                 <div className="pt-4">
-                  <label className="block text-gray-700 mb-2">Ваше имя:</label>
+                  <label className="text-gray-700 mb-2 flex items-center">
+                    <User className="h-4 w-4 mr-2 text-sky-600" />
+                    Ваше имя:
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -540,7 +495,8 @@ const TimeTablePage: FC = () => {
                 </div>
 
                 <div className="pt-2">
-                  <label className="block text-gray-700 mb-2">
+                  <label className="text-gray-700 mb-2 flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-sky-600" />
                     Ваш телефон:
                   </label>
                   <input
@@ -550,6 +506,21 @@ const TimeTablePage: FC = () => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                     placeholder="+7 (___) ___-__-__"
+                    required
+                  />
+                </div>
+                <div className="pt-2">
+                  <label className="text-gray-700 mb-2 flex items-center">
+                    <ArrowRight className="h-4 w-4 mr-2 text-sky-600" />
+                    Ваш email:
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                    placeholder="Введите свой email"
                     required
                   />
                 </div>
@@ -580,10 +551,16 @@ const TimeTablePage: FC = () => {
                 <button
                   onClick={() => {
                     setShowModal(false);
-                    setFormData({ name: "", phone: "", paid: false });
+                    setFormData({
+                      name: "",
+                      phone: "",
+                      email: "",
+                      paid: false,
+                    });
                   }}
-                  className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                  className="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors flex items-center"
                 >
+                  <X className="mr-2 h-4 w-4" />
                   Отмена
                 </button>
                 <button
@@ -592,21 +569,27 @@ const TimeTablePage: FC = () => {
                       alert("Пожалуйста, заполните имя и телефон");
                       return;
                     }
-                    //доп проверка и отправление на апи
                     dispatch(
                       bookSession({
                         sessionId: selectedSession.id!,
                         name: formData.name,
                         phone: formData.phone,
                         day: selectedSession.day,
+                        trainer: selectedSession.trainerName,
                         time: selectedSession.time,
                         paid: formData.paid,
+                        email: formData.email,
+                        type: activeTab, 
                       })
                     );
                     setShowModal(false);
-                    setFormData({ name: "", phone: "", paid: false });
+                    setFormData({
+                      name: "",
+                      phone: "",
+                      email: "",
+                      paid: false,
+                    });
                   }}
-                  className="px-5 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-lg hover:from-sky-600 hover:to-blue-700 transition-all shadow-md"
                 >
                   Подтвердить запись
                 </button>
@@ -615,7 +598,7 @@ const TimeTablePage: FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 

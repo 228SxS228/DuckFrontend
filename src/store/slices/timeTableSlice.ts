@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { TimeTableItem } from "../../model/model";
-import { fetchTimeTable, bookSession } from "../action/timeTableAction";
+import {
+  fetchTimeTable,
+  bookSession,
+  fetchTimeTablePro,
+  bookSaltCaveSession,
+} from "../action/timeTableAction";
 import { RootState } from "../index";
 
 interface TimeTableState {
@@ -35,36 +40,60 @@ export const timeTableSlice = createSlice({
         fetchTimeTable.fulfilled,
         (state, action: PayloadAction<TimeTableItem[]>) => {
           state.loading = false;
-          state.items = action.payload;
+          const newItems = action.payload.map((item) => ({
+            ...item,
+            type: "pool" as const, // Явно указываем тип
+          }));
+          state.items = [...state.items, ...newItems];
         }
       )
       .addCase(fetchTimeTable.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Ошибка загрузки расписания";
       })
-      //Post запрос с проверкой
-      .addCase(bookSession.pending, (state) => {
-        state.bookingStatus = "loading";
-        console.log("Запись на занятие: отправка данных...");
+      .addCase(fetchTimeTablePro.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
       .addCase(
-        bookSession.fulfilled,
-        (state, action: PayloadAction<TimeTableItem>) => {
-          state.bookingStatus = "success";
-          console.log("Запись успешно подтверждена:", action.payload);
-
-          const index = state.items.findIndex(
-            (item) => item.id === action.payload.id
-          );
-          if (index !== -1) {
-            state.items[index] = action.payload;
-          }
+        fetchTimeTablePro.fulfilled,
+        (state, action: PayloadAction<TimeTableItem[]>) => {
+          state.loading = false;
+          const newItems = action.payload.map((item) => ({
+            ...item,
+            type: "poolpro" as const, // Явно указываем тип
+          }));
+          state.items = [...state.items, ...newItems];
         }
       )
-      .addCase(bookSession.rejected, (state, action) => {
+      .addCase(fetchTimeTablePro.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Ошибка загрузки расписания";
+      })
+      .addCase(bookSession.pending, (state) => {
+        state.bookingStatus = "loading";
+      })
+      .addCase(bookSession.fulfilled, (state, action) => {
+        state.bookingStatus = "success";
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
+      })
+      .addCase(bookSession.rejected, (state) => {
         state.bookingStatus = "error";
-        console.error("Ошибка записи:", action.error);
-      });
+      })
+      .addCase(bookSaltCaveSession.pending, (state) => {
+        state.bookingStatus = "loading";
+      })
+      .addCase(bookSaltCaveSession.fulfilled, (state) => {
+        state.bookingStatus = "success";
+      })
+      .addCase(bookSaltCaveSession.rejected, (state) => {
+        state.bookingStatus = "error";
+      })
   },
 });
 

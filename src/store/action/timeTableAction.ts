@@ -1,5 +1,5 @@
 import { baseAPI } from "../../axios/index";
-import { TimeTableItem, BookingData } from "../../model/model"; // Добавим импорт BookingData
+import { TimeTableItem, BookingData, BookingSaltCaveData } from "../../model/model"; // Добавим импорт BookingData
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
@@ -10,23 +10,47 @@ export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
     return response.data;
   }
 );
-//Post запрос на апи
-export const bookSession = createAsyncThunk<
-  TimeTableItem,
-  BookingData
->("timeTable/bookSession", async (bookingData) => {
-  console.log("Отправка данных записи:", bookingData);
-
-  try {
-    const response = await baseAPI.post<TimeTableItem>(
-      "/book-session",
-      bookingData // Отправляем все данные
-    );
-
-    console.log("Ответ сервера:", response.data);
+export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
+  "timeTablePro/fetchAll",
+  async () => {
+    const response = await baseAPI.get<TimeTableItem[]>("get-time-table");
+    console.log("Расписание загружено:", response.data);
     return response.data;
-  } catch (error) {
-    console.error("Ошибка записи:", error);
-    throw error;
   }
-});
+);
+//Post запрос на апи
+export const bookSession = createAsyncThunk<TimeTableItem, BookingData>(
+  "timeTable/bookSession",
+  async (bookingData) => {
+    try {
+      const response = await baseAPI.post<TimeTableItem>(
+        "/create-application",
+        bookingData
+      );
+      return {
+        
+        ...response.data,
+        type: bookingData.type, // Добавляем тип в ответ
+      };
+    } catch (error) {
+      console.error("Ошибка записи:", error);
+      throw error;
+    }
+  }
+);
+
+//для записи в пещеру
+export const bookSaltCaveSession = createAsyncThunk<any, BookingSaltCaveData>(
+  "saltCave/bookSession",
+  async (bookingData) => {
+    try {
+      const response = await baseAPI.post<any>(
+        "/create-application",
+        bookingData
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
