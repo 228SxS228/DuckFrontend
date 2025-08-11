@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Shield, Heart, Clock, Star, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -6,8 +6,7 @@ import { RouteNames } from "@/router";
 import ImageGalleryBanner from "./ui/ImageGalleryBanner";
 import photo2 from "@/static/solinai_pehera_2-768x1151.jpg";
 import photo3 from "@/static/solinai_pehera_4-683x1024.jpg";
-import { Input } from "./ui/input";
-import Modal from "./Modal";
+
 import { LiquidGlass } from "./ui/LiquidGlass";
 import { motion, Variants } from "framer-motion";
 import BubbleComponent from "./ui/Buble";
@@ -15,10 +14,6 @@ import BubbleComponent from "./ui/Buble";
 const images = [photo2, photo3];
 
 const SaltCaveComponent: FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const handleCloseModal = () => setIsModalOpen(false);
-  const handleOpenClick = () => setIsModalOpen(true);
-
   // Анимация текста
   const textVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -156,13 +151,6 @@ const SaltCaveComponent: FC = () => {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <Button
-                onClick={handleOpenClick}
-                className="py-6 px-8 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-              >
-                Забронировать сеанс
-              </Button>
-
               <Link to={RouteNames.SALTCAVE}>
                 <Button
                   variant="outline"
@@ -175,46 +163,6 @@ const SaltCaveComponent: FC = () => {
           </div>
         </div>
       </LiquidGlass>
-
-      {/* Модальное окно */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        className="rounded-3xl shadow-2xl w-full max-w-xl transform transition-all duration-300"
-      >
-        <div className="p-8 rounded-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-blue-900">
-            Забронируйте сеанс в соляной пещере
-          </h2>
-
-          <div className="space-y-6 mb-8">
-            <Input
-              className="w-full px-5 py-4 bg-white/80 border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-blue-900 placeholder-blue-700/70 transition-all"
-              type="text"
-              placeholder="Ваше имя"
-            />
-            <Input
-              className="w-full px-5 py-4 bg-white/80 border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-blue-900 placeholder-blue-700/70 transition-all"
-              type="tel"
-              placeholder="Ваш телефон"
-            />
-          </div>
-
-          <Button
-            className="w-full py-5 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-            onClick={handleCloseModal}
-          >
-            Забронировать
-          </Button>
-
-          <div className="mt-6 text-center text-sm text-blue-700">
-            Нажимая кнопку, вы соглашаетесь с{" "}
-            <a href="#" className="text-[#EBA31E] hover:underline font-medium">
-              политикой конфиденциальности
-            </a>
-          </div>
-        </div>
-      </Modal>
     </section>
   );
 };

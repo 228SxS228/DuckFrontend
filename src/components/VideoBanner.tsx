@@ -25,13 +25,6 @@ const VideoBanner: FC = () => {
           backgroundPosition: "center",
         }}
       >
-        {/* Пузырьки */}
-        {/* <BubbleComponent
-          count={30}
-          speed={1}
-          color="#ffff"
-          size={{ base: 20, sm: 30, md: 40 }}
-        /> */}
         {/* Контент */}
         <div className="container mx-auto relative z-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -187,44 +180,6 @@ const VideoBanner: FC = () => {
           </a>
         </div>
       </Modal>
-      {/* <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        className="rounded-3xl shadow-2xl w-full max-w-xl"
-      >
-        <div className="p-8 bg-gradient-to-b from-blue-50 to-blue-100 text-[#301EEB] rounded-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-            Запишитесь на первое бесплатное занятие
-          </h2>
-
-          <div className="space-y-6 mb-8">
-            <Input
-              className="w-full px-5 py-4 bg-white/10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-[#301EEB] placeholder-gray-400 transition-all"
-              type="text"
-              placeholder="Ваше имя"
-            />
-            <Input
-              className="w-full px-5 py-4 bg-white/10 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-[#301EEB] placeholder-gray-400 transition-all"
-              type="tel"
-              placeholder="Ваш телефон"
-            />
-          </div>
-
-          <Button
-            className="w-full py-5 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-            onClick={handleCloseModal}
-          >
-            Записаться бесплатно
-          </Button>
-
-          <div className="mt-6 text-center text-sm text-white/70">
-            Нажимая кнопку, вы соглашаетесь с{" "}
-            <a href="#" className="text-[#EBA31E] hover:underline font-medium">
-              политикой конфиденциальности
-            </a>
-          </div>
-        </div>
-      </Modal> */}
 
       {/* Модальное окно с видео */}
       <Modal
@@ -234,8 +189,10 @@ const VideoBanner: FC = () => {
       >
         <div className="relative pb-[56.25%] h-0 rounded-3xl overflow-hidden">
           <video
-            controls
             autoPlay
+            loop
+            muted
+            playsInline
             className="absolute top-0 left-0 w-full h-full object-cover"
           >
             <source src="src\static\videoplayback.mp4" type="video/mp4" />

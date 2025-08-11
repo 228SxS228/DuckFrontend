@@ -1,19 +1,14 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
 import { Calendar, Zap, Star, Flame } from "lucide-react";
-import { Input } from "./ui/input";
-import Modal from "./Modal";
+
 import { motion } from "framer-motion";
 import BubbleComponent from "./ui/Buble";
 import { LiquidGlass } from "./ui/LiquidGlass";
 
 const PromotionsComponent: FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const handleCloseModal = () => setIsModalOpen(false);
-  const handleOpenClick = () => setIsModalOpen(true);
-
   const promotions = [
     {
       title: "Первое занятие бесплатно",
@@ -35,27 +30,7 @@ const PromotionsComponent: FC = () => {
       icon: <Star className="h-6 w-6" />,
       color: "from-purple-500 to-indigo-500",
     },
-    // {
-    //   title: "Первый день",
-    //   type: "special",
-    //   discount: "5% скидка",
-    //   validUntil: "Бессрочно",
-    //   description:
-    //     "При покупке абонемента в день пробное бесплатного индивидуального занятия, Вы получаете скидку на покупку абонемента",
-    //   icon: <Gift className="h-6 w-6" />,
-    //   color: "from-blue-500 to-cyan-500",
-    // },
-    // {
-    //   title: "День Рождения",
-    //   type: "special",
-    //   discount: "5% скидка",
-    //   validUntil: "Бессрочно",
-    //   description:
-    //     "Три дня до и три дня после дня рождения, действует скидка на покупку группового или индивидуального абонемента",
-    //   icon: <Calendar className="h-6 w-6" />,
-    //   color: "from-pink-500 to-rose-500",
-    // },
-    {
+       {
       title: "А мы в Утенок",
       type: "special",
       discount: "20% скидка",
@@ -119,10 +94,10 @@ const PromotionsComponent: FC = () => {
               key={index}
               className="bg-white rounded-2xl p-6 border border-blue-200 shadow-lg transition-all hover:shadow-xl hover:-translate-y-2"
               glassColor="#ffffff"
-                opacity={0.7}
-                hoverOpacity={0.9}
-                blurStrength={10}
-                borderRadius={24}
+              opacity={0.7}
+              hoverOpacity={0.9}
+              blurStrength={10}
+              borderRadius={24}
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-start">
@@ -162,13 +137,11 @@ const PromotionsComponent: FC = () => {
                 <Calendar className="h-4 w-4 mr-2 text-[#EBA31E]" />
                 <span>Действует до: {promo.validUntil}</span>
               </div>
-
-              <Button
-                onClick={handleOpenClick}
-                className="w-full py-4 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white hover:from-[#4020ff] hover:to-[#301EEB] rounded-xl font-bold"
-              >
-                Воспользоваться акцией
-              </Button>
+              <Link to={RouteNames.PROMOTION}>
+                <Button className="w-full py-4 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white hover:from-[#4020ff] hover:to-[#301EEB] rounded-xl font-bold">
+                  Воспользоваться акцией
+                </Button>
+              </Link>
             </LiquidGlass>
           ))}
         </div>
@@ -179,53 +152,8 @@ const PromotionsComponent: FC = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <Link to={RouteNames.PROMOTION}>
-            <Button className="py-5 px-10 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-              Все акции
-            </Button>
-          </Link>
-        </motion.div>
+        ></motion.div>
       </div>
-
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        className="rounded-3xl shadow-2xl w-full max-w-xl"
-      >
-        <div className="p-8 bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] text-white rounded-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-            Забронируйте акционное предложение
-          </h2>
-
-          <div className="space-y-6 mb-8">
-            <Input
-              className="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-white placeholder-white/70 transition-all"
-              type="text"
-              placeholder="Ваше имя"
-            />
-            <Input
-              className="w-full px-5 py-4 bg-white/10 border border-white/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#EBA31E] text-white placeholder-white/70 transition-all"
-              type="tel"
-              placeholder="Ваш телефон"
-            />
-          </div>
-
-          <Button
-            className="w-full py-5 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-            onClick={handleCloseModal}
-          >
-            Забронировать акцию
-          </Button>
-
-          <div className="mt-6 text-center text-sm text-white/70">
-            Нажимая кнопку, вы соглашаетесь с{" "}
-            <a href="#" className="text-[#EBA31E] hover:underline font-medium">
-              политикой конфиденциальности
-            </a>
-          </div>
-        </div>
-      </Modal>
     </section>
   );
 };

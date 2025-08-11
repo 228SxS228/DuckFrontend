@@ -76,7 +76,6 @@
 
 //   const dispatch = useAppDispatch();
 
-
 //   const handleSubmit = async (e: React.FormEvent) => {
 //     e.preventDefault();
 
@@ -848,7 +847,6 @@ import { motion } from "framer-motion";
 import { LiquidGlass } from "@/components/ui/LiquidGlass";
 import BubbleComponent from "@/components/ui/Buble";
 import { useState, useCallback, useEffect } from "react";
-import { Input } from "@/components/ui/input";
 import Modal from "@/components/Modal";
 import { bookSaltCaveSession } from "@/store/action/timeTableAction";
 import { BookingSaltCaveData } from "@/model/model";
@@ -859,7 +857,6 @@ import * as yup from "yup";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { format } from "date-fns";
-import { ru } from "date-fns/locale";
 
 // Импорт изображений
 import photo2 from "@/static/DSC_7757.jpg";
@@ -886,8 +883,11 @@ import {
 
 // Схема валидации
 const schema = yup.object().shape({
-  name: yup.string().required("Введите имя").min(2).max(50),
-  phone: yup.string().required("Введите телефон").min(11),
+  name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
+  phone: yup
+    .string()
+    .required("Введите телефон")
+    .min(11, "Телефон слишком короткий"),
   sessionType: yup.string().required("Выберите тип сеанса"),
   date: yup.string().required("Выберите дату"),
   time: yup.string().required("Выберите время"),
@@ -902,30 +902,13 @@ type FormValues = {
   time: string;
 };
 
-type FormData = yup.InferType<typeof schema> & { type: "saltacave" };
+
 
 export default function SaltCavePage() {
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
-
-const {
-  control,
-  handleSubmit,
-  reset,
-  setValue,
-  formState: { errors, isSubmitting },
-} = useForm<FormValues>({
-  resolver: yupResolver(schema),
-  defaultValues: {
-    name: "",
-    phone: "",
-    sessionType: "",
-    date: "",
-    time: "",
-  },
-});
 
   // Генерация временных слотов
   const times = Array.from({ length: 11 }, (_, i) => {
@@ -939,6 +922,63 @@ const {
     setIsModalOpen(true);
   }, []);
 
+  // Отправка формы
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      sessionType: "",
+      date: "",
+      time: "",
+    },
+  });
+
+  // Исправленный обработчик отправки формы
+  const onSubmit: SubmitHandler<FormValues> = async (formData) => {
+    try {
+      const bookingData: BookingSaltCaveData = {
+        ...formData,
+        type: "saltacave",
+      };
+
+      await dispatch(bookSaltCaveSession(bookingData)).unwrap();
+      setIsSubmitted(true);
+
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setIsSubmitted(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Ошибка бронирования:", error);
+      alert("Произошла ошибка при бронировании. Пожалуйста, попробуйте снова.");
+    }
+  };
+
+  // Исправленный компонент для поля ввода
+  const InputWithIcon = ({ icon, error, ...props }: any) => (
+    <div>
+      <div className="relative">
+        <div className="absolute left-3 top-3 text-blue-500">{icon}</div>
+        <input
+          {...props}
+          className={`w-full px-4 py-3 pl-10 border ${
+            error ? "border-red-500" : "border-gray-300"
+          } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+        />
+      </div>
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+    </div>
+  );
+
+  // Получение текущей даты для ограничения выбора
+
   // Сброс формы при закрытии модального окна
   useEffect(() => {
     if (!isModalOpen) {
@@ -948,45 +988,6 @@ const {
       setValue("sessionType", selectedPlan);
     }
   }, [isModalOpen, reset, selectedPlan, setValue]);
-
-  // Отправка формы
-const onSubmit: SubmitHandler<FormValues> = async (formData) => {
-  try {
-    // Преобразуем в BookingSaltCaveData перед отправкой
-    const bookingData: BookingSaltCaveData = {
-      ...formData,
-      type: "saltacave",
-    };
-
-    await dispatch(bookSaltCaveSession(bookingData)).unwrap();
-    setIsSubmitted(true);
-
-    setTimeout(() => {
-      setIsModalOpen(false);
-      setIsSubmitted(false);
-    }, 2000);
-  } catch (error) {
-    console.error("Ошибка бронирования:", error);
-    alert("Произошла ошибка при бронировании. Пожалуйста, попробуйте снова.");
-  }
-};
-
-// Для поля ввода с иконкой создайте кастомный компонент
-const InputWithIcon = ({ icon, error, ...props }: any) => (
-  <div className="relative">
-    <div className="absolute left-3 top-3 text-blue-500">{icon}</div>
-    <input
-      {...props}
-      className={`w-full px-4 py-3 pl-10 border ${
-        error ? "border-red-500" : "border-gray-300"
-      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
-    />
-    {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-  </div>
-);
-
-  // Получение текущей даты для ограничения выбора
-  const today = new Date().toISOString().split("T")[0];
 
   return (
     <section className="min-h-screen overflow-hidden bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] py-12 relative">
@@ -1076,10 +1077,7 @@ const InputWithIcon = ({ icon, error, ...props }: any) => (
                     name="date"
                     control={control}
                     render={({ field }) => {
-                      const value =
-                        field.value instanceof Date
-                          ? format(field.value, "yyyy-MM-dd")
-                          : field.value;
+                      const value = field.value;
 
                       return (
                         <div className="relative">
@@ -1198,7 +1196,7 @@ const InputWithIcon = ({ icon, error, ...props }: any) => (
         <SessionProcessSection />
         <PricingSection onBookClick={handleBookClick} />
         <FAQSection />
-        <CallToActionSection onBookClick={handleBookClick} />
+        
         <GallerySection />
       </div>
     </section>
@@ -1527,41 +1525,7 @@ const FAQSection = () => (
   </LiquidGlass>
 );
 
-const CallToActionSection = ({ onBookClick }: { onBookClick: () => void }) => (
-  <div className="bg-gradient-to-r from-blue-800 to-purple-800 rounded-3xl p-8 md:p-12 relative overflow-hidden mb-16">
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute top-20 right-20 w-80 h-80 bg-yellow-400 rounded-full opacity-10 blur-3xl" />
-      <div className="absolute bottom-10 left-10 w-60 h-60 bg-blue-400 rounded-full opacity-10 blur-3xl" />
-    </div>
 
-    <div className="relative z-10 max-w-3xl mx-auto text-center">
-      <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-        Готовы к оздоровлению?
-      </h2>
-      <p className="text-blue-200 text-lg mb-8 max-w-2xl mx-auto">
-        Запишитесь на сеанс прямо сейчас и получите 10% скидку на первое
-        посещение
-      </p>
-
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button
-          size="lg"
-          className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-blue-900 font-bold rounded-full px-8 py-6 text-lg"
-          onClick={onBookClick}
-        >
-          Забронировать сеанс
-        </Button>
-        <Button
-          variant="outline"
-          size="lg"
-          className="bg-white/10 border-white/30 text-white hover:bg-white/20 rounded-full px-8 py-6 text-lg"
-        >
-          Задать вопрос
-        </Button>
-      </div>
-    </div>
-  </div>
-);
 
 const GallerySection = () => {
   const images = [photo2, photo3, photo4, photo5, photo6, photo7];

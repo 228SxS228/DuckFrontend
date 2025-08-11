@@ -1,167 +1,3 @@
-// import { FC, useEffect, useState } from "react";
-// import { useAppDispatch, useAppSelector } from "../hooks/reduxe";
-// import { bookSession, fetchTimeTable } from "../store/action/timeTableAction";
-// import { selectTimeTableInfo } from "../store/slices/timeTableSlice";
-// import { TimeTableItem } from "../model/model";
-
-// const TimeTablePage: FC = () => {
-//   const dispatch = useAppDispatch();
-//   const { loading, error, items } = useAppSelector(selectTimeTableInfo);
-//   const [selectedSession, setSelectedSession] = useState<TimeTableItem | null>(
-//     null
-//   );
-//   const [showModal, setShowModal] = useState(false);
-
-//   // Загрузка данных при монтировании
-//   useEffect(() => {
-//     dispatch(fetchTimeTable());
-//   }, [dispatch]);
-
-//   // Обработчик клика по занятию
-//   const handleSessionClick = (session: TimeTableItem) => {
-//     if (session.isFree) {
-//       setSelectedSession(session);
-//       setShowModal(true);
-//     }
-//   };
-
-//   // Группировка занятий по дням недели
-//   const groupByDay = (sessions: TimeTableItem[]) => {
-//     const daysMap: Record<string, TimeTableItem[]> = {};
-
-//     sessions.forEach((session) => {
-//       const date = new Date(session.day);
-//       const dayName = date.toLocaleDateString("ru-RU", { weekday: "long" });
-
-//       if (!daysMap[dayName]) {
-//         daysMap[dayName] = [];
-//       }
-//       daysMap[dayName].push(session);
-//     });
-
-//     // Сортируем дни недели в правильном порядке
-//     const daysOrder = [
-//       "понедельник",
-//       "вторник",
-//       "среда",
-//       "четверг",
-//       "пятница",
-//       "суббота",
-//       "воскресенье",
-//     ];
-
-//     const sortedDays: Record<string, TimeTableItem[]> = {};
-//     daysOrder.forEach((day) => {
-//       if (daysMap[day]) {
-//         sortedDays[day] = daysMap[day].sort((a, b) =>
-//           a.time.localeCompare(b.time)
-//         );
-//       }
-//     });
-
-//     return sortedDays;
-//   };
-
-//   // Состояния загрузки
-//   if (loading)
-//     return <div className="text-center py-8">Загрузка расписания...</div>;
-//   if (error)
-//     return <div className="text-center py-8 text-red-500">Ошибка: {error}</div>;
-//   if (!items.length)
-//     return <div className="text-center py-8">Нет доступных занятий</div>;
-
-//   const groupedSessions = groupByDay(items);
-
-//   return (
-//     <div className="container mx-auto px-4 py-8">
-//       <h1 className="text-2xl font-bold text-center mb-8">
-//         Расписание занятий
-//       </h1>
-
-//       <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-//         {Object.entries(groupedSessions).map(([dayName, sessions]) => (
-//           <div key={dayName} className="border rounded-lg overflow-hidden">
-//             <div className="bg-blue-600 p-3 text-center text-white font-bold">
-//               {dayName.charAt(0).toUpperCase() + dayName.slice(1)}
-//             </div>
-//             <div className="p-2">
-//               {sessions.map((session) => (
-//                 <div
-//                   key={`${session.day}-${session.time}`}
-//                   onClick={() => handleSessionClick(session)}
-//                   className={`p-3 mb-2 rounded border cursor-pointer ${
-//                     session.isFree
-//                       ? "bg-green-50 border-green-200 hover:bg-green-100"
-//                       : "bg-gray-100 border-gray-300 cursor-not-allowed"
-//                   }`}
-//                 >
-//                   <div className="flex justify-between">
-//                     <span className="font-medium">{session.time}</span>
-//                     {!session.isFree && (
-//                       <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-//                         Занято
-//                       </span>
-//                     )}
-//                   </div>
-//                   <div className="mt-1 text-sm">
-//                     <p>{session.className}</p>
-//                     <p className="text-gray-600">
-//                       Тренер: {session.trainerName}
-//                     </p>
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Модальное окно записи */}
-//       {showModal && selectedSession && (
-//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-//           <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
-//             <h3 className="text-xl font-bold mb-4">Запись на занятие</h3>
-//             <div className="space-y-2 mb-4">
-//               <p>
-//                 <b>Дата:</b>{" "}
-//                 {new Date(selectedSession.day).toLocaleDateString("ru-RU")}
-//               </p>
-//               <p>
-//                 <b>Время:</b> {selectedSession.time}
-//               </p>
-//               <p>
-//                 <b>Тренер:</b> {selectedSession.trainerName}
-//               </p>
-//               <p>
-//                 <b>Тип:</b> {selectedSession.className}
-//               </p>
-//             </div>
-//             <div className="flex justify-end gap-2">
-//               <button
-//                 onClick={() => setShowModal(false)}
-//                 className="px-4 py-2 border rounded hover:bg-gray-100"
-//               >
-//                 Отмена
-//               </button>
-//               <button
-//                 onClick={() => {
-//                   dispatch(bookSession({ sessionId: selectedSession.id! }));
-//                   setShowModal(false);
-//                 }}
-//                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-//               >
-//                 Записаться
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default TimeTablePage;
-
 import { FC, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxe";
 import {
@@ -172,7 +8,8 @@ import {
 import { selectTimeTableInfo } from "../store/slices/timeTableSlice";
 import { TimeTableItem } from "../model/model";
 import { motion } from "framer-motion";
-import { ArrowRight, Check, Clock, User, X } from "lucide-react";
+import { ArrowRight, Clock, User, X } from "lucide-react";
+import BubbleComponent from "@/components/ui/Buble";
 
 type ActiveTab = "pool" | "poolpro" | "saltacave";
 
@@ -315,6 +152,12 @@ const TimeTablePage: FC = () => {
 
   return (
     <section className="min-h-screen overflow-hidden bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] py-12">
+      <BubbleComponent
+        count={80}
+        speed={1}
+        color="#ffff"
+        size={{ base: 15, sm: 25, md: 35 }}
+      />
       {/* Верхний баннер */}
       <div className="text-center mb-16">
         <motion.h1
@@ -542,7 +385,7 @@ const TimeTablePage: FC = () => {
                     htmlFor="paid"
                     className="ml-2 block text-sm text-gray-700"
                   >
-                    Оплачено
+                    Я у вас впервые!
                   </label>
                 </div>
               </div>
@@ -579,7 +422,7 @@ const TimeTablePage: FC = () => {
                         time: selectedSession.time,
                         paid: formData.paid,
                         email: formData.email,
-                        type: activeTab, 
+                        type: activeTab,
                       })
                     );
                     setShowModal(false);

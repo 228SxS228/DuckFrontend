@@ -241,12 +241,8 @@
 
 // export default Rentalcomponent;
 
-
-import { FC } from "react";
-import {
-  ChevronRight,
-  PartyPopper,
-} from "lucide-react";
+import { FC, useState } from "react";
+import { ChevronRight, PartyPopper } from "lucide-react";
 import ImageGalleryBanner from "./ui/ImageGalleryBanner";
 import photo2 from "@/static/utenokpro_animatory.jpg";
 import photo3 from "@/static/utenokpro_programma.jpg";
@@ -254,10 +250,16 @@ import { motion, Variants } from "framer-motion";
 
 import BubbleComponent from "./ui/Buble";
 import { Button } from "./ui/button";
+import Modal from "./Modal";
+import { Input } from "./ui/input";
 
 const images = [photo2, photo3];
 
 const Rentalcomponent: FC = () => {
+ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenClick = () => setIsModalOpen(true);
+
   // const packages = [
   //   {
   //     title: "Праздничный пакет 'Утенок'",
@@ -389,94 +391,6 @@ const Rentalcomponent: FC = () => {
               </h3>
             </div>
           </motion.div>
-
-          {/* Пакеты */}
-          {/* <div className="space-y-12">
-            <motion.div
-              className="bg-gradient-to-br from-[#1a093f] to-[#0d0525] p-8 rounded-3xl border border-white/10 shadow-xl shadow-[#4A00E0]/10"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="flex items-start mb-6">
-                <div className="bg-gradient-to-r from-[#8E2DE2] to-[#4A00E0] p-3 rounded-xl mr-4">
-                  <Calendar className="h-8 w-8 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Часы работы
-                  </h3>
-                  <p className="text-lg text-white/80">
-                    Пн-Пт: 14:00-20:00
-                    <br />
-                    Сб-Вс: 10:00-20:00
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="bg-gradient-to-r from-[#8E2DE2] to-[#4A00E0] p-3 rounded-xl mr-4">
-                  <Users className="h-8 w-8 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Вместимость
-                  </h3>
-                  <p className="text-lg text-white/80">
-                    До 15 детей + 5 взрослых
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            <div className="grid gap-8">
-              {packages.map((pkg, index) => (
-                <motion.div
-                  key={index}
-                  className="bg-gradient-to-br from-[#1a093f] to-[#0d0525] rounded-3xl p-8 border border-white/10 shadow-xl shadow-[#4A00E0]/10"
-                  variants={cardVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  whileHover="hover"
-                  viewport={{ once: true }}
-                >
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="flex items-center">
-                      <div
-                        className={`w-14 h-14 rounded-xl flex items-center justify-center mr-4 ${pkg.color}`}
-                      >
-                        {pkg.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-white">
-                          {pkg.title}
-                        </h3>
-                        <div className="text-[#FFD700] font-bold text-lg mt-1">
-                          {pkg.price}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <ul className="space-y-4 mb-8">
-                    {pkg.features.map((feature, i) => (
-                      <li key={i} className="flex items-start">
-                        <div className="w-6 h-6 rounded-full bg-[#8E2DE2]/30 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
-                          <div className="w-2 h-2 rounded-full bg-[#FFD700]"></div>
-                        </div>
-                        <span className="text-white/90">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button className="w-full py-6 text-lg font-bold bg-gradient-to-r from-[#8E2DE2] to-[#4A00E0] hover:from-[#9e45e8] hover:to-[#5a15e6] text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    Забронировать
-                  </Button>
-                </motion.div>
-              ))}
-            </div>
-          </div> */}
         </div>
 
         <motion.div
@@ -499,11 +413,46 @@ const Rentalcomponent: FC = () => {
             и мы предложим оптимальное решение.
           </p>
 
-          <Button className="py-5 px-12 text-lg font-bold bg-gradient-to-r from-[#FFD700] to-[#ffa800] hover:from-[#ffe14d] hover:to-[#FFD700] text-black rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+          <Button
+            onClick={handleOpenClick}
+            className="py-5 px-12 text-lg font-bold bg-gradient-to-r from-[#FFD700] to-[#ffa800] hover:from-[#ffe14d] hover:to-[#FFD700] text-black rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+          >
             Обсудить мероприятие
           </Button>
         </motion.div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
+      >
+        <div className="p-6 md:p-8">
+          <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 md:mb-8">
+            Оставьте контактные данные, мы перезвоним Вам и обсудим все подробности
+          </h2>
+          <div className="space-y-6 mb-6">
+            <Input
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              type="text"
+              placeholder="Ваше имя"
+            />
+            <Input
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              type="tel"
+              placeholder="Ваш телефон"
+            />
+          </div>
+          <Button className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:opacity-90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform duration-300">
+            Оставить заявку
+          </Button>
+        </div>
+        <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100">
+          Нажимая кнопку, вы соглашаетесь с{" "}
+          <a href="#" className="text-blue-600 hover:underline">
+            политикой конфиденциальности
+          </a>
+        </div>
+      </Modal>
     </section>
   );
 };

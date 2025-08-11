@@ -31,7 +31,7 @@ const Footer: FC = () => {
   };
 
   // Анимация пузырьков
-  const bubbleVariants:Variants = {
+  const bubbleVariants: Variants = {
     float: {
       y: [0, -20],
       opacity: [0.6, 1],
@@ -218,7 +218,15 @@ const Footer: FC = () => {
           viewport={{ once: true }}
         >
           <p className="text-blue-300 text-sm">
-            © {new Date().getFullYear()} Центр Плавания. Все права защищены.
+            © {new Date().getFullYear()} Разработано
+            <a className="text-blue-300 text-sm" href="https://t.me/ijustwtod">
+              @ijustwtod
+            </a>
+            <span > && </span>
+            <a className="text-blue-300 text-sm" href="https://t.me/youDreamOf">
+              @youDreamOf
+            </a>
+            . Все права защищены.
           </p>
         </motion.div>
       </div>

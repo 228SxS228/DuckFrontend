@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RouteNames } from "../router/index";
 import { NavLink } from "react-router-dom";
-import logo from "../static/utenok_logo.png";
+import logo from "@/static/utenok_logo.png";
 import Modal from "./Modal";
 import { Input } from "./ui/input";
 import {

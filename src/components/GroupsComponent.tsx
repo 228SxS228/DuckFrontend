@@ -12,7 +12,7 @@ import { FC, useState } from "react";
 import { Button } from "./ui/button";
 import { Program } from "@/model/types";
 import Modal from "./Modal";
-import photo from "@/static/utenok_g4.jpg";
+import photo from "@/static//utenok_g4.jpg";
 import { motion, Variants } from "framer-motion";
 import { LiquidGlass } from "./ui/LiquidGlass";
 import BubbleComponent from "./ui/Buble";
