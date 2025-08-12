@@ -3,6 +3,7 @@ import { Award, Calendar, Clock, MapPin, Trophy, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import BubbleComponent from "@/components/ui/Buble";
+import { LiquidGlass } from "@/components/ui/LiquidGlass";
 
 const CompetitionsPage: FC = () => {
   const upcomingCompetitions = [
@@ -194,7 +195,14 @@ const CompetitionsPage: FC = () => {
             </div>
           </div>
 
-          <div className="mb-12 rounded-lg bg-sky-50 p-6 shadow-sm">
+          <LiquidGlass
+            glassColor="#ffffff"
+            opacity={0.7}
+            hoverOpacity={0.9}
+            blurStrength={10}
+            borderRadius={24}
+            className="h-full rounded-3xl p-6 transition-all"
+          >
             <h2 className="mb-4 text-2xl font-bold text-sky-800">
               Как принять участие в соревнованиях
             </h2>
@@ -243,7 +251,7 @@ const CompetitionsPage: FC = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </LiquidGlass>
 
           <div>
             <h2 className="mb-6 text-3xl font-bold text-white">

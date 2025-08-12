@@ -198,53 +198,16 @@ const PromotionPage: FC = () => {
                     <span className="text-gray-700">{promo.conditions}</span>
                   </div>
                 </div>
-
-                {/* <div className="flex flex-col sm:flex-row gap-3">
-                  <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-full cursor-pointer">
-                    Воспользоваться акцией
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="flex-1 border-blue-200 text-blue-700 hover:bg-blue-50 rounded-full cursor-pointer"
-                  >
-                    Подробнее
-                  </Button>
-                </div> */}
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Newsletter Section */}
-      {/* <div className="container mx-auto px-4 py-12 mb-16">
-        <div className="bg-white rounded-2xl p-8 md:p-12 border border-gray-100">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-blue-900 mb-4">
-              Не пропустите новые акции
-            </h2>
-            <p className="text-gray-600 mb-8">
-              Подпишитесь на нашу рассылку и получайте информацию о новых акциях
-              и специальных предложениях первыми
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Ваш email"
-                className="flex-1 px-4 py-3 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-              <Button className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 rounded-full cursor-pointer">
-                Подписаться
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-      {/* FAQ Section */}
+          {/* FAQ Section */}
       <div className="container  mx-auto px-4 py-12 mb-16">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-blue-900 mb-8 text-center">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">
             Часто задаваемые вопросы
           </h2>
           <div className="space-y-6">
