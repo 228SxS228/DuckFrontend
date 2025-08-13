@@ -1,4 +1,4 @@
-import { FC} from "react";
+import { FC } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
@@ -10,13 +10,12 @@ import {
   Waves,
 } from "lucide-react";
 import DuckComponent from "./DuckComponent";
-import { motion} from "framer-motion";
+import { motion } from "framer-motion";
 
 import { LiquidGlass } from "./ui/LiquidGlass";
 import BubbleComponent from "./ui/Buble";
 
 const ProgramsComponent: FC = () => {
-
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -96,7 +95,7 @@ const ProgramsComponent: FC = () => {
             className="text-xl text-[#EACBBE] max-w-2xl mx-auto font-light"
             variants={textVariants}
           >
-            Два уникальных мира плавания для вашего малыша
+            Два современных мира плавания для вашего малыша
           </motion.p>
         </motion.div>
 
@@ -159,7 +158,7 @@ const ProgramsComponent: FC = () => {
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
                     <span className="text-[#EACBBE]">Разовое посещение</span>
                     <span className="font-bold text-[#EBA31E] text-lg">
-                      1 500 ₽
+                      850 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
@@ -167,7 +166,7 @@ const ProgramsComponent: FC = () => {
                       Абонемент (4 занятия)
                     </span>
                     <span className="font-bold text-[#EBA31E] text-lg">
-                      5 000 ₽
+                      3140 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
@@ -175,7 +174,7 @@ const ProgramsComponent: FC = () => {
                       Абонемент (8 занятий)
                     </span>
                     <span className="font-bold text-[#EBA31E] text-lg">
-                      9 000 ₽
+                      5960 ₽
                     </span>
                   </div>
                 </div>
@@ -186,7 +185,7 @@ const ProgramsComponent: FC = () => {
                 <div className="flex items-center mb-4">
                   <User className="h-6 w-6 mr-3 text-[#9F1EEB]" />
                   <h4 className="font-bold text-white text-xl">
-                    Индивидуальные занятия
+                    Индивидуальные занятия (2 тренера)
                   </h4>
                 </div>
 
@@ -194,7 +193,7 @@ const ProgramsComponent: FC = () => {
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
                     <span className="text-[#EACBBE]">Разовое занятие</span>
                     <span className="font-bold text-[#9F1EEB] text-lg">
-                      2 500 ₽
+                      1600 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
@@ -202,15 +201,23 @@ const ProgramsComponent: FC = () => {
                       Абонемент (4 занятия)
                     </span>
                     <span className="font-bold text-[#9F1EEB] text-lg">
-                      9 000 ₽
+                      5950 ₽
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-2">
+                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
                     <span className="text-[#EACBBE]">
                       Абонемент (8 занятий)
                     </span>
                     <span className="font-bold text-[#9F1EEB] text-lg">
-                      16 000 ₽
+                      10900 ₽
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-[#EACBBE]">
+                      Абонемент (12 занятий)
+                    </span>
+                    <span className="font-bold text-[#9F1EEB] text-lg">
+                      15900 ₽
                     </span>
                   </div>
                 </div>
@@ -280,7 +287,7 @@ const ProgramsComponent: FC = () => {
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
                     <span className="text-[#EACBBE]">Разовое посещение</span>
                     <span className="font-bold text-[#EBA31E] text-lg">
-                      1 800 ₽
+                      1 080 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
@@ -288,7 +295,7 @@ const ProgramsComponent: FC = () => {
                       Абонемент (4 занятия)
                     </span>
                     <span className="font-bold text-[#EBA31E] text-lg">
-                      6 500 ₽
+                      3940 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
@@ -296,7 +303,7 @@ const ProgramsComponent: FC = () => {
                       Абонемент (8 занятий)
                     </span>
                     <span className="font-bold text-[#EBA31E] text-lg">
-                      12 000 ₽
+                      7560 ₽
                     </span>
                   </div>
                 </div>
@@ -315,7 +322,7 @@ const ProgramsComponent: FC = () => {
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
                     <span className="text-[#EACBBE]">Разовое занятие</span>
                     <span className="font-bold text-[#9F1EEB] text-lg">
-                      3 000 ₽
+                      1750 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
@@ -323,15 +330,23 @@ const ProgramsComponent: FC = () => {
                       Абонемент (4 занятия)
                     </span>
                     <span className="font-bold text-[#9F1EEB] text-lg">
-                      11 000 ₽
+                      6400 ₽
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
+                    <span className="text-[#EACBBE]">
+                      Абонемент (8 занятия)
+                    </span>
+                    <span className="font-bold text-[#9F1EEB] text-lg">
+                      6400 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="text-[#EACBBE]">
-                      Абонемент (8 занятий)
+                      Абонемент (12 занятий)
                     </span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      20 000 ₽
+                    <span className="font-bold text-[#EBA31E] text-lg">
+                      17200 ₽
                     </span>
                   </div>
                 </div>
@@ -340,7 +355,7 @@ const ProgramsComponent: FC = () => {
 
             <Link to={RouteNames.SCHEDULE}>
               <Button className="w-full mt-4 py-5 bg-gradient-to-r from-[#9F1EEB] to-[#7a17b8] hover:from-[#7a17b8] hover:to-[#9F1EEB] text-gray-300 text-lg font-bold rounded-xl cursor-pointer shadow-lg hover:shadow-xl transition-all group">
-                Записаться в ПРО
+                Записаться в УтенокПРО
               </Button>
             </Link>
           </LiquidGlass>
@@ -361,18 +376,18 @@ const ProgramsComponent: FC = () => {
           <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
             {[
               {
-                title: "Теплая вода",
-                desc: "30-32°C для комфорта малышей",
+                title: "Кристильно чистая и теплая вода",
+                desc: "32-32°C для комфорта малышей",
                 color: "#EBA31E",
               },
               {
-                title: "Маленькие группы",
+                title: "Различные варианты групп и индивидуальных занятий",
                 desc: "До 6 человек для внимания каждому",
                 color: "#9F1EEB",
               },
               {
                 title: "Опытные тренеры",
-                desc: "Специалисты по детскому плаванию",
+                desc: "Специалисты с большим опытом по обучению плавания",
                 color: "#EACBBE",
               },
             ].map((item, index) => (

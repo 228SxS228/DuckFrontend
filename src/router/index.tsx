@@ -11,6 +11,7 @@ import Layout from "@/components/Layout";
 export enum RouteNames {
   HOME = "/",
   TRAINERS = "/trainers",
+  TRAINERSID = "/trainers/:id",
   SCHEDULE = "/schedule",
   SALTCAVE = "/saltcave",
   PROMOTION = "/promotion",
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Route element={<Layout />}>
         <Route path={RouteNames.HOME} element={<MainPage />} />
         <Route path={RouteNames.TRAINERS} element={<TrainersPage />} />
+        <Route path={RouteNames.TRAINERSID} element={<TrainersPage />} />
         <Route path={RouteNames.SCHEDULE} element={<TimeTablePage />} />
         <Route path={RouteNames.COMPETITION} element={<CompetitionsPage />} />
         <Route path={RouteNames.PROMOTION} element={<PromotionPage />} />

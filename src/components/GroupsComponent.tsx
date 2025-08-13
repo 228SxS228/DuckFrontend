@@ -39,7 +39,7 @@ const GroupsComponent: FC = () => {
     {
       title: "Смелые утята",
       description: "Продвинутое плавание для детей от 5 до 8 лет",
-      schedule: "Пн-Пт: 7:00 - 9:00, 19:00 - 22:00",
+      schedule: "Пн, Ср, Пт: 19:00 - 20:00, Вт, Чт: 18:00 - 19:00, Сб: 11:00 - 12:00",
       icon: <Star className="h-6 w-6 text-[#EBA31E]" />,
       photoProgram: photo,
       description2:
@@ -56,7 +56,7 @@ const GroupsComponent: FC = () => {
     {
       title: "Индивидуальные занятия",
       description: "Персональный подход для детей от 3 месяцев до 10 лет",
-      schedule: "Пн-Пт: 10:00 - 21:00",
+      schedule: "Пн-Вс: 09:00 - 20:30",
       icon: <Award className="h-6 w-6 text-[#EBA31E]" />,
       photoProgram: photo,
       description2:
@@ -163,7 +163,7 @@ const GroupsComponent: FC = () => {
             variants={textVariants}
           >
             <span className="bg-gradient-to-r from-[#EBA31E] to-[#d6940c] text-transparent bg-clip-text">
-              Лучшие программы
+              Различные программы
             </span>{" "}
             для развития вашего ребенка
           </motion.h2>
@@ -226,77 +226,84 @@ const GroupsComponent: FC = () => {
         </div>
 
         {/* Модальное окно с детальной информацией */}
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          className="flex items-center justify-center p-4"
+        >
           {selectedProgram && (
             <motion.div
-              className="bg-white rounded-2xl overflow-hidden max-w-4xl w-full"
+              className="bg-white rounded-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] flex flex-col"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="relative h-72 md:h-96 overflow-hidden">
+              {/* Заголовочная часть с изображением */}
+              <div className="relative h-52 md:h-72 overflow-hidden">
                 <img
                   src={selectedProgram.photoProgram}
                   alt={selectedProgram.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <h3 className="text-3xl font-extrabold">
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+                  <h3 className="text-2xl md:text-3xl font-extrabold">
                     {selectedProgram.title}
                   </h3>
-                  <p className="text-blue-100 mt-2">
+                  <p className="text-blue-100 mt-1 md:mt-2 text-sm md:text-base">
                     {selectedProgram.description}
                   </p>
                 </div>
               </div>
 
-              <div className="p-6 md:p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div className="flex items-center p-4 rounded-xl bg-blue-50">
-                    <Calendar className="h-8 w-8 text-[#9F1EEB] mr-4" />
+              {/* Контентная часть с прокруткой */}
+              <div className="p-4 md:p-6 overflow-y-auto flex-1">
+                {/* Карточки характеристик */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6">
+                  <div className="flex items-center p-3 md:p-4 rounded-xl bg-blue-50">
+                    <Calendar className="h-6 w-6 md:h-8 md:w-8 text-[#9F1EEB] mr-3" />
                     <div>
-                      <p className="text-sm text-gray-500 font-medium">
+                      <p className="text-xs md:text-sm text-gray-500 font-medium">
                         Возраст
                       </p>
-                      <p className="text-lg font-bold text-[#301EEB]">
+                      <p className="text-base md:text-lg font-bold text-[#301EEB]">
                         {selectedProgram.age}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center p-4 rounded-xl bg-blue-50">
-                    <Clock className="h-8 w-8 text-[#9F1EEB] mr-4" />
+                  <div className="flex items-center p-3 md:p-4 rounded-xl bg-blue-50">
+                    <Clock className="h-6 w-6 md:h-8 md:w-8 text-[#9F1EEB] mr-3" />
                     <div>
-                      <p className="text-sm text-gray-500 font-medium">
+                      <p className="text-xs md:text-sm text-gray-500 font-medium">
                         Длительность
                       </p>
-                      <p className="text-lg font-bold text-[#301EEB]">
+                      <p className="text-base md:text-lg font-bold text-[#301EEB]">
                         {selectedProgram.duration}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center p-4 rounded-xl bg-blue-50">
-                    <Users className="h-8 w-8 text-[#9F1EEB] mr-4" />
+                  <div className="flex items-center p-3 md:p-4 rounded-xl bg-blue-50">
+                    <Users className="h-6 w-6 md:h-8 md:w-8 text-[#9F1EEB] mr-3" />
                     <div>
-                      <p className="text-sm text-gray-500 font-medium">
+                      <p className="text-xs md:text-sm text-gray-500 font-medium">
                         Расписание
                       </p>
-                      <p className="text-lg font-bold text-[#301EEB]">
+                      <p className="text-base md:text-lg font-bold text-[#301EEB]">
                         {selectedProgram.schedule}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center p-4 rounded-xl bg-blue-50">
-                    <Star className="h-8 w-8 text-[#9F1EEB] mr-4" />
+                  <div className="flex items-center p-3 md:p-4 rounded-xl bg-blue-50">
+                    <Star className="h-6 w-6 md:h-8 md:w-8 text-[#9F1EEB] mr-3" />
                     <div>
-                      <p className="text-sm text-gray-500 font-medium">
+                      <p className="text-xs md:text-sm text-gray-500 font-medium">
                         Формат
                       </p>
-                      <p className="text-lg font-bold text-[#301EEB]">
+                      <p className="text-base md:text-lg font-bold text-[#301EEB]">
                         {selectedProgram.title === "Индивидуальные занятия"
                           ? "Персональный"
                           : "Групповой"}
@@ -305,37 +312,44 @@ const GroupsComponent: FC = () => {
                   </div>
                 </div>
 
-                <h4 className="text-2xl font-bold text-[#301EEB] mb-4">
-                  Что включает программа:
-                </h4>
-                <p className="text-gray-700 mb-8 text-lg leading-relaxed">
-                  {selectedProgram.description2}
-                </p>
+                {/* Описание программы */}
+                <div className="mb-6">
+                  <h4 className="text-xl md:text-2xl font-bold text-[#301EEB] mb-3">
+                    Что включает программа:
+                  </h4>
+                  <p className="text-gray-700 text-base md:text-lg leading-relaxed">
+                    {selectedProgram.description2}
+                  </p>
+                </div>
 
-                <h4 className="text-2xl font-bold text-[#301EEB] mb-4">
-                  Ключевые преимущества:
-                </h4>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                  {selectedProgram.features?.map((feature, i) => (
-                    <motion.li
-                      key={i}
-                      className="flex items-start p-4 rounded-xl bg-blue-50 border border-blue-100"
-                      whileHover={{
-                        boxShadow: "0 10px 20px rgba(159, 30, 235, 0.1)",
-                      }}
-                    >
-                      <div className="w-8 h-8 rounded-full bg-[#EBA31E] flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
-                        <div className="w-2 h-2 rounded-full bg-white"></div>
-                      </div>
-                      <span className="text-lg font-medium text-[#1e293b]">
-                        {feature}
-                      </span>
-                    </motion.li>
-                  ))}
-                </ul>
+                {/* Преимущества */}
+                <div className="mb-6">
+                  <h4 className="text-xl md:text-2xl font-bold text-[#301EEB] mb-3">
+                    Ключевые преимущества:
+                  </h4>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {selectedProgram.features?.map((feature, i) => (
+                      <motion.li
+                        key={i}
+                        className="flex items-start p-3 md:p-4 rounded-xl bg-blue-50 border border-blue-100"
+                        whileHover={{
+                          boxShadow: "0 10px 20px rgba(159, 30, 235, 0.1)",
+                        }}
+                      >
+                        <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[#EBA31E] flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                          <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-white"></div>
+                        </div>
+                        <span className="text-base md:text-lg font-medium text-[#1e293b]">
+                          {feature}
+                        </span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
 
+                {/* Кнопка записи */}
                 <Button
-                  className="w-full py-7 bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                  className="w-full py-5 md:py-6 bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black text-lg md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mt-4"
                   onClick={handleCloseModal}
                 >
                   Записаться на пробное занятие

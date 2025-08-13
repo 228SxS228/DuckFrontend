@@ -152,7 +152,16 @@ const PromotionsComponent: FC = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5 }}
-        ></motion.div>
+        >
+          <Link to={RouteNames.PROMOTION}>
+            <Button
+              variant="outline"
+              className="py-6 px-8 text-lg font-bold border-2 border-[#EBA31E] text-blue-900 hover:bg-[#EBA31E]/10 rounded-full"
+            >
+              Все акции
+            </Button>
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

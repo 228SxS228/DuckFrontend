@@ -154,7 +154,7 @@ const Header: FC = () => {
             transition={{ duration: 0.2 }}
           >
             <Phone className="h-4 w-4 text-[#EBA31E]" />
-            <span className="text-sm font-medium text-white">
+            <span className="text-lg font-medium text-white">
               +7 (3822) 68-28-00
             </span>
           </motion.div>
