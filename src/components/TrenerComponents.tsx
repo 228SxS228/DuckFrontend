@@ -18,6 +18,7 @@ interface Trainer {
   Id: number;
   TrainerName: string;
   TrainerDescription: string[];
+  TrainerDescription2: string[];
   TrainerPhotoUrl: string;
   experience?: number;
   achievements?: string[];
@@ -48,6 +49,9 @@ const TrenerComponents: FC = () => {
           "ТГПУ-Факультет физической культуры и спорта — 2021 г.",
           "Сертифицированный специалист по «Проведению базовых мероприятий по поддержанию жизнедеятельности (Сердечно-легочная реанимация).",
         ],
+        TrainerDescription2: [
+          "Сертифицированный специалист по «Проведению базовых мероприятий по поддержанию жизнедеятельности (Сердечно-легочная реанимация).",
+        ],
         TrainerPhotoUrl: kiryanov,
         experience: 4,
         achievements: [
@@ -66,6 +70,8 @@ const TrenerComponents: FC = () => {
           "ТГПУ – «Факультет физической культуры и спорта» 1977 год.",
           "Переподготовка в образовательном учреждении дополнительного профессионального образования «институт новых технологий в образовании по программе «Физической культуре и спорта» — 2017 год.",
           "Профессиональная переподготовка на факультете дополнительного образования в «СГУФКиС» спортивная подготовка по виду спорта (плавание) — 2021 год.",
+        ],
+        TrainerDescription2: [
           "ТГПУ – «Факультет физической культуры и спорта» 1977 год.",
         ],
         TrainerPhotoUrl: oger,
@@ -86,6 +92,9 @@ const TrenerComponents: FC = () => {
           "ТГПК направление: Физическая культура — 2019 г.",
           "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 2 лет» — 2022 г.",
         ],
+        TrainerDescription2: [
+          "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 2 лет» — 2022 г.",
+        ],
         TrainerPhotoUrl: lapshina,
         experience: 4,
         achievements: [
@@ -104,6 +113,9 @@ const TrenerComponents: FC = () => {
         TrainerName: "Алина Константиновна Жилина",
         TrainerDescription: [
           "ТГПУ — Факультет физической культуры и спорта — 2019 г.",
+          "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 2 лет» — 2021 г.",
+        ],
+        TrainerDescription2: [
           "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 2 лет» — 2021 г.",
         ],
         TrainerPhotoUrl: zilina,
@@ -128,6 +140,9 @@ const TrenerComponents: FC = () => {
           "Сертифицированный специалист в направлении «Гидрореабилитация детей до 1 года с последствиями перинатального поражения ЦНС» — 2014 г.",
           "ТУСУР — 2017 год.",
         ],
+        TrainerDescription2: [
+          "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 7 лет» — 2014 г.",
+        ],
         TrainerPhotoUrl: sheremeta,
         experience: 7,
         achievements: [
@@ -140,6 +155,9 @@ const TrenerComponents: FC = () => {
         TrainerName: "Максим Сергеевич Букреев",
         TrainerDescription: [
           "ТГПУ — Факультет физической культуры и спорта — 2020 г.",
+          "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 лет до 10 лет» — 2023 г.",
+        ],
+        TrainerDescription2: [
           "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 лет до 10 лет» — 2023 г.",
         ],
         TrainerPhotoUrl: bykreev,
@@ -162,6 +180,9 @@ const TrenerComponents: FC = () => {
           "Курс «Обучение плаванию детей дошкольного и школьного возраста» 2022г.",
           "Курс «Инструктор-эксперт грудничкового плавания» 2024г.",
         ],
+        TrainerDescription2: [
+          "Курс «Обучение плаванию детей дошкольного и школьного возраста» 2022г.",
+        ],
         TrainerPhotoUrl: sandra,
         experience: 3,
         achievements: [
@@ -177,6 +198,9 @@ const TrenerComponents: FC = () => {
         TrainerName: "Евгений Александрович Волков",
         TrainerDescription: [
           "ТГПУ — Факультет физической культуры и спорта — 2017 г.",
+          "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 лет до 7 лет» — 2018 г.",
+        ],
+        TrainerDescription2: [
           "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 лет до 7 лет» — 2018 г.",
         ],
         TrainerPhotoUrl: volkov,
@@ -331,7 +355,7 @@ const TrenerComponents: FC = () => {
                 {trainer.TrainerName}
               </h3>
               <p className="text-yellow-400 text-xs md:text-sm mb-1 md:mb-2">
-                {trainer.TrainerDescription}
+                {trainer.TrainerDescription2}
               </p>
               {/* <p className="text-blue-100 text-xs md:text-sm">
                 {trainer.experience}
@@ -353,10 +377,10 @@ const TrenerComponents: FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        className="fixed overflow-hidden inset-0 z-50 flex items-center justify-center "
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
       >
         {selectedTrainer && (
-          <div className="relative overflow-hidden bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row">
+          <div className="relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row overflow-hidden">
             {/* Кнопки навигации */}
             <Button
               onClick={() => navigateTrainer("prev")}
@@ -373,14 +397,14 @@ const TrenerComponents: FC = () => {
             </Button>
 
             {/* Фото тренера */}
-            <div className="md:w-2/5 relative">
+            <div className="md:w-2/5 h-64 md:h-auto relative">
               <img
                 src={selectedTrainer.TrainerPhotoUrl}
                 alt={selectedTrainer.TrainerName}
                 className="w-full h-full object-cover"
               />
               {/* Волны */}
-              <div className="absolute bottom-0 left-0 right-0 h-6 flex">
+              <div className="absolute bottom-0 left-0 right-0 h-6 hidden md:flex">
                 {[...Array(8)].map((_, i) => (
                   <div
                     key={i}
@@ -396,46 +420,50 @@ const TrenerComponents: FC = () => {
             </div>
 
             {/* Информация о тренере */}
-            <div className="md:w-3/5  md:p-8 overflow-y-auto">
-              <div className="">
-                <h2 className="text-3xl font-bold text-blue-900 mb-2">
+            <div className="md:w-3/5 p-4 md:p-6 overflow-y-auto">
+              <div className="mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2">
                   {selectedTrainer.TrainerName}
                 </h2>
               </div>
 
               {/* Образование */}
-              <div className="mb-2 p-4 bg-blue-50 rounded-xl">
+              <div className="mb-4 p-4 bg-blue-50 rounded-xl">
                 <div className="flex items-start">
                   <GraduationCap
-                    className="mt-1 mr-3 text-blue-600 flex-shrink-0"
+                    className="mt-1 mr-3 text-blue-600 flex-shrink-0 min-w-[24px]"
                     size={24}
                   />
                   <div>
-                    <h3 className="font-bold text-lg text-blue-800 mb-1">
+                    <h3 className="font-bold text-lg text-blue-800 mb-2">
                       Образование
                     </h3>
-                    <p className="text-gray-700">
-                      {selectedTrainer.TrainerDescription}
-                    </p>
+                    <ul className="space-y-2">
+                      {selectedTrainer.TrainerDescription.map((item, i) => (
+                        <li key={i} className="text-gray-700">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
 
               {/* Достижения */}
-              <div className="mb-2 p-4 bg-yellow-50 rounded-xl">
+              <div className="mb-4 p-4 bg-yellow-50 rounded-xl">
                 <div className="flex items-start">
                   <Medal
-                    className="mt-1 mr-3 text-yellow-600 flex-shrink-0"
+                    className="mt-1 mr-3 text-yellow-600 flex-shrink-0 min-w-[24px]"
                     size={24}
                   />
                   <div>
-                    <h3 className="font-bold text-lg text-yellow-800 mb-1">
+                    <h3 className="font-bold text-lg text-yellow-800 mb-2">
                       Достижения
                     </h3>
-                    <ul className="space-y-2">
+                    <ul className="space-y-3">
                       {selectedTrainer.achievements?.map((achievement, i) => (
                         <li key={i} className="flex items-start">
-                          <span className="bg-yellow-400 text-white rounded-full w-5 h-5 flex items-center justify-center mr-2 mt-0.5">
+                          <span className="flex items-center justify-center w-6 h-6 bg-yellow-400 text-white rounded-full mr-3 flex-shrink-0 mt-0.5">
                             {i + 1}
                           </span>
                           <span className="text-gray-700">{achievement}</span>

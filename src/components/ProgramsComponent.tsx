@@ -117,7 +117,7 @@ const ProgramsComponent: FC = () => {
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-white">
-                  Басейн "Утенок"
+                  Бассейн "Утенок"
                 </h3>
                 <div className="w-20 h-1 bg-[#EBA31E] mt-2 rounded-full"></div>
               </div>
@@ -185,7 +185,7 @@ const ProgramsComponent: FC = () => {
                 <div className="flex items-center mb-4">
                   <User className="h-6 w-6 mr-3 text-[#9F1EEB]" />
                   <h4 className="font-bold text-white text-xl">
-                    Индивидуальные занятия (2 тренера)
+                    Индивидуальные занятия (2 тренера параллельно)
                   </h4>
                 </div>
 
@@ -246,7 +246,9 @@ const ProgramsComponent: FC = () => {
                 <ArrowDownToLine className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white">Утенок «ПРО»</h3>
+                <h3 className="text-2xl font-bold text-white">
+                  Бассейн "Утенок ПРО"
+                </h3>
                 <div className="w-20 h-1 bg-[#9F1EEB] mt-2 rounded-full"></div>
               </div>
             </div>
@@ -314,7 +316,7 @@ const ProgramsComponent: FC = () => {
                 <div className="flex items-center mb-4">
                   <User className="h-6 w-6 mr-3 text-[#9F1EEB]" />
                   <h4 className="font-bold text-white text-xl">
-                    Индивидуальные занятия
+                    Индивидуальные занятия  (1 тренер)
                   </h4>
                 </div>
 

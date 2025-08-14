@@ -27,7 +27,7 @@ interface Trainer {
   TrainerName: string;
   TrainerDescription: string[];
   TrainerPhotoUrl: string;
-  experience?: number;
+  experience?:  string;
   achievements?: string[];
 }
 
@@ -56,7 +56,7 @@ const TrainersPage: FC = () => {
         "Сертифицированный специалист по «Проведению базовых мероприятий по поддержанию жизнедеятельности (Сердечно-легочная реанимация).",
       ],
       TrainerPhotoUrl: kiryanov,
-      experience: 4,
+      experience: "4 года",
       achievements: [
         "Один из ведущих спортсменов сборной ТГПУ по плаванию.",
         "Призер различных соревнований по плаванию.",
@@ -76,7 +76,7 @@ const TrainersPage: FC = () => {
         "ТГПУ – «Факультет физической культуры и спорта» 1977 год.",
       ],
       TrainerPhotoUrl: oger,
-      experience: 4,
+      experience: "4 года",
       achievements: [
         "КМС по плаванию.",
         "Воспитала бронзового призера 3 этапа кубка России по плаванию.",
@@ -94,7 +94,7 @@ const TrainersPage: FC = () => {
         "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 2 лет» — 2022 г.",
       ],
       TrainerPhotoUrl: lapshina,
-      experience: 4,
+      experience: "4 года",
       achievements: [
         "КМС по плаванию.",
         "Многократный победитель и призер по плаванию в г.Томске.",
@@ -114,7 +114,7 @@ const TrainersPage: FC = () => {
         "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 2 лет» — 2021 г.",
       ],
       TrainerPhotoUrl: zilina,
-      experience: 6,
+      experience: "6 лет",
       achievements: [
         "МС по плаванию.",
         "Выпускница СДЮШОР «Янтарь» (отделение плавание).",
@@ -136,7 +136,7 @@ const TrainersPage: FC = () => {
         "ТУСУР — 2017 год.",
       ],
       TrainerPhotoUrl: sheremeta,
-      experience: 7,
+      experience: "7 лет",
       achievements: [
         "Тренер по оздоровительному плаванию для детей с рождения — 2014 – 2017 год.",
         "Тренер по плаванию для детей от 3 месяцев до 10 лет в ПЦ «Утенок» — с 2018 г по настоящее время.",
@@ -150,7 +150,7 @@ const TrainersPage: FC = () => {
         "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 лет до 10 лет» — 2023 г.",
       ],
       TrainerPhotoUrl: bykreev,
-      experience: 2,
+      experience: "2 года",
       achievements: [
         "Участник сборной ТГПУ по плаванию",
         " Призер областных соревнований по легкой атлетике.",
@@ -170,7 +170,7 @@ const TrainersPage: FC = () => {
         "Курс «Инструктор-эксперт грудничкового плавания» 2024г.",
       ],
       TrainerPhotoUrl: sandra,
-      experience: 3,
+      experience: "3 года",
       achievements: [
         "КМС по подводному спорту.",
         "Победитель и призёр чемпионатов и первенств ТО, СФО, Всероссийских соревнований по плаванию в ластах.",
@@ -187,7 +187,7 @@ const TrainersPage: FC = () => {
         "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 лет до 7 лет» — 2018 г.",
       ],
       TrainerPhotoUrl: volkov,
-      experience: 8,
+      experience: "8 лет",
       achievements: [
         "Выпускник СДЮШОР «Янтарь» (отделение плавание).",
         "Неоднократный победитель и призер Томской области по плаванию.",
@@ -276,7 +276,7 @@ const TrainersPage: FC = () => {
                       size={16}
                     />
                     <span className="text-sm text-gray-200">
-                      Стаж: {trainer.experience} лет
+                      Стаж: {trainer.experience} 
                     </span>
                   </div>
                 </div>

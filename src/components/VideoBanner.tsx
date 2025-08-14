@@ -7,6 +7,8 @@ import { Input } from "./ui/input";
 import { motion } from "framer-motion";
 import { LiquidGlass } from "./ui/LiquidGlass";
 
+import Video from "@/static/videoplayback.mp4";
+
 const VideoBanner: FC = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -195,7 +197,7 @@ const VideoBanner: FC = () => {
             playsInline
             className="absolute top-0 left-0 w-full h-full object-cover"
           >
-            <source src="src\static\videoplayback.mp4" type="video/mp4" />
+            <source src={Video} type="video/mp4" />
             Ваш браузер не поддерживает видео тег.
           </video>
         </div>
