@@ -1,5 +1,5 @@
 import { baseAPI } from "../../axios/index";
-import { TimeTableItem, BookingData, BookingSaltCaveData } from "../../model/model"; // Добавим импорт BookingData
+import { TimeTableItem, BookingData, BookingSaltCaveData, BookingFirstData } from "../../model/model"; // Добавим импорт BookingData
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
@@ -41,6 +41,21 @@ export const bookSession = createAsyncThunk<TimeTableItem, BookingData>(
 
 //для записи в пещеру
 export const bookSaltCaveSession = createAsyncThunk<any, BookingSaltCaveData>(
+  "saltCave/bookSession",
+  async (bookingData) => {
+    try {
+      const response = await baseAPI.post<any>(
+        "/create-application",
+        bookingData
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+//для записи в на первое занятие
+export const bookFirstSession = createAsyncThunk<any, BookingFirstData>(
   "saltCave/bookSession",
   async (bookingData) => {
     try {

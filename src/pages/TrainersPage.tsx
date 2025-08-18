@@ -13,7 +13,7 @@ import { motion } from "framer-motion";
 // Импорт фотографий тренеров
 import bykreev from "@/static/trainers/bykreev.jpg";
 import kiryanov from "@/static/trainers/kiryanov.jpg";
-import lapshina from "@/static/trainers/lapshina.jpg";
+import shiliauva from "@/static/trainers/shiliauva.jpg";
 import oger from "@/static/trainers/oger.jpg";
 import sandra from "@/static/trainers/sandra.jpg";
 import sheremeta from "@/static/trainers/sheremeta.jpg";
@@ -88,22 +88,19 @@ const TrainersPage: FC = () => {
     },
     {
       Id: 3,
-      TrainerName: "Мария Алексеевна Лапшина",
+      TrainerName: "Шиляева Софья Денисовна",
       TrainerDescription: [
-        "ТГПК направление: Физическая культура — 2019 г.",
-        "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 2 лет» — 2022 г.",
+        "ТГПУ – «Факультет физической культуры и спорта» - 2025 год.",
+        "Сертифицированный специалист в направлении «Оздоровительное плавание с детьми от 3 месяцев до 3 лет» а так же «с детьми от 3 лет и до 10 лет» 2025 год.",
       ],
-      TrainerPhotoUrl: lapshina,
-      experience: "4 года",
+      TrainerPhotoUrl: shiliauva,
+      experience: "1 год",
       achievements: [
-        "КМС по плаванию.",
-        "Многократный победитель и призер по плаванию в г.Томске.",
-        "Победитель и призер Кузбасса по плаванию.",
-        "Победитель президентских игр в Томске.",
-        "Выпускник Центра водных видов спорта «Звездный» (отделение плавание).",
-        "Спортивный судья по плаванию второй категории.",
-        "Тренер по плаванию для детей в бассейне «Дельфин»  — 2020-2022 г.",
-        "Тренер по плаванию для детей от 3 месяцев до 10 лет в ПЦ «Утенок» — с 2022 г по настоящее время.",
+        "Выпускница МАУДО СШ имени Любови Егоровой (отделение баскетбол).",
+        "Победитель и призер областных соревнований по баскетболу.",
+        "Награжден золотым знаком отличия Всероссийского физкультурно – спортивного комплекса ГТО (5 ступени).",
+        "Призер соревнований по плаванию на базе ТГПУ.",
+        "Тренер по плаванию для детей от 3 месяцев до 10 лет в ПЦ «Утенок» -с  2019 года и по настоящее время.",
       ],
     },
     {
@@ -276,7 +273,7 @@ const TrainersPage: FC = () => {
                       size={16}
                     />
                     <span className="text-sm text-gray-200">
-                      Стаж: {trainer.experience} 
+                      Стаж: {trainer.experience}
                     </span>
                   </div>
                 </div>
@@ -299,10 +296,10 @@ const TrainersPage: FC = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        className="fixed overflow-hidden inset-0 z-50 flex items-center justify-center "
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
       >
         {selectedTrainer && (
-          <div className="relative overflow-hidden bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row">
+          <div className="relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row overflow-hidden">
             {/* Кнопки навигации */}
             <Button
               onClick={() => navigateTrainer("prev")}
@@ -319,14 +316,14 @@ const TrainersPage: FC = () => {
             </Button>
 
             {/* Фото тренера */}
-            <div className="md:w-2/5 relative">
+            <div className="md:w-2/5 h-64 md:h-auto relative">
               <img
                 src={selectedTrainer.TrainerPhotoUrl}
                 alt={selectedTrainer.TrainerName}
                 className="w-full h-full object-cover"
               />
               {/* Волны */}
-              <div className="absolute bottom-0 left-0 right-0 h-6 flex">
+              <div className="absolute bottom-0 left-0 right-0 h-6 hidden md:flex">
                 {[...Array(8)].map((_, i) => (
                   <div
                     key={i}
@@ -342,48 +339,50 @@ const TrainersPage: FC = () => {
             </div>
 
             {/* Информация о тренере */}
-            <div className="md:w-3/5  md:p-8 overflow-y-auto">
-              <div className="">
-                <h2 className="text-3xl font-bold text-blue-900 mb-2">
+            <div className="md:w-3/5 p-4 md:p-6 overflow-y-auto">
+              <div className="mb-6">
+                <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2">
                   {selectedTrainer.TrainerName}
                 </h2>
               </div>
 
               {/* Образование */}
-              <div className="mb-2 p-4 bg-blue-50 rounded-xl">
+              <div className="mb-4 p-4 bg-blue-50 rounded-xl">
                 <div className="flex items-start">
                   <GraduationCap
-                    className="mt-1 mr-3 text-blue-600 flex-shrink-0"
+                    className="mt-1 mr-3 text-blue-600 flex-shrink-0 min-w-[24px]"
                     size={24}
                   />
                   <div>
-                    <h3 className="font-bold text-lg text-blue-800 mb-1">
+                    <h3 className="font-bold text-lg text-blue-800 mb-2">
                       Образование
                     </h3>
-                    <p className="text-gray-700">
-                      {selectedTrainer.TrainerDescription}
-                    </p>
+                    <ul className="space-y-2">
+                      {selectedTrainer.TrainerDescription.map((item, i) => (
+                        <li key={i} className="text-gray-700">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
 
               {/* Достижения */}
-              <div className="mb-2 p-4 bg-yellow-50 rounded-xl">
+              <div className="mb-4 p-4 bg-yellow-50 rounded-xl">
                 <div className="flex items-start">
                   <Medal
-                    className="mt-1 mr-3 text-yellow-600 flex-shrink-0"
+                    className="mt-1 mr-3 text-yellow-600 flex-shrink-0 min-w-[24px]"
                     size={24}
                   />
                   <div>
-                    <h3 className="font-bold text-lg text-yellow-800 mb-1">
+                    <h3 className="font-bold text-lg text-yellow-800 mb-2">
                       Достижения
                     </h3>
-                    <ul className="space-y-2">
+                    <ul className="space-y-3">
                       {selectedTrainer.achievements?.map((achievement, i) => (
                         <li key={i} className="flex items-start">
-                          <span className="bg-yellow-400 text-white rounded-full w-5 h-5 flex items-center justify-center mr-2 mt-0.5">
-                            {i + 1}
-                          </span>
+                          
                           <span className="text-gray-700">{achievement}</span>
                         </li>
                       ))}

@@ -7,7 +7,6 @@ import { useAppDispatch } from "@/hooks/reduxe";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { format } from "date-fns";
 import BubbleComponent from "@/components/ui/Buble";
@@ -23,8 +22,7 @@ import {
   User,
   Plus,
   Waves,
-  Heart,
-  Users,
+  Phone,
 } from "lucide-react";
 
 // Импорт изображений
@@ -419,7 +417,7 @@ export default function SaltCavePage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {pricingPlans.map((plan, index) => (
               <motion.div
                 key={index}
@@ -479,38 +477,6 @@ export default function SaltCavePage() {
             ))}
           </div>
         </motion.section>
-
-        {/* Секция статистики */}
-        <motion.div
-          className="py-14 relative z-10 mb-20"
-          initial="hidden"
-          whileInView="visible"
-          variants={staggerContainer}
-          viewport={{ once: true }}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="text-center p-8 bg-white rounded-2xl border border-blue-200 shadow-lg"
-                variants={fadeInUp}
-                whileHover={{
-                  y: -10,
-                  boxShadow: "0 15px 30px rgba(159, 30, 235, 0.2)",
-                }}
-              >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-50 mb-6">
-                  {stat.icon}
-                </div>
-                <p className="text-5xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-[#301EEB] to-[#9F1EEB]">
-                  {stat.value}
-                  {stat.suffix}
-                </p>
-                <p className="text-xl font-bold text-blue-900">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
 
         {/* Секция FAQ */}
         <motion.div
@@ -627,7 +593,7 @@ export default function SaltCavePage() {
               </p>
               <Button
                 onClick={() => setIsModalOpen(false)}
-                className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white px-6 py-3"
+                className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white px-6 py-3 rounded-lg w-full"
               >
                 Понятно
               </Button>
@@ -641,11 +607,15 @@ export default function SaltCavePage() {
                   <Controller
                     name="name"
                     control={control}
+                    rules={{
+                      required: "ФИО обязательно",
+                      minLength: { value: 2, message: "Минимум 2 символа" },
+                    }}
                     render={({ field }) => (
                       <input
                         {...field}
-                        placeholder="Ваше имя"
-                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        placeholder="Иванов Иван Иванович"
+                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     )}
                   />
@@ -657,27 +627,37 @@ export default function SaltCavePage() {
                 )}
               </div>
 
-              {/* Поле телефона */}
+              {/* Поле телефона (только Россия) */}
               <div>
-                <Controller
-                  name="phone"
-                  control={control}
-                  render={({ field }) => (
-                    <PhoneInput
-                      country={"ru"}
-                      value={field.value}
-                      onChange={(phone) => field.onChange(phone)}
-                      inputClass="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      containerClass="relative"
-                      buttonClass="absolute left-3 top-3.5 text-blue-500"
-                    />
+                <div className="relative">
+                  <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                  <Controller
+                    name="phone"
+                    control={control}
+                    render={({ field }) => (
+                      // <PhoneInput
+                      //   country={"ru"}
+                      //   value={field.value}
+                      //   onChange={(phone) => field.onChange(phone)}
+                      //   inputClass="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      //   containerClass="relative"
+                      //   buttonClass="absolute left-3 top-3.5 text-blue-500"
+                      // />
+                      <input
+                        {...field}
+                        type="tel"
+                        maxLength={12}
+                        placeholder="+7(999)-999-99-99"
+                        className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    )}
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.phone.message}
+                    </p>
                   )}
-                />
-                {errors.phone && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.phone.message}
-                  </p>
-                )}
+                </div>
               </div>
 
               {/* Дата и время */}
@@ -689,13 +669,13 @@ export default function SaltCavePage() {
                     <Controller
                       name="date"
                       control={control}
+                      rules={{ required: "Дата обязательна" }}
                       render={({ field }) => (
                         <input
                           type="date"
-                          value={field.value}
-                          onChange={(e) => field.onChange(e.target.value)}
+                          {...field}
                           min={format(new Date(), "yyyy-MM-dd")}
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                       )}
                     />
@@ -714,10 +694,11 @@ export default function SaltCavePage() {
                     <Controller
                       name="time"
                       control={control}
+                      rules={{ required: "Время обязательно" }}
                       render={({ field }) => (
                         <select
                           {...field}
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="">Время</option>
                           {times.map((time) => (
@@ -744,10 +725,11 @@ export default function SaltCavePage() {
                   <Controller
                     name="sessionType"
                     control={control}
+                    rules={{ required: "Тип сеанса обязателен" }}
                     render={({ field }) => (
                       <select
                         {...field}
-                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="">Тип сеанса</option>
                         {pricingPlans.map((plan) => (
@@ -770,15 +752,14 @@ export default function SaltCavePage() {
               <div className="flex gap-3 pt-2">
                 <Button
                   type="button"
-                  variant="outline"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-3 border-gray-300 text-gray-700"
+                  className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
                   Отмена
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium"
+                  className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Отправка..." : "Забронировать"}
@@ -786,6 +767,14 @@ export default function SaltCavePage() {
               </div>
             </form>
           )}
+        </div>
+
+        {/* Футер */}
+        <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
+          Нажимая кнопку, вы соглашаетесь с{" "}
+          <a href="#" className="text-blue-600 hover:underline">
+            политикой конфиденциальности
+          </a>
         </div>
       </Modal>
     </section>
@@ -841,27 +830,6 @@ const benefits = [
   },
 ];
 
-const stats = [
-  {
-    value: 8,
-    suffix: "+",
-    label: "Лет успешной работы",
-    icon: <Calendar className="h-8 w-8 text-[#9F1EEB]" />,
-  },
-  {
-    value: 25000,
-    suffix: "+",
-    label: "Довольных посетителей",
-    icon: <Heart className="h-8 w-8 text-[#9F1EEB]" />,
-  },
-  {
-    value: 98,
-    suffix: "%",
-    label: "Рекомендуют нас друзьям",
-    icon: <Users className="h-8 w-8 text-[#9F1EEB]" />,
-  },
-];
-
 const pricingPlans = [
   {
     title: "Разовое посещение",
@@ -871,9 +839,10 @@ const pricingPlans = [
       "Идеально для тех, кто хочет попробовать соляную пещеру впервые",
     features: [
       "Длительность сеанса 40 минут",
-      "Комфортная температура",
-      "Релаксирующая музыка",
-      "Удобные кресла для отдыха",
+      "До 8 человек",
+      "Специальные кресла для детей",
+      "Детская релаксирующая музыка",
+      "Игрушки для детей",
     ],
     popular: false,
   },
@@ -885,26 +854,14 @@ const pricingPlans = [
       "Оптимальный вариант для регулярного посещения с хорошей скидкой",
     features: [
       "Длительность сеанса 40 минут",
-      "Срок действия 3 месяца",
-      "Возможность заморозки",
-    ],
-    popular: true,
-  },
-  {
-    title: "Индивидуальное посещение",
-    price: "2000",
-    perSession: true,
-    description:
-      "до 4 человек включительно + после каждого посещения бесплатные кислородные коктейли",
-    features: [
-      "Длительность сеанса 40 минут",
-      "До 4 человек",
+      "До 8 человек",
       "Специальные кресла для детей",
       "Детская релаксирующая музыка",
       "Игрушки для детей",
     ],
     popular: true,
   },
+
   {
     title: "Абонемент на 20 посещений",
     price: "7500",

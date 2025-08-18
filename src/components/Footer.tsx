@@ -107,7 +107,7 @@ const Footer: FC = () => {
               viewport={{ once: true }}
             >
               <span className="font-bold text-xl text-blue-200">
-                Детский плавательный центр "Утенок"
+                Плавательный центр "Утенок"
               </span>
             </motion.div>
             <motion.p
@@ -117,7 +117,7 @@ const Footer: FC = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
             >
-              Профессиональное обучение плаванию для всех возрастов в
+              Профессиональное обучение детей плаванию от 3 месяцев до 10 лет в
               современном бассейне
             </motion.p>
             <motion.div
@@ -180,7 +180,9 @@ const Footer: FC = () => {
               <p className="not-italic text-blue-200">г.Томск</p>
               <p className="not-italic text-blue-200">ул. Суворова, 11/1</p>
               <p className="mt-2 text-blue-200">Телефон: +7 (3822) 68-28-00</p>
-              <p className="not-italic text-blue-200">Email: info@utenok.ru</p>
+              <p className="not-italic text-blue-200">
+                Email: utenoktomsk@yandex.ru
+              </p>
             </address>
           </motion.div>
 
@@ -195,16 +197,10 @@ const Footer: FC = () => {
             </h3>
             <ul className="space-y-3">
               <li className="flex justify-between">
-                <span className="text-blue-200">Понедельник - Пятница:</span>
-                <span className="text-blue-200">7:00 - 22:00</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-blue-200">Суббота:</span>
-                <span className="text-blue-200">8:00 - 20:00</span>
-              </li>
-              <li className="flex justify-between">
-                <span className="text-blue-200">Воскресенье:</span>
-                <span className="text-blue-200">9:00 - 18:00</span>
+                <span className="text-blue-200">
+                  Понедельник - Воскресенье:
+                </span>
+                <span className="text-blue-200">9:00 - 21:00</span>
               </li>
             </ul>
           </motion.div>
@@ -222,7 +218,7 @@ const Footer: FC = () => {
             <a className="text-blue-300 text-sm" href="https://t.me/ijustwtod">
               @ijustwtod
             </a>
-            <span > && </span>
+            <span> && </span>
             <a className="text-blue-300 text-sm" href="https://t.me/youDreamOf">
               @youDreamOf
             </a>

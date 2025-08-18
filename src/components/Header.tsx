@@ -1,12 +1,13 @@
-import { FC, useState, useRef } from "react";
-import { Phone, Menu } from "lucide-react";
+import { FC, useState, useRef, useEffect } from "react";
+import { Phone, Menu, Calendar, User, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RouteNames } from "../router/index";
 import { NavLink } from "react-router-dom";
 import logo from "@/static/utenok_logo.png";
 import Modal from "./Modal";
-import { Input } from "./ui/input";
+import { format } from "date-fns";
+import { bookFirstSession} from "@/store/action/timeTableAction";
 import {
   motion,
   AnimatePresence,
@@ -14,9 +15,37 @@ import {
   TargetAndTransition,
 } from "framer-motion";
 import BubbleComponent from "./ui/Buble";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { BookingFirstData} from "@/model/model";
+import { useAppDispatch } from "@/hooks/reduxe";
 
+// Схема валидации
+const schema = yup.object().shape({
+  name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
+  phone: yup
+    .string()
+    .required("Введите телефон")
+    .min(11, "Телефон слишком короткий"),
+  sessionType: yup.string().required("Выберите тип сеанса"),
+  date: yup.string().required("Выберите дату"),
+  time: yup.string().required("Выберите время"),
+});
+
+// Тип формы
+type FormValues = {
+  name: string;
+  phone: string;
+  sessionType: string;
+  date: string;
+  time: string;
+};
 const Header: FC = () => {
+  const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
   const [activeItem, setActiveItem] = useState<number | null>(null);
   const menuItems = useRef<(HTMLLIElement | null)[]>([]);
   const headerRef = useRef<HTMLElement>(null);
@@ -36,7 +65,54 @@ const Header: FC = () => {
 
   const handleCloseModal = () => setIsModalOpen(false);
   const handleOpenClick = () => setIsModalOpen(true);
+  // Отправка формы
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      sessionType: "",
+      date: "",
+      time: "",
+    },
+  });
 
+  //  обработчик отправки формы
+  const onSubmit: any = async (formData: FormValues) => {
+    try {
+      const bookingData: BookingFirstData = {
+        ...formData,
+        type: "firstsession",
+      };
+
+      await dispatch(bookFirstSession(bookingData)).unwrap();
+      setIsSubmitted(true);
+
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setIsSubmitted(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Ошибка бронирования:", error);
+      alert("Произошла ошибка при бронировании. Пожалуйста, попробуйте снова.");
+    }
+  };
+
+  // Сброс формы при закрытии модального окна
+  useEffect(() => {
+    if (!isModalOpen) {
+      reset();
+      setSelectedPlan("");
+    } else if (selectedPlan) {
+      setValue("sessionType", selectedPlan);
+    }
+  }, [isModalOpen, reset, selectedPlan, setValue]);
   // Рассчитываем позицию утки для активного пункта меню
   const getDuckPosition = (): TargetAndTransition => {
     if (activeItem === null || !menuItems.current[activeItem]) {
@@ -177,28 +253,149 @@ const Header: FC = () => {
             onClose={handleCloseModal}
             className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
           >
-            <div className="p-6 md:p-8">
-              <h2 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-6 md:mb-8">
-                Оставьте контактные данные, мы перезвоним Вам и запишем на
-                занятие
-              </h2>
-              <div className="space-y-6 mb-6">
-                <Input
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  type="text"
-                  placeholder="Ваше имя"
-                />
-                <Input
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  type="tel"
-                  placeholder="Ваш телефон"
-                />
+            {/* Заголовок */}
+            <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl md:text-2xl font-bold text-center text-white mb-6 md:mb-8">
+                  Оставьте контактные данные, мы перезвоним Вам и запишем на
+                  занятие
+                </h2>
               </div>
-              <Button className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg hover:opacity-90 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform duration-300">
-                Оставить заявку
-              </Button>
             </div>
-            <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100">
+
+            {/* Контент */}
+            <div className="p-5">
+              {isSubmitted ? (
+                <div className="text-center py-5">
+                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Check className="text-green-600" size={28} />
+                  </div>
+                  <h4 className="text-lg font-bold text-blue-900 mb-2">
+                    Заявка принята!
+                  </h4>
+                  <p className="text-gray-600 mb-4">
+                    Наш администратор свяжется с вами в течение 15 минут
+                  </p>
+                  <Button
+                    onClick={() => setIsModalOpen(false)}
+                    className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white px-6 py-3 rounded-lg w-full"
+                  >
+                    Понятно
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                  {/* Поле имени */}
+                  <div>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                      <Controller
+                        name="name"
+                        control={control}
+                        rules={{
+                          required: "ФИО обязательно",
+                          minLength: { value: 2, message: "Минимум 2 символа" },
+                        }}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            placeholder="Иванов Иван Иванович"
+                            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                        )}
+                      />
+                    </div>
+                    {errors.name && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Поле телефона (только Россия) */}
+                  <div>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                      <Controller
+                        name="phone"
+                        control={control}
+                        render={({ field }) => (
+                          // <PhoneInput
+                          //   country={"ru"}
+                          //   value={field.value}
+                          //   onChange={(phone) => field.onChange(phone)}
+                          //   inputClass="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          //   containerClass="relative"
+                          //   buttonClass="absolute left-3 top-3.5 text-blue-500"
+                          // />
+                          <input
+                            {...field}
+                            type="tel"
+                            maxLength={12}
+                            placeholder="+7(999)-999-99-99"
+                            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                        )}
+                      />
+                      {errors.phone && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.phone.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Дата и время */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Дата */}
+                    <div>
+                      <div className="relative">
+                        <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                        <Controller
+                          name="date"
+                          control={control}
+                          rules={{ required: "Дата обязательна" }}
+                          render={({ field }) => (
+                            <input
+                              type="date"
+                              {...field}
+                              min={format(new Date(), "yyyy-MM-dd")}
+                              className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                          )}
+                        />
+                      </div>
+                      {errors.date && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {errors.date.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Кнопки */}
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    >
+                      Отмена
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Отправка..." : "Забронировать"}
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </div>
+
+            {/* Футер */}
+            <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
               Нажимая кнопку, вы соглашаетесь с{" "}
               <a href="#" className="text-blue-600 hover:underline">
                 политикой конфиденциальности

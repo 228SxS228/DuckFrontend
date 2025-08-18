@@ -316,7 +316,7 @@ const ProgramsComponent: FC = () => {
                 <div className="flex items-center mb-4">
                   <User className="h-6 w-6 mr-3 text-[#9F1EEB]" />
                   <h4 className="font-bold text-white text-xl">
-                    Индивидуальные занятия  (1 тренер)
+                    Индивидуальные занятия (1 тренер)
                   </h4>
                 </div>
 
@@ -384,7 +384,7 @@ const ProgramsComponent: FC = () => {
               },
               {
                 title: "Различные варианты групп и индивидуальных занятий",
-                desc: "До 6 человек для внимания каждому",
+                desc: "До 6-10 чел в группе (с базовыми навыками плавания)",
                 color: "#9F1EEB",
               },
               {

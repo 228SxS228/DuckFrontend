@@ -6,7 +6,7 @@ export interface TimeTableItem {
   trainerName: string; // Имя тренера
   className: string; // Тип занятия
   isFree: boolean; // Свободна запись?
-  type: 'pool' | 'poolpro' | 'saltacave'; // Добавляем тип занятия
+  type: "pool" | "poolpro" | "saltacave"; // Добавляем тип занятия
 }
 export interface BookingData {
   sessionId: number;
@@ -17,7 +17,7 @@ export interface BookingData {
   email: string;
   time: string;
   paid: boolean;
-  type: 'pool' | 'poolpro' | 'saltacave'; // Про обычный пещера
+  type: "pool" | "poolpro" | "saltacave"; // Про обычный пещера
 }
 export interface BookingSaltCaveData {
   name: string;
@@ -26,4 +26,10 @@ export interface BookingSaltCaveData {
   date: string; // Изменяем с string на Date
   time: string;
   type: "saltacave";
+}
+export interface BookingFirstData {
+  name: string;
+  phone: string;
+  date: string; // Изменяем с string на Date
+  type: "firstsession";
 }
