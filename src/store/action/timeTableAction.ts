@@ -13,31 +13,34 @@ export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
 export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
   "timeTablePro/fetchAll",
   async () => {
-    const response = await baseAPI.get<TimeTableItem[]>("get-time-table");
+    const response = await baseAPI.get<TimeTableItem[]>("get-time-table-pro");
     console.log("Расписание загружено:", response.data);
     return response.data;
   }
 );
 //Post запрос на апи
-export const bookSession = createAsyncThunk<TimeTableItem, BookingData>(
-  "timeTable/bookSession",
-  async (bookingData) => {
-    try {
-      const response = await baseAPI.post<TimeTableItem>(
-        "/create-application",
-        bookingData
-      );
-      return {
-        
-        ...response.data,
-        type: bookingData.type, // Добавляем тип в ответ
-      };
-    } catch (error) {
-      console.error("Ошибка записи:", error);
-      throw error;
-    }
+
+export interface ApplicationResponseDto {
+  Success: boolean;
+  Message: string;
+  ApplicationId: string;
+}
+
+export const bookSession = createAsyncThunk<
+  ApplicationResponseDto,
+  BookingData
+>("timeTable/bookSession", async (bookingData) => {
+  try {
+    const response = await baseAPI.post<ApplicationResponseDto>(
+      "/create-application",
+      bookingData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка записи:", error);
+    throw error;
   }
-);
+});
 
 //для записи в пещеру
 export const bookSaltCaveSession = createAsyncThunk<any, BookingSaltCaveData>(
