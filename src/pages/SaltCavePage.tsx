@@ -23,6 +23,7 @@ import {
   Plus,
   Waves,
   Phone,
+  Mail,
 } from "lucide-react";
 
 // Импорт изображений
@@ -41,6 +42,10 @@ const schema = yup.object().shape({
     .string()
     .required("Введите телефон")
     .min(11, "Телефон слишком короткий"),
+  email: yup
+    .string()
+    .email("Введите корректный email")
+    .required("Введите email"),
   sessionType: yup.string().required("Выберите тип сеанса"),
   date: yup.string().required("Выберите дату"),
   time: yup.string().required("Выберите время"),
@@ -50,11 +55,11 @@ const schema = yup.object().shape({
 type FormValues = {
   name: string;
   phone: string;
+  email: string;
   sessionType: string;
   date: string;
   time: string;
 };
-
 // Анимации
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -103,6 +108,7 @@ export default function SaltCavePage() {
     defaultValues: {
       name: "",
       phone: "",
+      email: "",
       sessionType: "",
       date: "",
       time: "",
@@ -635,14 +641,6 @@ export default function SaltCavePage() {
                     name="phone"
                     control={control}
                     render={({ field }) => (
-                      // <PhoneInput
-                      //   country={"ru"}
-                      //   value={field.value}
-                      //   onChange={(phone) => field.onChange(phone)}
-                      //   inputClass="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      //   containerClass="relative"
-                      //   buttonClass="absolute left-3 top-3.5 text-blue-500"
-                      // />
                       <input
                         {...field}
                         type="tel"
@@ -652,12 +650,36 @@ export default function SaltCavePage() {
                       />
                     )}
                   />
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.phone.message}
-                    </p>
-                  )}
                 </div>
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.phone.message}
+                  </p>
+                )}
+              </div>
+
+              {/* поле email */}
+              <div>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                  <Controller
+                    name="email"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        type="email"
+                        placeholder="Email"
+                        className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    )}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               {/* Дата и время */}
@@ -904,6 +926,11 @@ const faq = [
     question: "Можно ли посещать соляную пещеру с детьми?",
     answer:
       "Да, дети могут посещать соляную пещеру с 3-х лет в сопровождении взрослых. Для детей предусмотрены специальные кресла и игрушки, чтобы сделать процедуру комфортной и интересной.",
+  },
+  {
+    question: "что нужно при первом посещение?",
+    answer:
+      "Нужен только паспорт для заполнения договора.",
   },
 ];
 

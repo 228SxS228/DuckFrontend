@@ -135,7 +135,7 @@ const Footer: FC = () => {
                 <span className="sr-only">Youtube</span>
               </Link>
               <Link
-                to="#"
+                to="https://vk.com/utenok_tomsk"
                 className="w-9 h-9 rounded-full bg-blue-900 flex items-center justify-center hover:bg-blue-800 transition-colors"
               >
                 <Send className="h-5 w-5 text-blue-200" />

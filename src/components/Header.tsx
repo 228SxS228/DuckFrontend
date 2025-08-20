@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useEffect } from "react";
-import { Phone, Menu, Calendar, User, Check } from "lucide-react";
+import { Phone, Menu, Calendar, User, Check, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RouteNames } from "../router/index";
@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 import logo from "@/static/utenok_logo.png";
 import Modal from "./Modal";
 import { format } from "date-fns";
-import { bookFirstSession} from "@/store/action/timeTableAction";
+import { bookFirstSession } from "@/store/action/timeTableAction";
 import {
   motion,
   AnimatePresence,
@@ -18,7 +18,7 @@ import BubbleComponent from "./ui/Buble";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { BookingFirstData} from "@/model/model";
+import { BookingFirstData } from "@/model/model";
 import { useAppDispatch } from "@/hooks/reduxe";
 
 // Схема валидации
@@ -28,6 +28,10 @@ const schema = yup.object().shape({
     .string()
     .required("Введите телефон")
     .min(11, "Телефон слишком короткий"),
+  email: yup
+    .string()
+    .email("Введите корректный email")
+    .required("Введите email"),
   sessionType: yup.string().required("Выберите тип сеанса"),
   date: yup.string().required("Выберите дату"),
   time: yup.string().required("Выберите время"),
@@ -37,6 +41,7 @@ const schema = yup.object().shape({
 type FormValues = {
   name: string;
   phone: string;
+  email: string;
   sessionType: string;
   date: string;
   time: string;
@@ -77,6 +82,7 @@ const Header: FC = () => {
     defaultValues: {
       name: "",
       phone: "",
+      email: "",
       sessionType: "",
       date: "",
       time: "",
@@ -343,6 +349,29 @@ const Header: FC = () => {
                         </p>
                       )}
                     </div>
+                  </div>
+                  {/* поле email */}
+                  <div>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                      <Controller
+                        name="email"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="email"
+                            placeholder="Email"
+                            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                        )}
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
 
                   {/* Дата и время */}

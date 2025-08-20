@@ -22,14 +22,23 @@ export interface BookingData {
 export interface BookingSaltCaveData {
   name: string;
   phone: string;
+  email: string;
   sessionType: string;
-  date: string; // Изменяем с string на Date
+  date: string; 
   time: string;
   type: "saltacave";
 }
 export interface BookingFirstData {
   name: string;
   phone: string;
-  date: string; // Изменяем с string на Date
+  email:string;
+  date: string; 
   type: "firstsession";
+}
+export interface BookingProData {
+  name: string;
+  phone: string;
+  email: string;
+  date: string;
+  type: "rentalpro";
 }

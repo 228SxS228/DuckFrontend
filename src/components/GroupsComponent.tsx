@@ -12,90 +12,19 @@ import { FC, useState } from "react";
 import { Button } from "./ui/button";
 import { Program } from "@/model/types";
 import Modal from "./Modal";
-import photo from "@/static//utenok_g4.jpg";
 import { motion, Variants } from "framer-motion";
 import { LiquidGlass } from "./ui/LiquidGlass";
 import BubbleComponent from "./ui/Buble";
 
+import photo from "@/static/utenok_g4.jpg";
+import photo2 from "@/static/utenok_g4.jpg";
+import photo3 from "@/static/DSC_7757.jpg";
+import photo4 from "@/static//utenok_g4.jpg";
+
 const GroupsComponent: FC = () => {
-  const programs: Program[] = [
-    {
-      title: "Пузырьки",
-      description: "Грудничковое плавание для малышей от 3 месяцев до 2 лет",
-      schedule: "ПН, ПТ: 11:00 - 12:00",
-      icon: <Baby className="h-6 w-6 text-[#EBA31E]" />,
-      photoProgram: photo,
-      description2:
-        "Возраст с 3 месяцев и до года – это второй этап в обучении плаванию наших малышей. В это время очень важно, что мама находится в бассейне вместе с малышом. Ребенок, чувствуя присутствие мамы, ее защиту и поддержку, без страха познает водную среду.",
-      age: "3 мес - 2 года",
-      duration: "30 минут",
-      features: [
-        "Совместно с родителями",
-        "Безопасная среда",
-        "Первые водные навыки",
-        "Развитие координации",
-      ],
-    },
-    {
-      title: "Смелые утята",
-      description: "Продвинутое плавание для детей от 5 до 8 лет",
-      schedule: "Пн, Ср, Пт: 19:00 - 20:00, Вт, Чт: 18:00 - 19:00, Сб: 11:00 - 12:00",
-      icon: <Star className="h-6 w-6 text-[#EBA31E]" />,
-      photoProgram: photo,
-      description2:
-        "Группа для детей, которые уже освоили базовые навыки плавания. Занятия направлены на совершенствование техники, развитие выносливости и уверенности в воде.",
-      age: "5-8 лет",
-      duration: "45 минут + сауна",
-      features: [
-        "Групповые занятия",
-        "Развитие техники",
-        "Прогрев в сауне",
-        "Подготовка к соревнованиям",
-      ],
-    },
-    {
-      title: "Индивидуальные занятия",
-      description: "Персональный подход для детей от 3 месяцев до 10 лет",
-      schedule: "Пн-Вс: 09:00 - 20:30",
-      icon: <Award className="h-6 w-6 text-[#EBA31E]" />,
-      photoProgram: photo,
-      description2:
-        "Персональные занятия с тренером по индивидуальной программе. Идеально подходит для детей, которым требуется особый подход или ускоренное обучение.",
-      age: "3 мес - 10 лет",
-      duration: "30 минут",
-      features: [
-        "Индивидуальный подход",
-        "Гибкое расписание",
-        "Быстрый прогресс",
-        "Фокус на конкретных навыках",
-      ],
-    },
-    {
-      title: "Соляная пещера",
-      description: "Уникальный формат оздоровления для всей семьи",
-      schedule: "Ежедневно: 10:00 - 20:00",
-      icon: <Thermometer className="h-6 w-6 text-[#EBA31E]" />,
-      photoProgram: photo,
-      description2:
-        "Специально оборудованное помещение, стены которого покрыты солью. Во время сеанса в воздух распыляются мельчайшие частицы соли, создавая особый микроклимат, благотворно влияющий на здоровье.",
-      age: "Для всей семьи",
-      duration: "30-45 минут",
-      features: [
-        "Укрепление иммунитета",
-        "Профилактика заболеваний",
-        "Релаксация",
-        "Улучшение дыхания",
-      ],
-    },
-  ];
-
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedProgram(null);
-  };
+  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleProgramClick = (program: Program) => {
     setSelectedProgram(program);
@@ -248,10 +177,10 @@ const GroupsComponent: FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
-                  <h3 className="text-2xl md:text-3xl font-extrabold">
+                  <h3 className="text-2xl text-white md:text-3xl font-extrabold">
                     {selectedProgram.title}
                   </h3>
-                  <p className="text-blue-100 mt-1 md:mt-2 text-sm md:text-base">
+                  <p className="text-white mt-1 md:mt-2 text-sm md:text-base">
                     {selectedProgram.description}
                   </p>
                 </div>
@@ -346,14 +275,6 @@ const GroupsComponent: FC = () => {
                     ))}
                   </ul>
                 </div>
-
-                {/* Кнопка записи */}
-                <Button
-                  className="w-full py-5 md:py-6 bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black text-lg md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mt-4"
-                  onClick={handleCloseModal}
-                >
-                  Записаться на пробное занятие
-                </Button>
               </div>
             </motion.div>
           )}
@@ -364,3 +285,74 @@ const GroupsComponent: FC = () => {
 };
 
 export default GroupsComponent;
+const programs: Program[] = [
+  {
+    title: "Пузырьки",
+    description: "Грудничковое плавание для малышей от 3 месяцев до 2 лет",
+    schedule: "ПН, ПТ: 11:00 - 12:00",
+    icon: <Baby className="h-6 w-6 text-[#EBA31E]" />,
+    photoProgram: photo2,
+    description2:
+      "Группа Пузырьки создана для самых маленьких ребятишек которым важно, чтобы мама находилась в бассейне вместе с ним.",
+    age: "3 мес - 2 года",
+    duration: "45 минут + 15 сауна",
+    features: [
+      "Совместно с родителями",
+      "Безопасная среда",
+      "Опытный тренер",
+      "Множество игрушек",
+    ],
+  },
+  {
+    title: "Смелые утята",
+    description: "Продвинутое плавание для детей от 5 до 8 лет",
+    schedule:
+      "Пн, Ср, Пт: 19:00 - 20:00, Вт, Чт: 18:00 - 19:00, Сб: 11:00 - 12:00",
+    icon: <Star className="h-6 w-6 text-[#EBA31E]" />,
+    photoProgram: photo,
+    description2:
+      "Группа для детей, которые уже освоили базовые навыки плавания. Занятия направлены на совершенствование техники, развитие выносливости и уверенности в воде, а так же присуствует соревновательный элемент.",
+    age: "5-8 лет",
+    duration: "45 минут + сауна",
+    features: [
+      "Особая методика",
+      "Колличество до 10 человек",
+      "Умеющая плавать группа",
+      "Соревновательный фактор",
+    ],
+  },
+  {
+    title: "Индивидуальные занятия",
+    description: "Персональный подход для детей от 3 месяцев до 10 лет",
+    schedule: "Пн-Вс: 09:00 - 20:30",
+    icon: <Award className="h-6 w-6 text-[#EBA31E]" />,
+    photoProgram: photo4,
+    description2:
+      "Персональные занятия с тренером по индивидуальной программе. Идеально подходит для детей, которым требуется особый подход или ускоренное обучение.",
+    age: "3 мес - 10 лет",
+    duration: "30 минут",
+    features: [
+      "Индивидуальный подход",
+      "Гибкое расписание",
+      "Быстрый прогресс",
+      "Особое внимание",
+    ],
+  },
+  {
+    title: "Соляная пещера",
+    description: "Уникальный формат оздоровления для всей семьи",
+    schedule: "Ежедневно: 10:00 - 20:00",
+    icon: <Thermometer className="h-6 w-6 text-[#EBA31E]" />,
+    photoProgram: photo3,
+    description2:
+      "Специально оборудованное помещение, стены которого покрыты солью. Во время сеанса в воздух распыляются мельчайшие частицы соли, создавая особый микроклимат, благотворно влияющий на здоровье.",
+    age: "Для всей семьи",
+    duration: "30-45 минут",
+    features: [
+      "Укрепление иммунитета",
+      "Профилактика заболеваний",
+      "Релаксация",
+      "Улучшение дыхания",
+    ],
+  },
+];
