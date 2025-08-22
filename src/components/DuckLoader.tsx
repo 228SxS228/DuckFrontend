@@ -31,10 +31,7 @@ const DuckLoader: React.FC = () => {
       }
     });
 
-    // Добавляем другие ресурсы по необходимости (шрифты, скрипты и т.д.)
-    // document.querySelectorAll('link[rel="stylesheet"]').forEach(...
-
-    return resources;
+      return resources;
   };
 
   useEffect(() => {

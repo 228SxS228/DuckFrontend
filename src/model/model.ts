@@ -42,3 +42,8 @@ export interface BookingProData {
   date: string;
   type: "rentalpro";
 }
+export interface ApplicationResponse {
+  Success: boolean;
+  Message: string;
+  ApplicationId?: number;
+}

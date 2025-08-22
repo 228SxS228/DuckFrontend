@@ -1,3 +1,4 @@
+// timeTableSlice.ts
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { TimeTableItem } from "../../model/model";
 import {
@@ -29,6 +30,18 @@ export const timeTableSlice = createSlice({
     resetBookingStatus: (state) => {
       state.bookingStatus = "idle";
     },
+    // Добавляем новый редюсер для обновления статуса сессии
+    updateSessionStatus: (
+      state,
+      action: PayloadAction<{ sessionId: number; isFree: boolean }>
+    ) => {
+      const index = state.items.findIndex(
+        (item) => item.id === action.payload.sessionId
+      );
+      if (index !== -1) {
+        state.items[index].isFree = action.payload.isFree;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -42,7 +55,7 @@ export const timeTableSlice = createSlice({
           state.loading = false;
           const newItems = action.payload.map((item) => ({
             ...item,
-            type: "pool" as const, // Явно указываем тип
+            type: "pool" as const,
           }));
           state.items = [...state.items, ...newItems];
         }
@@ -61,7 +74,7 @@ export const timeTableSlice = createSlice({
           state.loading = false;
           const newItems = action.payload.map((item) => ({
             ...item,
-            type: "poolpro" as const, // Явно указываем тип
+            type: "poolpro" as const,
           }));
           state.items = [...state.items, ...newItems];
         }
@@ -73,14 +86,10 @@ export const timeTableSlice = createSlice({
       .addCase(bookSession.pending, (state) => {
         state.bookingStatus = "loading";
       })
-      .addCase(bookSession.fulfilled, (state, action) => {
+      .addCase(bookSession.fulfilled, (state) => {
         state.bookingStatus = "success";
-        const index = state.items.findIndex(
-          (item) => item.id === action.payload.id
-        );
-        if (index !== -1) {
-          state.items[index] = action.payload;
-        }
+        // Мы больше не обновляем items здесь, так как сервер возвращает ApplicationResponse
+        // Вместо этого мы будем обновлять статус сессии через отдельный экшен
       })
       .addCase(bookSession.rejected, (state) => {
         state.bookingStatus = "error";
@@ -93,7 +102,7 @@ export const timeTableSlice = createSlice({
       })
       .addCase(bookSaltCaveSession.rejected, (state) => {
         state.bookingStatus = "error";
-      })
+      });
   },
 });
 
@@ -131,5 +140,6 @@ export const selectTimeTableInfo = createSelector(
   })
 );
 
-export const { resetBookingStatus } = timeTableSlice.actions;
+export const { resetBookingStatus, updateSessionStatus } =
+  timeTableSlice.actions;
 export default timeTableSlice.reducer;

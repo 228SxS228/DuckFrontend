@@ -1,5 +1,12 @@
 import { baseAPI } from "../../axios/index";
-import { TimeTableItem, BookingData, BookingSaltCaveData, BookingFirstData, BookingProData } from "../../model/model"; // Добавим импорт BookingData
+import {
+  TimeTableItem,
+  BookingData,
+  BookingSaltCaveData,
+  BookingFirstData,
+  BookingProData,
+  ApplicationResponse,
+} from "../../model/model"; // Добавим импорт BookingData
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
@@ -20,70 +27,68 @@ export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
 );
 //Post запрос на апи
 
-export interface ApplicationResponseDto {
-  Success: boolean;
-  Message: string;
-  ApplicationId: string;
-}
+export const bookSession = createAsyncThunk<ApplicationResponse, BookingData>(
+  "timeTable/bookSession",
+  async (bookingData) => {
+    try {
+      const response = await baseAPI.post<any>(
+        "/create-application",
+        bookingData
+      );
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.error("Ошибка записи:", error);
+      throw error;
+    }
+  }
+);
 
-export const bookSession = createAsyncThunk<
-  ApplicationResponseDto,
-  BookingData
->("timeTable/bookSession", async (bookingData) => {
+//для записи в пещеру
+export const bookSaltCaveSession = createAsyncThunk<
+  ApplicationResponse,
+  BookingSaltCaveData
+>("saltCave/bookSession", async (bookingData) => {
   try {
-    const response = await baseAPI.post<ApplicationResponseDto>(
+    const response = await baseAPI.post<any>(
       "/create-application",
       bookingData
     );
+    console.log(response);
     return response.data;
   } catch (error) {
-    console.error("Ошибка записи:", error);
     throw error;
   }
 });
-
-//для записи в пещеру
-export const bookSaltCaveSession = createAsyncThunk<any, BookingSaltCaveData>(
-  "saltCave/bookSession",
-  async (bookingData) => {
-    try {
-      const response = await baseAPI.post<any>(
-        "/create-application",
-        bookingData
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-);
 //для записи в на первое занятие
-export const bookFirstSession = createAsyncThunk<any, BookingFirstData>(
-  "firstSession/bookSession",
-  async (bookingData) => {
-    try {
-      const response = await baseAPI.post<any>(
-        "/create-application",
-        bookingData
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+export const bookFirstSession = createAsyncThunk<
+  ApplicationResponse,
+  BookingFirstData
+>("firstSession/bookSession", async (bookingData) => {
+  try {
+    const response = await baseAPI.post<any>(
+      "/create-application",
+      bookingData
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    throw error;
   }
-);
+});
 //для записи на аренду про
-export const bookProSession = createAsyncThunk<any, BookingProData>(
-  "rentalPro/bookSession",
-  async (bookingData) => {
-    try {
-      const response = await baseAPI.post<any>(
-        "/create-application",
-        bookingData
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+export const bookProSession = createAsyncThunk<
+  ApplicationResponse,
+  BookingProData
+>("rentalPro/bookSession", async (bookingData) => {
+  try {
+    const response = await baseAPI.post<any>(
+      "/create-application",
+      bookingData
+    );
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    throw error;
   }
-);
+});
