@@ -1,3 +1,4 @@
+//интерфейс для овтета с сервера для расписания
 export interface TimeTableItem {
   id?: number;
   name: string;
@@ -8,6 +9,7 @@ export interface TimeTableItem {
   isFree: boolean; // Свободна запись?
   type: "pool" | "poolpro" | "saltacave"; // Добавляем тип занятия
 }
+//интерфейс для поста на сервер для записи
 export interface BookingData {
   sessionId: number;
   trainer: string;
@@ -19,22 +21,25 @@ export interface BookingData {
   paid: boolean;
   type: "pool" | "poolpro" | "saltacave"; // Про обычный пещера
 }
+//интерфейс для поста на сервер для записи в соляную пещеру
 export interface BookingSaltCaveData {
   name: string;
   phone: string;
   email: string;
   sessionType: string;
-  date: string; 
+  date: string;
   time: string;
   type: "saltacave";
 }
+//интерфейс для поста на сервер для записи в на первое занятие
 export interface BookingFirstData {
   name: string;
   phone: string;
-  email:string;
-  date: string; 
+  email: string;
+  date: string;
   type: "firstsession";
 }
+//интерфейс для поста на сервер для записи на аренду в про
 export interface BookingProData {
   name: string;
   phone: string;
@@ -42,8 +47,21 @@ export interface BookingProData {
   date: string;
   type: "rentalpro";
 }
+//интерфейс для ответа с сервер для формирования страницы оплаты
 export interface ApplicationResponse {
-  Success: boolean;
-  Message: string;
-  ApplicationId?: number;
+  success: boolean;
+  message: string;
+  applicationId?: number;
+}
+
+export interface Program {
+  title: string;
+  description: string;
+  schedule: string;
+  icon: React.ReactNode;
+  photoProgram: string;
+  description2: string;
+  age: string;
+  duration: string;
+  features: string[];
 }

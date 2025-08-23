@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { FC, useState } from "react";
 import { Button } from "./ui/button";
-import { Program } from "@/model/types";
+import { Program } from "@/model/model";
 import Modal from "./Modal";
 import { motion, Variants } from "framer-motion";
 import { LiquidGlass } from "./ui/LiquidGlass";

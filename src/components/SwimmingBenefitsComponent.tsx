@@ -1,40 +1,7 @@
-
 import { Heart, Brain, Smile, Shield, Award } from "lucide-react";
 import { FC } from "react";
 
-const SwimmingBenefitsComponent: FC =() => {
-  const benefits = [
-    {
-      icon: <Heart className="h-8 w-8 text-sky-600" />,
-      title: "Укрепление здоровья",
-      description:
-        "Плавание укрепляет сердечно-сосудистую и дыхательную системы, повышает иммунитет",
-    },
-    {
-      icon: <Brain className="h-8 w-8 text-sky-600" />,
-      title: "Развитие мозга",
-      description:
-        "Стимулирует развитие нервной системы и улучшает когнитивные функции",
-    },
-    {
-      icon: <Smile className="h-8 w-8 text-sky-600" />,
-      title: "Эмоциональное благополучие",
-      description: "Снижает стресс, улучшает настроение и повышает самооценку",
-    },
-    {
-      icon: <Shield className="h-8 w-8 text-sky-600" />,
-      title: "Безопасность",
-      description:
-        "Обучение плаванию — важный навык безопасности для всей жизни",
-    },
-    {
-      icon: <Award className="h-8 w-8 text-sky-600" />,
-      title: "Физическое развитие",
-      description:
-        "Формирует правильную осанку, укрепляет все группы мышц, развивает координацию",
-    },
-  ];
-
+const SwimmingBenefitsComponent: FC = () => {
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
@@ -53,7 +20,7 @@ const SwimmingBenefitsComponent: FC =() => {
             <img
               src="/placeholder.svg?height=400&width=600"
               alt="Дети плавают в бассейне"
-            //   fill
+              //   fill
               className="object-cover"
             />
           </div>
@@ -88,5 +55,37 @@ const SwimmingBenefitsComponent: FC =() => {
       </div>
     </section>
   );
-}
+};
+
+const benefits = [
+  {
+    icon: <Heart className="h-8 w-8 text-sky-600" />,
+    title: "Укрепление здоровья",
+    description:
+      "Плавание укрепляет сердечно-сосудистую и дыхательную системы, повышает иммунитет",
+  },
+  {
+    icon: <Brain className="h-8 w-8 text-sky-600" />,
+    title: "Развитие мозга",
+    description:
+      "Стимулирует развитие нервной системы и улучшает когнитивные функции",
+  },
+  {
+    icon: <Smile className="h-8 w-8 text-sky-600" />,
+    title: "Эмоциональное благополучие",
+    description: "Снижает стресс, улучшает настроение и повышает самооценку",
+  },
+  {
+    icon: <Shield className="h-8 w-8 text-sky-600" />,
+    title: "Безопасность",
+    description: "Обучение плаванию — важный навык безопасности для всей жизни",
+  },
+  {
+    icon: <Award className="h-8 w-8 text-sky-600" />,
+    title: "Физическое развитие",
+    description:
+      "Формирует правильную осанку, укрепляет все группы мышц, развивает координацию",
+  },
+];
+
 export default SwimmingBenefitsComponent;

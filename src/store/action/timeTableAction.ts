@@ -6,7 +6,7 @@ import {
   BookingFirstData,
   BookingProData,
   ApplicationResponse,
-} from "../../model/model"; // Добавим импорт BookingData
+} from "../../model/model";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
@@ -26,7 +26,6 @@ export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
   }
 );
 //Post запрос на апи
-
 export const bookSession = createAsyncThunk<ApplicationResponse, BookingData>(
   "timeTable/bookSession",
   async (bookingData) => {

@@ -1,6 +1,4 @@
 import { FC, lazy } from "react";
-
-
 import GroupsComponent from "@/components/GroupsComponent";
 import SaltCaveComponent from "@/components/SaltCaveComponent";
 import Rentalcomponent from "@/components/RentalComponent";

@@ -2,7 +2,7 @@ import { motion, Variants } from "framer-motion";
 import { useState, useCallback, useEffect } from "react";
 import Modal from "@/components/Modal";
 import { bookSaltCaveSession } from "@/store/action/timeTableAction";
-import { BookingSaltCaveData } from "@/model/model";
+import { ApplicationResponse, BookingSaltCaveData } from "@/model/model";
 import { useAppDispatch } from "@/hooks/reduxe";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,6 +24,11 @@ import {
   Waves,
   Phone,
   Mail,
+  CreditCard,
+  ArrowRight,
+  Store,
+  ExternalLink,
+  X,
 } from "lucide-react";
 
 // Импорт изображений
@@ -41,7 +46,7 @@ const schema = yup.object().shape({
   phone: yup
     .string()
     .required("Введите телефон")
-    .min(11, "Телефон слишком короткий"),
+    .min(11, "Телефон слишком коротный"),
   email: yup
     .string()
     .email("Введите корректный email")
@@ -81,8 +86,11 @@ const staggerContainer = {
 export default function SaltCavePage() {
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [applicationData, setApplicationData] =
+    useState<ApplicationResponse | null>(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
 
   // Генерация временных слотов
   const times = Array.from({ length: 11 }, (_, i) => {
@@ -115,6 +123,19 @@ export default function SaltCavePage() {
     },
   });
 
+  // Обработчик выбора способа оплаты
+  const handlePaymentMethodSelect = (method: "online" | "in_center") => {
+    setShowPaymentMethodModal(false);
+
+    if (method === "online") {
+      setShowPaymentModal(true);
+      // Здесь можно добавить логику для перенаправления на страницу оплаты
+    } else {
+      // Оплата в центре - просто показываем подтверждение
+      alert("Вы выбрали оплату в центре. Ждем вас!");
+    }
+  };
+
   // Исправленный обработчик отправки формы
   const onSubmit: any = async (formData: FormValues) => {
     try {
@@ -123,13 +144,15 @@ export default function SaltCavePage() {
         type: "saltacave",
       };
 
-      await dispatch(bookSaltCaveSession(bookingData)).unwrap();
-      setIsSubmitted(true);
+      const result = await dispatch(bookSaltCaveSession(bookingData)).unwrap();
 
-      setTimeout(() => {
+      if (result.success) {
+        setApplicationData(result);
         setIsModalOpen(false);
-        setIsSubmitted(false);
-      }, 2000);
+        setShowPaymentMethodModal(true);
+      } else {
+        alert(result.message || "Произошла ошибка при бронировании");
+      }
     } catch (error) {
       console.error("Ошибка бронирования:", error);
       alert("Произошла ошибка при бронировании. Пожалуйста, попробуйте снова.");
@@ -145,7 +168,6 @@ export default function SaltCavePage() {
       setValue("sessionType", selectedPlan);
     }
   }, [isModalOpen, reset, selectedPlan, setValue]);
-  // Компонент сообщения об успехе
 
   return (
     <section className="min-h-screen overflow-hidden bg-gradient-to-b from-blue-50 to-blue-100 py-12 relative">
@@ -581,214 +603,200 @@ export default function SaltCavePage() {
             <h3 className="text-xl font-bold text-white">
               Бронирование сеанса
             </h3>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="text-white/80 hover:text-white"
+            >
+              <X size={24} />
+            </button>
           </div>
         </div>
 
         {/* Контент */}
         <div className="p-5">
-          {isSubmitted ? (
-            <div className="text-center py-5">
-              <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Check className="text-green-600" size={28} />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Поле имени */}
+            <div>
+              <div className="relative">
+                <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                <Controller
+                  name="name"
+                  control={control}
+                  rules={{
+                    required: "ФИО обязательно",
+                    minLength: { value: 2, message: "Минимум 2 символа" },
+                  }}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      placeholder="Иванов Иван Иванович"
+                      className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  )}
+                />
               </div>
-              <h4 className="text-lg font-bold text-blue-900 mb-2">
-                Заявка принята!
-              </h4>
-              <p className="text-gray-600 mb-4">
-                Наш администратор свяжется с вами в течение 15 минут
-              </p>
-              <Button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white px-6 py-3 rounded-lg w-full"
-              >
-                Понятно
-              </Button>
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {/* Поле имени */}
+
+            {/* Поле телефона (только Россия) */}
+            <div>
+              <div className="relative">
+                <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="tel"
+                      maxLength={12}
+                      placeholder="+7(999)-999-99-99"
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  )}
+                />
+              </div>
+              {errors.phone && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.phone.message}
+                </p>
+              )}
+            </div>
+
+            {/* поле email */}
+            <div>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="email"
+                      placeholder="Email"
+                      className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  )}
+                />
+              </div>
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            {/* Дата и время */}
+            <div className="grid grid-cols-2 gap-3">
+              {/* Дата */}
               <div>
                 <div className="relative">
-                  <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                  <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
                   <Controller
-                    name="name"
+                    name="date"
                     control={control}
-                    rules={{
-                      required: "ФИО обязательно",
-                      minLength: { value: 2, message: "Минимум 2 символа" },
-                    }}
+                    rules={{ required: "Дата обязательна" }}
                     render={({ field }) => (
                       <input
+                        type="date"
                         {...field}
-                        placeholder="Иванов Иван Иванович"
+                        min={format(new Date(), "yyyy-MM-dd")}
                         className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     )}
                   />
                 </div>
-                {errors.name && (
+                {errors.date && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.name.message}
+                    {errors.date.message}
                   </p>
                 )}
               </div>
 
-              {/* Поле телефона (только Россия) */}
+              {/* Время */}
               <div>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                  <Clock className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
                   <Controller
-                    name="phone"
+                    name="time"
                     control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="tel"
-                        maxLength={12}
-                        placeholder="+7(999)-999-99-99"
-                        className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    )}
-                  />
-                </div>
-                {errors.phone && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-
-              {/* поле email */}
-              <div>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                  <Controller
-                    name="email"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="email"
-                        placeholder="Email"
-                        className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    )}
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Дата и время */}
-              <div className="grid grid-cols-2 gap-3">
-                {/* Дата */}
-                <div>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="date"
-                      control={control}
-                      rules={{ required: "Дата обязательна" }}
-                      render={({ field }) => (
-                        <input
-                          type="date"
-                          {...field}
-                          min={format(new Date(), "yyyy-MM-dd")}
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      )}
-                    />
-                  </div>
-                  {errors.date && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.date.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Время */}
-                <div>
-                  <div className="relative">
-                    <Clock className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="time"
-                      control={control}
-                      rules={{ required: "Время обязательно" }}
-                      render={({ field }) => (
-                        <select
-                          {...field}
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                          <option value="">Время</option>
-                          {times.map((time) => (
-                            <option key={time} value={time}>
-                              {time}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                    />
-                  </div>
-                  {errors.time && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.time.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Тип сеанса */}
-              <div>
-                <div className="relative">
-                  <Plus className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                  <Controller
-                    name="sessionType"
-                    control={control}
-                    rules={{ required: "Тип сеанса обязателен" }}
+                    rules={{ required: "Время обязательно" }}
                     render={({ field }) => (
                       <select
                         {...field}
                         className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
-                        <option value="">Тип сеанса</option>
-                        {pricingPlans.map((plan) => (
-                          <option key={plan.title} value={plan.title}>
-                            {plan.title}
+                        <option value="">Время</option>
+                        {times.map((time) => (
+                          <option key={time} value={time}>
+                            {time}
                           </option>
                         ))}
                       </select>
                     )}
                   />
                 </div>
-                {errors.sessionType && (
+                {errors.time && (
                   <p className="text-red-500 text-sm mt-1">
-                    {errors.sessionType.message}
+                    {errors.time.message}
                   </p>
                 )}
               </div>
+            </div>
 
-              {/* Кнопки */}
-              <div className="flex gap-3 pt-2">
-                <Button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  Отмена
-                </Button>
-                <Button
-                  type="submit"
-                  className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Отправка..." : "Забронировать"}
-                </Button>
+            {/* Тип сеанса */}
+            <div>
+              <div className="relative">
+                <Plus className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                <Controller
+                  name="sessionType"
+                  control={control}
+                  rules={{ required: "Тип сеанса обязателен" }}
+                  render={({ field }) => (
+                    <select
+                      {...field}
+                      className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Тип сеанса</option>
+                      {pricingPlans.map((plan) => (
+                        <option key={plan.title} value={plan.title}>
+                          {plan.title}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                />
               </div>
-            </form>
-          )}
+              {errors.sessionType && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.sessionType.message}
+                </p>
+              )}
+            </div>
+
+            {/* Кнопки */}
+            <div className="flex gap-3 pt-2">
+              <Button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                Отмена
+              </Button>
+              <Button
+                type="submit"
+                className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Отправка..." : "Забронировать"}
+              </Button>
+            </div>
+          </form>
         </div>
 
         {/* Футер */}
@@ -797,6 +805,148 @@ export default function SaltCavePage() {
           <a href="#" className="text-blue-600 hover:underline">
             политикой конфиденциальности
           </a>
+        </div>
+      </Modal>
+
+      {/* Модальное окно выбора способа оплаты */}
+      <Modal
+        isOpen={showPaymentMethodModal}
+        onClose={() => setShowPaymentMethodModal(false)}
+        className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
+      >
+        <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-bold text-white">Выбор оплаты</h3>
+            <button
+              onClick={() => setShowPaymentMethodModal(false)}
+              className="text-white/80 hover:text-white"
+            >
+              <X size={24} />
+            </button>
+          </div>
+        </div>
+
+        <div className="p-5">
+          <div className="text-center mb-6">
+            <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Check className="text-green-600" size={28} />
+            </div>
+            <h4 className="text-lg font-bold text-blue-900 mb-2">
+              Заявка #{applicationData?.applicationId} принята!
+            </h4>
+            <p className="text-gray-600 mb-4">
+              Выберите способ оплаты для подтверждения записи
+            </p>
+
+            {/* Номер заявки */}
+            <div className="bg-blue-50 rounded-lg p-3 mb-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-blue-800">
+                  Номер заявки: {applicationData?.applicationId}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <button
+              onClick={() => handlePaymentMethodSelect("online")}
+              className="w-full p-4 border-2 border-blue-200 rounded-xl flex items-center justify-between hover:bg-blue-50 transition-colors"
+            >
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                  <CreditCard className="text-blue-600" size={20} />
+                </div>
+                <div className="text-left">
+                  <div className="font-bold text-blue-900">Оплата онлайн</div>
+                  <div className="text-sm text-gray-600">Банковской картой</div>
+                </div>
+              </div>
+              <ExternalLink className="text-blue-600" size={20} />
+            </button>
+
+            <button
+              onClick={() => handlePaymentMethodSelect("in_center")}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl flex items-center justify-between hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                  <Store className="text-gray-600" size={20} />
+                </div>
+                <div className="text-left">
+                  <div className="font-bold text-gray-900">Оплата в центре</div>
+                  <div className="text-sm text-gray-600">При посещении</div>
+                </div>
+              </div>
+              <ArrowRight className="text-gray-600" size={20} />
+            </button>
+          </div>
+
+          <div className="mt-6 text-center text-sm text-gray-500">
+            <p>
+              Вы можете оплатить позже, но не позднее чем за 2 часа до занятия
+            </p>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Модальное окно оплаты (после выбора онлайн оплаты) */}
+      <Modal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
+      >
+        <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-bold text-white">Оплата онлайн</h3>
+            <button
+              onClick={() => setShowPaymentModal(false)}
+              className="text-white/80 hover:text-white"
+            >
+              <X size={24} />
+            </button>
+          </div>
+        </div>
+
+        <div className="p-5">
+          <div className="text-center mb-6">
+            <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CreditCard className="text-blue-600" size={28} />
+            </div>
+            <h4 className="text-lg font-bold text-blue-900 mb-2">
+              Оплата заявки #{applicationData?.applicationId}
+            </h4>
+            <p className="text-gray-600 mb-4">
+              Вы будете перенаправлены на безопасную страницу оплаты
+            </p>
+          </div>
+
+          <div className="bg-gray-100 p-4 rounded-lg mb-6">
+            <div className="flex justify-between mb-2">
+              <span className="text-gray-600">Сумма к оплате:</span>
+              <span className="font-bold">1 500 руб.</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Номер заявки:</span>
+              <span className="font-medium">
+                {applicationData?.applicationId}
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              // Здесь будет редирект на страницу оплаты
+              alert("Редирект на страницу оплаты");
+            }}
+            className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90"
+          >
+            Перейти к оплате
+          </button>
+
+          <div className="mt-4 text-center text-sm text-gray-500">
+            <p>Оплата защищена по стандарту PCI DSS</p>
+          </div>
         </div>
       </Modal>
     </section>
@@ -929,8 +1079,7 @@ const faq = [
   },
   {
     question: "что нужно при первом посещение?",
-    answer:
-      "Нужен только паспорт для заполнения договора.",
+    answer: "Нужен только паспорт для заполнения договора.",
   },
 ];
 

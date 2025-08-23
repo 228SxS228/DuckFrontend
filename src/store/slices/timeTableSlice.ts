@@ -1,4 +1,3 @@
-// timeTableSlice.ts
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { TimeTableItem } from "../../model/model";
 import {
@@ -30,7 +29,7 @@ export const timeTableSlice = createSlice({
     resetBookingStatus: (state) => {
       state.bookingStatus = "idle";
     },
-    // Добавляем новый редюсер для обновления статуса сессии
+    // редюсер для обновления статуса сессии
     updateSessionStatus: (
       state,
       action: PayloadAction<{ sessionId: number; isFree: boolean }>
@@ -88,8 +87,6 @@ export const timeTableSlice = createSlice({
       })
       .addCase(bookSession.fulfilled, (state) => {
         state.bookingStatus = "success";
-        // Мы больше не обновляем items здесь, так как сервер возвращает ApplicationResponse
-        // Вместо этого мы будем обновлять статус сессии через отдельный экшен
       })
       .addCase(bookSession.rejected, (state) => {
         state.bookingStatus = "error";
