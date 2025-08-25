@@ -1,7 +1,8 @@
 import { FC } from "react";
 import { RouteNames } from "../router/index";
 import { NavLink } from "react-router-dom";
-import { Youtube, Send } from "lucide-react";
+import { Send } from "lucide-react";
+import { Icon20LogoVk } from "@vkontakte/icons";
 import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
 
@@ -128,11 +129,11 @@ const Footer: FC = () => {
               viewport={{ once: true }}
             >
               <Link
-                to="#"
+                to="https://vk.com/utenok_tomsk"
                 className="w-9 h-9 rounded-full bg-blue-900 flex items-center justify-center hover:bg-blue-800 transition-colors"
               >
-                <Youtube className="h-5 w-5 text-blue-200" />
-                <span className="sr-only">Youtube</span>
+                <Icon20LogoVk className="h-5 w-5 text-blue-200" />
+                <span className="sr-only">VK</span>
               </Link>
               <Link
                 to="https://vk.com/utenok_tomsk"
