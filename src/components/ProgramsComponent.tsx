@@ -340,7 +340,7 @@ const ProgramsComponent: FC = () => {
                       Абонемент (8 занятия)
                     </span>
                     <span className="font-bold text-[#9F1EEB] text-lg">
-                      6400 ₽
+                      11720 ₽
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">

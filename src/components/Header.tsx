@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useEffect } from "react";
-import { Phone, Menu, Calendar, User, Check, Mail } from "lucide-react";
+import { Phone, Menu, Calendar, User, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RouteNames } from "../router/index";
@@ -18,10 +18,10 @@ import BubbleComponent from "./ui/Buble";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { BookingFirstData } from "@/model/model";
+import { ApplicationResponse, BookingFirstData } from "@/model/model";
 import { useAppDispatch } from "@/hooks/reduxe";
 
-// Схема валидации
+// Упрощенная схема валидации (без sessionType и time)
 const schema = yup.object().shape({
   name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
   phone: yup
@@ -32,33 +32,31 @@ const schema = yup.object().shape({
     .string()
     .email("Введите корректный email")
     .required("Введите email"),
-  sessionType: yup.string().required("Выберите тип сеанса"),
   date: yup.string().required("Выберите дату"),
-  time: yup.string().required("Выберите время"),
 });
 
-// Тип формы
+// Упрощенный тип формы
 type FormValues = {
   name: string;
   phone: string;
   email: string;
-  sessionType: string;
   date: string;
-  time: string;
 };
+
 const Header: FC = () => {
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState("");
+  const [applicationData, setApplicationData] =
+    useState<ApplicationResponse | null>(null);
   const [activeItem, setActiveItem] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const menuItems = useRef<(HTMLLIElement | null)[]>([]);
   const headerRef = useRef<HTMLElement>(null);
 
   const setMenuItemRef = (el: HTMLLIElement | null, index: number) => {
     menuItems.current[index] = el;
   };
-
+  console.log(applicationData);
   const menuLinks = [
     { name: "Главная", path: RouteNames.HOME },
     { name: "Тренеры", path: RouteNames.TRAINERS },
@@ -68,14 +66,15 @@ const Header: FC = () => {
     { name: "Соляная пещера", path: RouteNames.SALTCAVE },
   ];
 
-  const handleCloseModal = () => setIsModalOpen(false);
-  const handleOpenClick = () => setIsModalOpen(true);
-  // Отправка формы
+  const handleOpenClick = () => {
+    setIsModalOpen(true);
+    setErrorMessage(""); // Сбрасываем ошибку при открытии модального окна
+  };
+
   const {
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
@@ -83,43 +82,47 @@ const Header: FC = () => {
       name: "",
       phone: "",
       email: "",
-      sessionType: "",
       date: "",
-      time: "",
     },
   });
 
-  //  обработчик отправки формы
-  const onSubmit: any = async (formData: FormValues) => {
+  const onSubmit = async (formData: FormValues) => {
     try {
+      setErrorMessage(""); // Сбрасываем ошибку перед отправкой
+
       const bookingData: BookingFirstData = {
         ...formData,
         type: "firstsession",
       };
 
-      await dispatch(bookFirstSession(bookingData)).unwrap();
-      setIsSubmitted(true);
+      const result = await dispatch(bookFirstSession(bookingData)).unwrap();
 
-      setTimeout(() => {
+      if (result.success) {
+        setApplicationData(result);
         setIsModalOpen(false);
-        setIsSubmitted(false);
-      }, 2000);
-    } catch (error) {
+        reset();
+      } else {
+        // Показываем сообщение об ошибке от сервера
+        setErrorMessage(result.message || "Произошла ошибка при бронировании");
+      }
+    } catch (error: any) {
       console.error("Ошибка бронирования:", error);
-      alert("Произошла ошибка при бронировании. Пожалуйста, попробуйте снова.");
+      // Показываем детали ошибки
+      setErrorMessage(
+        error.message ||
+          error.response?.data?.message ||
+          "Произошла ошибка при бронировании. Пожалуйста, попробуйте снова."
+      );
     }
   };
 
-  // Сброс формы при закрытии модального окна
   useEffect(() => {
     if (!isModalOpen) {
       reset();
-      setSelectedPlan("");
-    } else if (selectedPlan) {
-      setValue("sessionType", selectedPlan);
+      setErrorMessage(""); // Сбрасываем ошибку при закрытии модального окна
     }
-  }, [isModalOpen, reset, selectedPlan, setValue]);
-  // Рассчитываем позицию утки для активного пункта меню
+  }, [isModalOpen, reset]);
+
   const getDuckPosition = (): TargetAndTransition => {
     if (activeItem === null || !menuItems.current[activeItem]) {
       return {
@@ -140,7 +143,6 @@ const Header: FC = () => {
     };
   };
 
-  // Тип для плавающей анимации
   const floatingAnimation: Variants = {
     animate: {
       y: [0, -5, 0],
@@ -256,171 +258,141 @@ const Header: FC = () => {
 
           <Modal
             isOpen={isModalOpen}
-            onClose={handleCloseModal}
+            onClose={() => setIsModalOpen(false)}
             className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
           >
             {/* Заголовок */}
             <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl md:text-2xl font-bold text-center text-white mb-6 md:mb-8">
-                  Оставьте контактные данные, мы перезвоним Вам и запишем на
-                  занятие
-                </h2>
+                <h3 className="text-xl font-bold text-white">
+                  Бронирование сеанса
+                </h3>
               </div>
             </div>
 
             {/* Контент */}
             <div className="p-5">
-              {isSubmitted ? (
-                <div className="text-center py-5">
-                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Check className="text-green-600" size={28} />
+              {/* Отображение ошибки */}
+              {errorMessage && (
+                <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                  {errorMessage}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                {/* Поле имени */}
+                <div>
+                  <div className="relative">
+                    <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                    <Controller
+                      name="name"
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          placeholder="Иванов Иван Иванович"
+                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      )}
+                    />
                   </div>
-                  <h4 className="text-lg font-bold text-blue-900 mb-2">
-                    Заявка принята!
-                  </h4>
-                  <p className="text-gray-600 mb-4">
-                    Наш администратор свяжется с вами в течение 15 минут
-                  </p>
+                  {errors.name && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Поле телефона */}
+                <div>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                    <Controller
+                      name="phone"
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          type="tel"
+                          placeholder="+7(999)-999-99-99"
+                          className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      )}
+                    />
+                  </div>
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* поле email */}
+                <div>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                    <Controller
+                      name="email"
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          type="email"
+                          placeholder="Email"
+                          className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      )}
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Дата */}
+                <div>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                    <Controller
+                      name="date"
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          type="date"
+                          {...field}
+                          min={format(new Date(), "yyyy-MM-dd")}
+                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                      )}
+                    />
+                  </div>
+                  {errors.date && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.date.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Кнопки */}
+                <div className="flex gap-3 pt-2">
                   <Button
+                    type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white px-6 py-3 rounded-lg w-full"
+                    className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                   >
-                    Понятно
+                    Отмена
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Отправка..." : "Забронировать"}
                   </Button>
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                  {/* Поле имени */}
-                  <div>
-                    <div className="relative">
-                      <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                      <Controller
-                        name="name"
-                        control={control}
-                        rules={{
-                          required: "ФИО обязательно",
-                          minLength: { value: 2, message: "Минимум 2 символа" },
-                        }}
-                        render={({ field }) => (
-                          <input
-                            {...field}
-                            placeholder="Иванов Иван Иванович"
-                            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        )}
-                      />
-                    </div>
-                    {errors.name && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.name.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Поле телефона (только Россия) */}
-                  <div>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                      <Controller
-                        name="phone"
-                        control={control}
-                        render={({ field }) => (
-                          // <PhoneInput
-                          //   country={"ru"}
-                          //   value={field.value}
-                          //   onChange={(phone) => field.onChange(phone)}
-                          //   inputClass="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                          //   containerClass="relative"
-                          //   buttonClass="absolute left-3 top-3.5 text-blue-500"
-                          // />
-                          <input
-                            {...field}
-                            type="tel"
-                            maxLength={12}
-                            placeholder="+7(999)-999-99-99"
-                            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        )}
-                      />
-                      {errors.phone && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.phone.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {/* поле email */}
-                  <div>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                      <Controller
-                        name="email"
-                        control={control}
-                        render={({ field }) => (
-                          <input
-                            {...field}
-                            type="email"
-                            placeholder="Email"
-                            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        )}
-                      />
-                    </div>
-                    {errors.email && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Дата и время */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {/* Дата */}
-                    <div>
-                      <div className="relative">
-                        <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                        <Controller
-                          name="date"
-                          control={control}
-                          rules={{ required: "Дата обязательна" }}
-                          render={({ field }) => (
-                            <input
-                              type="date"
-                              {...field}
-                              min={format(new Date(), "yyyy-MM-dd")}
-                              className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                          )}
-                        />
-                      </div>
-                      {errors.date && (
-                        <p className="text-red-500 text-sm mt-1">
-                          {errors.date.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Кнопки */}
-                  <div className="flex gap-3 pt-2">
-                    <Button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                    >
-                      Отмена
-                    </Button>
-                    <Button
-                      type="submit"
-                      className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? "Отправка..." : "Забронировать"}
-                    </Button>
-                  </div>
-                </form>
-              )}
+              </form>
             </div>
 
             {/* Футер */}

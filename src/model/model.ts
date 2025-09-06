@@ -4,10 +4,16 @@ export interface TimeTableItem {
   name: string;
   day: string; // Дата в формате "2025-08-05T00:00:00"
   time: string; // Время в формате "11:00"
-  trainerName: string; // Имя тренера
+  trainers: Trainer[]; // Имя тренера
   className: string; // Тип занятия
   isFree: boolean; // Свободна запись?
-  type: "pool" | "poolpro" | "saltacave"; // Добавляем тип занятия
+  sessionType: string;
+  price: string;
+  type: "pool" | "poolpro"; // Добавляем тип занятия
+}
+export interface Trainer {
+  trainerName: string;
+  isFree: boolean;
 }
 //интерфейс для поста на сервер для записи
 export interface BookingData {
@@ -19,6 +25,8 @@ export interface BookingData {
   email: string;
   time: string;
   paid: boolean;
+  sessionType: string;
+  price: string;
   type: "pool" | "poolpro" | "saltacave"; // Про обычный пещера
 }
 //интерфейс для поста на сервер для записи в соляную пещеру
@@ -51,7 +59,9 @@ export interface BookingProData {
 export interface ApplicationResponse {
   success: boolean;
   message: string;
+  onlinePayLink?: string;
   applicationId?: number;
+  price?: string;
 }
 
 export interface Program {

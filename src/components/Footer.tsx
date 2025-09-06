@@ -184,6 +184,10 @@ const Footer: FC = () => {
               <p className="not-italic text-blue-200">
                 Email: utenoktomsk@yandex.ru
               </p>
+              <p className="not-italic text-blue-200">ИНН: 700703987421</p>
+              <p className="not-italic text-blue-200">
+                ИП: Кочкуров Вадим Алексеевич
+              </p>
             </address>
           </motion.div>
 
@@ -216,12 +220,9 @@ const Footer: FC = () => {
         >
           <p className="text-blue-300 text-sm">
             © {new Date().getFullYear()} Разработано
-            <a className="text-blue-300 text-sm" href="https://t.me/ijustwtod">
-              @ijustwtod
-            </a>
-            <span> && </span>
-            <a className="text-blue-300 text-sm" href="https://t.me/youDreamOf">
-              @youDreamOf
+            <span> </span>
+            <a className="text-lime-500" href="https://dev.ultimate-sib.ru/">
+              dev.ultimate-sib
             </a>
             . Все права защищены.
           </p>

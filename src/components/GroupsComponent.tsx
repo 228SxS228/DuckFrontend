@@ -122,33 +122,38 @@ const GroupsComponent: FC = () => {
                 hoverOpacity={0.9}
                 blurStrength={10}
                 borderRadius={24}
-                className="h-full rounded-3xl p-6 transition-all"
+                className="h-90  rounded-3xl p-6 transition-all"
               >
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] flex items-center justify-center mb-6">
-                  {program.icon}
+                <div className="fixed ">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] flex items-center justify-center mb-6">
+                    {program.icon}
+                  </div>
+
+                  <h3 className="text-xl font-extrabold text-[#301EEB] mb-3">
+                    {program.title}
+                  </h3>
+
+                  <p className="text-[#1e293b] mb-5 font-medium">
+                    {program.description}
+                  </p>
+
+                  <div className="flex items-center text-sm text-[#6b7280] mb-5">
+                    <Clock className="h-5 w-5 mr-2 text-[#EBA31E]" />
+                    <span className="font-medium">{program.schedule}</span>
+                  </div>
                 </div>
 
-                <h3 className="text-xl font-extrabold text-[#301EEB] mb-3">
-                  {program.title}
-                </h3>
-
-                <p className="text-[#1e293b] mb-5 font-medium">
-                  {program.description}
-                </p>
-
-                <div className="flex items-center text-sm text-[#6b7280] mb-5">
-                  <Clock className="h-5 w-5 mr-2 text-[#EBA31E]" />
-                  <span className="font-medium">{program.schedule}</span>
+                <div className=" fixed pt-65">
+                  {" "}
+                  <Button
+                    onClick={() => handleProgramClick(program)}
+                    variant="default"
+                    className="text-[#301EEB] hover:text-[#9F1EEB] font-bold pl-0 group"
+                  >
+                    <span>Узнать подробности</span>
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
                 </div>
-
-                <Button
-                  onClick={() => handleProgramClick(program)}
-                  variant="default"
-                  className="text-[#301EEB] hover:text-[#9F1EEB] font-bold pl-0 group"
-                >
-                  <span>Узнать подробности</span>
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
               </LiquidGlass>
             </motion.div>
           ))}
