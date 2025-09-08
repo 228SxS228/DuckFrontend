@@ -39,6 +39,8 @@ import {
   endOfWeek,
   addWeeks,
 } from "date-fns";
+import { Link } from "react-router-dom";
+import { RouteNames } from "@/router";
 
 // Схема валидации
 type FormValues = {
@@ -463,12 +465,6 @@ const TimeTablePage: FC = () => {
                 <h3 className="text-xl font-bold text-white">
                   Запись на занятие
                 </h3>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="text-white/80 hover:text-white"
-                >
-                  <X size={24} />
-                </button>
               </div>
             </div>
 
@@ -498,7 +494,7 @@ const TimeTablePage: FC = () => {
                 </div>
 
                 {/* Выбор тренера */}
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   <label className="block text-gray-500 mb-2">
                     Выберите тренера:
                   </label>
@@ -540,10 +536,10 @@ const TimeTablePage: FC = () => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
                 {/* Выбор конкретного тренера из доступных */}
-                {/* {availableTrainers.length > 0 && (
+                {availableTrainers.length > 0 && (
                   <div className="mt-4">
                     <label className="block text-gray-500 mb-2">
                       Выберите конкретного тренера:
@@ -573,7 +569,7 @@ const TimeTablePage: FC = () => {
                       </p>
                     )}
                   </div>
-                )} */}
+                )}
               </div>
             </div>
 
@@ -716,14 +712,17 @@ const TimeTablePage: FC = () => {
 
             <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
               Нажимая кнопку, вы соглашаетесь с{" "}
-              <a href="#" className="text-blue-600 hover:underline">
+              <Link
+                to={RouteNames.OFFERTA}
+                className="text-blue-600 hover:underline"
+              >
                 политикой конфиденциальности
-              </a>
+              </Link>
             </div>
           </>
         )}
       </Modal>
-      {/* Остальные модальные окна (оплаты) остаются без изменений */}
+      {/* Остальные модальные окна (оплаты) */}
       <Modal
         isOpen={showPaymentMethodModal}
         onClose={() => setShowPaymentMethodModal(false)}
@@ -803,7 +802,6 @@ const TimeTablePage: FC = () => {
           </div>
         </div>
       </Modal>
-      // Модальное окно оплаты (после выбора онлайн оплаты)
       <Modal
         isOpen={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
@@ -835,12 +833,6 @@ const TimeTablePage: FC = () => {
           </div>
 
           <div className="bg-gray-100 p-4 rounded-lg mb-6">
-            <div className="flex justify-between mb-3">
-              <span className="text-gray-600">Номер заявки:</span>
-              <span className="font-medium">
-                {applicationData?.applicationId}
-              </span>
-            </div>
             <div className="flex justify-between mb-3">
               <span className="text-gray-600">Сумма к оплате:</span>
               <span className="font-bold text-green-600">

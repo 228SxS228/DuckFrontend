@@ -14,6 +14,8 @@ import { BookingFirstData } from "@/model/model";
 import { useAppDispatch } from "@/hooks/reduxe";
 import { bookFirstSession } from "@/store/action/timeTableAction";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
+import { RouteNames } from "@/router";
 
 const schema = yup.object().shape({
   name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
@@ -402,9 +404,9 @@ const VideoBanner: FC = () => {
         {/* Футер */}
         <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
           Нажимая кнопку, вы соглашаетесь с{" "}
-          <a href="#" className="text-blue-600 hover:underline">
+          <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
             политикой конфиденциальности
-          </a>
+          </Link>
         </div>
       </Modal>
 

@@ -17,7 +17,7 @@ import { LiquidGlass } from "./ui/LiquidGlass";
 import BubbleComponent from "./ui/Buble";
 
 import photo from "@/static/utenok_g4.jpg";
-import photo2 from "@/static/utenok_g4.jpg";
+import photo2 from "@/static/pyzirki.jpg";
 import photo3 from "@/static/DSC_7757.jpg";
 import photo4 from "@/static//utenok_g4.jpg";
 

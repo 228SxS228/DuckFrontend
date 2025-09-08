@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import BubbleComponent from "@/components/ui/Buble";
 
 const PromotionPage: FC = () => {
-  
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#301EEB] to-[#9F1EEB]">
       {/* Header */}
@@ -104,7 +103,7 @@ const PromotionPage: FC = () => {
         </div>
       </div>
 
-          {/* FAQ Section */}
+      {/* FAQ Section */}
       <div className="container  mx-auto px-4 py-12 mb-16">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">
@@ -211,7 +210,7 @@ const faqs = [
   {
     question: "Можно ли передать абонемент другому человеку?",
     answer:
-      "Нет, абонементы являются именными и не могут быть переданы другим лицам. Это связано с тем, что программы тренировок составляются индивидуально для каждого клиента.",
+      "Да, в случае везкой причины (болезнь, переезд, и т.д.). В этом случае пишите заявление и абонемент продается",
   },
   {
     question: "Что такое «заморозка» абонемента?",

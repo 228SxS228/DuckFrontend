@@ -6,6 +6,7 @@ import ErrorPage from "@/pages/ErrorPage";
 import SaltCavePage from "@/pages/SaltCavePage";
 import PromotionPage from "@/pages/PromotionPage";
 import CompetitionsPage from "@/pages/CompetitionsPage";
+import OffertaPage from "@/pages/OffertaPage";
 import Layout from "@/components/Layout";
 
 export enum RouteNames {
@@ -16,6 +17,7 @@ export enum RouteNames {
   SALTCAVE = "/saltcave",
   PROMOTION = "/promotion",
   COMPETITION = "/competitions",
+  OFFERTA = "/offerta",
   ERROR = "*",
 }
 
@@ -30,6 +32,7 @@ const AppRoutes = () => {
         <Route path={RouteNames.COMPETITION} element={<CompetitionsPage />} />
         <Route path={RouteNames.PROMOTION} element={<PromotionPage />} />
         <Route path={RouteNames.SALTCAVE} element={<SaltCavePage />} />
+        <Route path={RouteNames.OFFERTA} element={<OffertaPage />} />
       </Route>
       <Route path={RouteNames.ERROR} element={<ErrorPage />} />
     </Routes>

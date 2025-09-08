@@ -3,7 +3,10 @@ import { Award, Calendar, Clock, MapPin, Trophy, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import BubbleComponent from "@/components/ui/Buble";
 import { LiquidGlass } from "@/components/ui/LiquidGlass";
-
+import photo2 from "@/static/photo_2025-09-08_14-45-22.jpg";
+import photo3 from "@/static/photo_2025-09-08_14-45-35.jpg";
+import photo4 from "@/static/photo_2025-09-08_14-45-40.jpg";
+import photo5 from "@/static/photo_2025-09-08_14-45-09.jpg";
 const CompetitionsPage: FC = () => {
   // Анимация для карточек
   const cardVariants = {
@@ -161,8 +164,8 @@ const CompetitionsPage: FC = () => {
                 </p>
                 <ul className="mb-6 space-y-3 text-gray-700">
                   {[
-                    'Быть воспитанником центра "Утенок" или иметь приглашение (для открытых соревнований)',
-                    "Иметь медицинскую справку о допуске к соревнованиям (действительна 6 месяцев)",
+                    'Быть действуйщим учеником ПЦ "Утенок".',
+                    "Иметь действующую медицинскую справки(от педиатора + этеребиоз)",
                     "Заполнить заявку на участие и оплатить стартовый взнос (если предусмотрен)",
                     "Прийти на соревнования в указанное время с необходимым снаряжением",
                   ].map((item, index) => (
@@ -266,30 +269,13 @@ const CompetitionsPage: FC = () => {
                 Наши достижения
               </h2>
               <p className="mb-6 text-gray-700">
-                Воспитанники детского плавательного центра "Утенок" регулярно
-                участвуют в соревнованиях различного уровня и показывают
-                отличные результаты. Мы гордимся достижениями наших юных
-                спортсменов!
+                Воспитанники детского плавательного центра "Утенок", после
+                обучения плаванию, регулярно зачисляются в спортивные школы для
+                дальнейшего рсота и развития.
               </p>
 
               <div className="space-y-5">
-                {[
-                  {
-                    title: "Более 100 медалей за 2022 год",
-                    description:
-                      "Наши воспитанники завоевали более 100 медалей различного достоинства на соревнованиях городского и областного уровня.",
-                  },
-                  {
-                    title: "5 воспитанников в сборной города",
-                    description:
-                      "Пятеро наших воспитанников вошли в состав сборной города по плаванию и представляют его на областных соревнованиях.",
-                  },
-                  {
-                    title: "Победители городской спартакиады",
-                    description:
-                      'Команда центра "Утенок" стала победителем городской спартакиады по плаванию среди детских спортивных школ и клубов.',
-                  },
-                ].map((item, index) => (
+                {champions.map((item, index) => (
                   <motion.div
                     key={index}
                     className="flex items-start p-4 bg-white rounded-lg shadow-sm border border-sky-50"
@@ -309,28 +295,20 @@ const CompetitionsPage: FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {[
-                "Награждение победителей",
-                "Юные пловцы с медалями",
-                "Команда на соревнованиях",
-                "Кубок победителей",
-              ].map((alt, index) => (
+              {achievementImages.map((image, index) => (
                 <motion.div
                   key={index}
-                  className="relative rounded-xl overflow-hidden border-2 border-sky-100 bg-gradient-to-r from-sky-50 to-blue-100"
+                  className="relative rounded-xl overflow-hidden border-2 border-sky-100 aspect-square"
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="relative pb-[100%]">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center p-4">
-                        <div className="bg-sky-200 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <Trophy className="h-6 w-6 text-sky-700" />
-                        </div>
-                        <span className="text-sky-700 font-medium">{alt}</span>
-                      </div>
-                    </div>
-                  </div>
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    
+                    className="object-cover"
+                   
+                  />
                 </motion.div>
               ))}
             </div>
@@ -357,7 +335,7 @@ const upcomingCompetitions = [
     ],
     description:
       "Финал Кубка «Утенка» это завершающий этап соревнований, где по сумме двух этапов выявляются лучшие детки по итогам прошедшего года, все участники получают памятные призы, победители и призеры получают кубки, медали и множество подарков от нас и наших спонсоров.ВАЖНО УЧАСТВОВАТЬ В ДВУХ ЭТАПАХ. ( по отдельности на каждом этапе тоже выявляются победители и призеры которые получают дипломы и медали).",
-    image: "/src/static/DSC_2379.jpg",
+    image: "/src/static/kybok_ytenka2.JPG",
     status: "Ожидается",
   },
   {
@@ -369,7 +347,7 @@ const upcomingCompetitions = [
     ageGroups: ["3 мес – 2 года", "3-5 лет", "5-9 лет плавающие"],
     description:
       "Праздничные группы для разных возрастов с увлекательной программой сказочного мира с аниматорами в зале. Далее водные развлекательные игры.Всем маленьким гостям подарки от Деда Мороза и его друзей.Профессиональные фотографии с праздника. Подарки каждому малышу. Розыгрыш подарков родителям",
-    image: "/src/static/DSC_8626.jpg",
+    image: "/src/static/ng_ytenok.JPG",
     status: "Ожидается",
   },
 ];
@@ -390,6 +368,38 @@ const pastCompetitions = [
     results:
       "Каждый год наша команда грандиозно отмечает День Рождения «Утенка», дарит множество подарков, проводит розыгрышы для взрослых, устраивает развлекательные программы для деток разных возрастов на суше и в воде.",
     image: "/src/static/DSC_2379.jpg", // Заменил на реальное изображение
+  },
+];
+
+const champions = [
+  {
+    title: "Наши юные победители.",
+    description:
+      "Победители и призеры региональных сибирских и всероссийских соревнований по плаванию",
+  },
+  {
+    title: "Наша гордость",
+    description:
+      "Толстых Павел, Юрец Максим, Сильков Максим, Михалев Иван, Молокоедов Андрей, Тинтуи Сергей, Щадилов Мирон, Колесников Макар. ",
+  },
+];
+
+const achievementImages = [
+  {
+    src: photo2,
+    alt: "Награждение победителей",
+  },
+  {
+    src: photo3,
+    alt: "Юные пловцы с медалями",
+  },
+  {
+    src: photo4,
+    alt: "Команда на соревнованиях",
+  },
+  {
+    src: photo5,
+    alt: "Кубок победителей",
   },
 ];
 

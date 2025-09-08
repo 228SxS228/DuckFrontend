@@ -39,6 +39,8 @@ import photo5 from "@/static/solinai_pehera_3-500x300.jpg";
 import photo6 from "@/static/solinai_pehera_8-854x750.jpg";
 import photo7 from "@/static/solinai_pehera_6-768x512.jpg";
 import Video from "@/static/saltcave_prewei.mp4";
+import { Link } from "react-router-dom";
+import { RouteNames } from "@/router";
 
 // Схема валидации
 const schema = yup.object().shape({
@@ -53,6 +55,7 @@ const schema = yup.object().shape({
     .required("Введите email"),
   sessionType: yup.string().required("Выберите тип сеанса"),
   date: yup.string().required("Выберите дату"),
+  selectedPrice: yup.string().required("Цена обязательна"),
   time: yup.string().required("Выберите время"),
 });
 
@@ -63,6 +66,7 @@ type FormValues = {
   email: string;
   sessionType: string;
   date: string;
+  selectedPrice: string;
   time: string;
 };
 // Анимации
@@ -119,6 +123,7 @@ export default function SaltCavePage() {
       email: "",
       sessionType: "",
       date: "",
+      selectedPrice: "",
       time: "",
     },
   });
@@ -603,12 +608,7 @@ export default function SaltCavePage() {
             <h3 className="text-xl font-bold text-white">
               Бронирование сеанса
             </h3>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="text-white/80 hover:text-white"
-            >
-              <X size={24} />
-            </button>
+          
           </div>
         </div>
 
@@ -760,12 +760,21 @@ export default function SaltCavePage() {
                   render={({ field }) => (
                     <select
                       {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        const selectedPlan = pricingPlans.find(
+                          (plan) => plan.title === e.target.value
+                        );
+                        if (selectedPlan) {
+                          setValue("selectedPrice", selectedPlan.price);
+                        }
+                      }}
                       className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       <option value="">Тип сеанса</option>
                       {pricingPlans.map((plan) => (
                         <option key={plan.title} value={plan.title}>
-                          {plan.title}
+                          {plan.title} - {plan.price} руб.
                         </option>
                       ))}
                     </select>
@@ -778,6 +787,13 @@ export default function SaltCavePage() {
                 </p>
               )}
             </div>
+
+            {/* Скрытое поле для цены */}
+            <Controller
+              name="selectedPrice"
+              control={control}
+              render={({ field }) => <input type="hidden" {...field} />}
+            />
 
             {/* Кнопки */}
             <div className="flex gap-3 pt-2">
@@ -802,9 +818,9 @@ export default function SaltCavePage() {
         {/* Футер */}
         <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
           Нажимая кнопку, вы соглашаетесь с{" "}
-          <a href="#" className="text-blue-600 hover:underline">
+          <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
             политикой конфиденциальности
-          </a>
+          </Link>
         </div>
       </Modal>
 
@@ -838,7 +854,6 @@ export default function SaltCavePage() {
               Выберите способ оплаты для подтверждения записи
             </p>
 
-            {/* Номер заявки */}
             <div className="bg-blue-50 rounded-lg p-3 mb-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-blue-800">
@@ -917,35 +932,61 @@ export default function SaltCavePage() {
               Оплата заявки #{applicationData?.applicationId}
             </h4>
             <p className="text-gray-600 mb-4">
-              Вы будете перенаправлены на безопасную страницу оплаты
+              Вы будете перенаправлены на безопасную страницу оплаты Робокассы
             </p>
           </div>
 
           <div className="bg-gray-100 p-4 rounded-lg mb-6">
-            <div className="flex justify-between mb-2">
-              <span className="text-gray-600">Сумма к оплате:</span>
-              <span className="font-bold">1 500 руб.</span>
-            </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between mb-3">
               <span className="text-gray-600">Номер заявки:</span>
               <span className="font-medium">
                 {applicationData?.applicationId}
+              </span>
+            </div>
+            <div className="flex justify-between mb-3">
+              <span className="text-gray-600">Сумма к оплате:</span>
+              <span className="font-bold text-green-600">
+                {/* Можно парсить сумму из ссылки или хранить отдельно */}
+                {applicationData?.onlinePayLink?.match(/OutSum=(\d+)/)?.[1] ||
+                  ""}{" "}
+                руб.
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Описание:</span>
+              <span className="font-medium text-sm text-right max-w-xs">
+                {applicationData?.onlinePayLink?.match(
+                  /Description=([^&]+)/
+                )?.[1]
+                  ? decodeURIComponent(
+                      applicationData.onlinePayLink.match(
+                        /Description=([^&]+)/
+                      )?.[1] || ""
+                    )
+                  : "Оплата занятия"}
               </span>
             </div>
           </div>
 
           <button
             onClick={() => {
-              // Здесь будет редирект на страницу оплаты
-              alert("Редирект на страницу оплаты");
+              if (applicationData?.onlinePayLink) {
+                // Редирект на страницу оплаты Робокассы
+                window.location.href = applicationData.onlinePayLink;
+              }
             }}
-            className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90"
+            disabled={!applicationData?.onlinePayLink}
+            className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50 mb-4"
           >
             Перейти к оплате
           </button>
 
-          <div className="mt-4 text-center text-sm text-gray-500">
+          <div className="text-center text-sm text-gray-500 mb-2">
             <p>Оплата защищена по стандарту PCI DSS</p>
+          </div>
+
+          <div className="text-center text-xs text-gray-400">
+            <p>Платежная система Робокасса</p>
           </div>
         </div>
       </Modal>

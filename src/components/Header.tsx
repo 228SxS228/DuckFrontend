@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ApplicationResponse, BookingFirstData } from "@/model/model";
 import { useAppDispatch } from "@/hooks/reduxe";
+import { Link } from "react-router-dom";
 
 // Упрощенная схема валидации (без sessionType и time)
 const schema = yup.object().shape({
@@ -398,9 +399,9 @@ const Header: FC = () => {
             {/* Футер */}
             <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
               Нажимая кнопку, вы соглашаетесь с{" "}
-              <a href="#" className="text-blue-600 hover:underline">
+              <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
                 политикой конфиденциальности
-              </a>
+              </Link>
             </div>
           </Modal>
 

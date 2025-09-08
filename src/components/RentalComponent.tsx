@@ -11,6 +11,7 @@ import {
 import ImageGalleryBanner from "./ui/ImageGalleryBanner";
 import photo2 from "@/static/utenokpro_animatory.jpg";
 import photo3 from "@/static/utenokpro_programma.jpg";
+import photo1 from "@/static/arenda_photo.jpg";
 import { motion, Variants } from "framer-motion";
 
 import BubbleComponent from "./ui/Buble";
@@ -24,6 +25,8 @@ import { BookingProData } from "@/model/model";
 import { useAppDispatch } from "@/hooks/reduxe";
 import { bookProSession } from "@/store/action/timeTableAction";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
+import { RouteNames } from "@/router";
 
 // Схема валидации
 const schema = yup.object().shape({
@@ -51,7 +54,7 @@ type FormValues = {
   time: string;
 };
 
-const images = [photo2, photo3];
+const images = [photo1, photo2, photo3];
 
 const Rentalcomponent: FC = () => {
   const dispatch = useAppDispatch();
@@ -158,15 +161,16 @@ const Rentalcomponent: FC = () => {
             className="text-4xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-[#8E2DE2] to-[#4A00E0] text-transparent bg-clip-text"
             variants={textVariants}
           >
-            Аренда бассейна для детских праздников
+            Аренда бассейна для детских праздников и свободного плавания всей
+            семьей
           </motion.h2>
 
           <motion.p
             className="text-xl text-[#301EEB] mb-10 leading-relaxed font-medium max-w-2xl mx-auto"
             variants={textVariants}
           >
-            Создайте волшебный праздник для вашего ребенка в нашем аквацентре с
-            профессиональными аниматорами и уникальной атмосферой
+            Создайте волшебный праздник для Вашего ребенка в нашем аквацентре
+            либо отдохните всей семьей от будничной суеты
           </motion.p>
         </motion.div>
 
@@ -211,8 +215,8 @@ const Rentalcomponent: FC = () => {
           </div>
 
           <p className="text-[#301EEB] max-w-3xl mx-auto text-xl mb-10">
-            Аренда бассейна для детских праздников и свободного плавания всей
-            семьей
+            Наша команд учтет любое ваше пожелание в случае необходимости
+            поможет его осуществить.
           </p>
 
           <Button
@@ -395,9 +399,9 @@ const Rentalcomponent: FC = () => {
         {/* Футер */}
         <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
           Нажимая кнопку, вы соглашаетесь с{" "}
-          <a href="#" className="text-blue-600 hover:underline">
+          <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
             политикой конфиденциальности
-          </a>
+          </Link>
         </div>
       </Modal>
     </section>
