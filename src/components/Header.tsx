@@ -57,7 +57,7 @@ const Header: FC = () => {
   const setMenuItemRef = (el: HTMLLIElement | null, index: number) => {
     menuItems.current[index] = el;
   };
-  console.log(applicationData);
+
   const menuLinks = [
     { name: "Главная", path: RouteNames.HOME },
     { name: "Тренеры", path: RouteNames.TRAINERS },
@@ -107,7 +107,7 @@ const Header: FC = () => {
         setErrorMessage(result.message || "Произошла ошибка при бронировании");
       }
     } catch (error: any) {
-      console.error("Ошибка бронирования:", error);
+      // console.error("Ошибка бронирования:", error);
       // Показываем детали ошибки
       setErrorMessage(
         error.message ||
@@ -168,7 +168,7 @@ const Header: FC = () => {
         color="#ffff"
         size={{ base: 20, sm: 30, md: 40 }}
       />
-
+      <input type="hiden" {...applicationData} />
       {/* Анимированная утка */}
       <AnimatePresence>
         <motion.div
@@ -399,7 +399,10 @@ const Header: FC = () => {
             {/* Футер */}
             <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
               Нажимая кнопку, вы соглашаетесь с{" "}
-              <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
+              <Link
+                to={RouteNames.OFFERTA}
+                className="text-blue-600 hover:underline"
+              >
                 политикой конфиденциальности
               </Link>
             </div>

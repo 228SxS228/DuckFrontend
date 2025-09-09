@@ -13,7 +13,7 @@ export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
   "timeTable/fetchAll",
   async () => {
     const response = await baseAPI.get<TimeTableItem[]>("get-time-table");
-    console.log("Расписание загружено:", response.data);
+
     return response.data;
   }
 );
@@ -21,7 +21,7 @@ export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
   "timeTablePro/fetchAll",
   async () => {
     const response = await baseAPI.get<TimeTableItem[]>("get-time-table-pro");
-    console.log("Расписание загружено:", response.data);
+
     return response.data;
   }
 );
@@ -34,7 +34,7 @@ export const bookSession = createAsyncThunk<ApplicationResponse, BookingData>(
         "/create-application",
         bookingData
       );
-      console.log(response);
+
       return response.data;
     } catch (error) {
       console.error("Ошибка записи:", error);
@@ -53,7 +53,6 @@ export const bookSaltCaveSession = createAsyncThunk<
       "/create-application",
       bookingData
     );
-    console.log(response);
     return response.data;
   } catch (error) {
     throw error;
@@ -69,7 +68,7 @@ export const bookFirstSession = createAsyncThunk<
       "/create-application",
       bookingData
     );
-    console.log(response);
+
     return response.data;
   } catch (error) {
     throw error;
@@ -85,7 +84,7 @@ export const bookProSession = createAsyncThunk<
       "/create-application",
       bookingData
     );
-    console.log(response);
+
     return response.data;
   } catch (error) {
     throw error;
