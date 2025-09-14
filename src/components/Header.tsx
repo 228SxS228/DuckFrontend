@@ -168,7 +168,7 @@ const Header: FC = () => {
         color="#ffff"
         size={{ base: 20, sm: 30, md: 40 }}
       />
-      <input type="hiden" {...applicationData} />
+      <a type="hiden" {...applicationData} />
       {/* Анимированная утка */}
       <AnimatePresence>
         <motion.div
