@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
@@ -16,6 +16,32 @@ import { LiquidGlass } from "./ui/LiquidGlass";
 import BubbleComponent from "./ui/Buble";
 
 const ProgramsComponent: FC = () => {
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
+
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -27,12 +53,8 @@ const ProgramsComponent: FC = () => {
 
   return (
     <section className="py-12 md:py-20 overflow-hidden relative flex flex-col bg-gradient-to-b from-[#1a1466] to-[#301EEB]">
-      <BubbleComponent
-        count={80}
-        speed={2}
-        color="#9F1EEB"
-        size={{ base: 20, sm: 30, md: 40 }}
-      />
+      {/* Пузырьки */}
+      {bubbles}
       {/* Плавающие утята */}
       <motion.div
         className="absolute top-20 left-10 z-10"

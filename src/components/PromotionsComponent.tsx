@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
@@ -9,15 +9,36 @@ import BubbleComponent from "./ui/Buble";
 import { LiquidGlass } from "./ui/LiquidGlass";
 
 const PromotionsComponent: FC = () => {
-  return (
-    <section className="py-20 bg-gradient-to-b from-blue-50 to-blue-100 relative overflow-hidden">
-      {/* Пузырьки фона */}
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
       <BubbleComponent
-        count={80}
-        speed={2}
-        color="#9F1EEB"
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
         size={{ base: 20, sm: 30, md: 40 }}
       />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
+
+  return (
+    <section className="py-20 bg-gradient-to-b from-blue-50 to-blue-100 relative overflow-hidden">
+      {/* Пузырьки */}
+      {bubbles}
 
       <div className="container px-4 mx-auto relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -59,7 +80,7 @@ const PromotionsComponent: FC = () => {
           {promotions.map((promo, index) => (
             <LiquidGlass
               key={index}
-              className="h-85 bg-white rounded-2xl p-6 border border-blue-200 shadow-lg transition-all hover:shadow-xl hover:-translate-y-2"
+              className="h-100 bg-white rounded-2xl p-6 border border-blue-200 shadow-lg transition-all hover:shadow-xl hover:-translate-y-2"
               glassColor="#ffffff"
               opacity={0.7}
               hoverOpacity={0.9}
@@ -101,12 +122,12 @@ const PromotionsComponent: FC = () => {
 
                 <p className="text-gray-600 mb-6">{promo.description}</p>
 
-                <div className="flex items-center text-sm text-gray-500 mb-6">
+                <div className="flex items-center text-sm text-gray-500  mb-6">
                   <Calendar className="h-4 w-4 mr-2 text-[#EBA31E]" />
                   <span>Действует до: {promo.validUntil}</span>
                 </div>
               </div>
-              <div className="fixed pt-60">
+              <div className="fixed w-75 m-auto pt-80">
                 <Link to={RouteNames.PROMOTION}>
                   <Button className="w-full py-4 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white hover:from-[#4020ff] hover:to-[#301EEB] rounded-xl font-bold">
                     Воспользоваться акцией

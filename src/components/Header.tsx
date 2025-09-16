@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useRef, useEffect, useMemo } from "react";
 import { Phone, Menu, Calendar, User, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -53,6 +53,20 @@ const Header: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const menuItems = useRef<(HTMLLIElement | null)[]>([]);
   const headerRef = useRef<HTMLElement>(null);
+
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const setMenuItemRef = (el: HTMLLIElement | null, index: number) => {
     menuItems.current[index] = el;
@@ -156,18 +170,26 @@ const Header: FC = () => {
     },
   };
 
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={10}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
+
   return (
     <header
       ref={headerRef}
       className="sticky top-0 z-50 w-full bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] overflow-hidden"
     >
       {/* Пузырьки */}
-      <BubbleComponent
-        count={10}
-        speed={1}
-        color="#ffff"
-        size={{ base: 20, sm: 30, md: 40 }}
-      />
+      {bubbles}
       <a type="hiden" {...applicationData} />
       {/* Анимированная утка */}
       <AnimatePresence>

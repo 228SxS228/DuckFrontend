@@ -54,6 +54,7 @@ const schema = yup.object().shape({
     .email("Введите корректный email")
     .required("Введите email"),
   sessionType: yup.string().required("Выберите тип сеанса"),
+  paid: yup.boolean().default(false),
   date: yup.string().required("Выберите дату"),
   selectedPrice: yup.string().required("Цена обязательна"),
   time: yup.string().required("Выберите время"),
@@ -66,6 +67,7 @@ type FormValues = {
   email: string;
   sessionType: string;
   date: string;
+  paid: boolean;
   selectedPrice: string;
   time: string;
 };
@@ -125,6 +127,7 @@ export default function SaltCavePage() {
       date: "",
       selectedPrice: "",
       time: "",
+      paid: false,
     },
   });
 
@@ -145,7 +148,14 @@ export default function SaltCavePage() {
   const onSubmit: any = async (formData: FormValues) => {
     try {
       const bookingData: BookingSaltCaveData = {
-        ...formData,
+        name: formData.name,
+        phone: formData.phone.replace(/\D/g, ""),
+        email: formData.email,
+        date: formData.date,
+        sessionType: formData.sessionType,
+        price: formData.selectedPrice,
+        paid: formData.paid,
+        time: formData.time,
         type: "saltacave",
       };
 
@@ -608,7 +618,6 @@ export default function SaltCavePage() {
             <h3 className="text-xl font-bold text-white">
               Бронирование сеанса
             </h3>
-          
           </div>
         </div>
 
@@ -818,7 +827,10 @@ export default function SaltCavePage() {
         {/* Футер */}
         <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
           Нажимая кнопку, вы соглашаетесь с{" "}
-          <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
+          <Link
+            to={RouteNames.OFFERTA}
+            className="text-blue-600 hover:underline"
+          >
             политикой конфиденциальности
           </Link>
         </div>
@@ -873,7 +885,9 @@ export default function SaltCavePage() {
                   <CreditCard className="text-blue-600" size={20} />
                 </div>
                 <div className="text-left">
-                  <div className="font-bold text-blue-900">Оплата онлайн</div>
+                  <div className="font-bold text-blue-900">
+                    Оплата онлайн скоро появится!!!
+                  </div>
                   <div className="text-sm text-gray-600">Банковской картой</div>
                 </div>
               </div>
@@ -969,16 +983,16 @@ export default function SaltCavePage() {
           </div>
 
           <button
-            onClick={() => {
-              if (applicationData?.onlinePayLink) {
-                // Редирект на страницу оплаты Робокассы
-                window.location.href = applicationData.onlinePayLink;
-              }
-            }}
+            // onClick={() => {
+            //   if (applicationData?.onlinePayLink) {
+            //     // Редирект на страницу оплаты Робокассы
+            //     window.location.href = applicationData.onlinePayLink;
+            //   }
+            // }}
             disabled={!applicationData?.onlinePayLink}
             className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50 mb-4"
           >
-            Перейти к оплате
+            Скоро появится!!!
           </button>
 
           <div className="text-center text-sm text-gray-500 mb-2">

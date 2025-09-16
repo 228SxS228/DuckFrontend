@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import {
   Calendar,
   Check,
@@ -28,7 +28,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
 
-// Схема валидации
+// Упрощенная схема валидации (без sessionType и time)
 const schema = yup.object().shape({
   name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
   phone: yup
@@ -39,19 +39,15 @@ const schema = yup.object().shape({
     .string()
     .email("Введите корректный email")
     .required("Введите email"),
-  sessionType: yup.string().required("Выберите тип сеанса"),
   date: yup.string().required("Выберите дату"),
-  time: yup.string().required("Выберите время"),
 });
 
-// Тип формы
+// Упрощенный тип формы
 type FormValues = {
   name: string;
   phone: string;
   email: string;
-  sessionType: string;
   date: string;
-  time: string;
 };
 
 const images = [photo1, photo2, photo3];
@@ -60,16 +56,46 @@ const Rentalcomponent: FC = () => {
   const dispatch = useAppDispatch();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const handleCloseModal = () => setIsModalOpen(false);
-  const handleOpenClick = () => setIsModalOpen(true);
+  const handleOpenClick = () => {
+    setIsModalOpen(true);
+    setErrorMessage(""); // Сбрасываем ошибку при открытии модального окна
+  };
+
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
 
   // Отправка формы
   const {
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
@@ -77,30 +103,42 @@ const Rentalcomponent: FC = () => {
       name: "",
       phone: "",
       email: "",
-      sessionType: "",
       date: "",
-      time: "",
     },
   });
 
-  //  обработчик отправки формы
-  const onSubmit: any = async (formData: FormValues) => {
+  // Обработчик отправки формы
+  const onSubmit = async (formData: FormValues) => {
     try {
+      setErrorMessage(""); // Сбрасываем ошибку перед отправкой
+
       const bookingData: BookingProData = {
         ...formData,
+        time: "10:00", // Добавляем значение по умолчанию
         type: "rentalpro",
       };
 
-      await dispatch(bookProSession(bookingData)).unwrap();
-      setIsSubmitted(true);
+      const result = await dispatch(bookProSession(bookingData)).unwrap();
 
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setIsSubmitted(false);
-      }, 2000);
-    } catch (error) {
+      if (result.success) {
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setIsSubmitted(false);
+          reset();
+        }, 2000);
+      } else {
+        // Показываем сообщение об ошибке от сервера
+        setErrorMessage(result.message || "Произошла ошибка при бронировании");
+      }
+    } catch (error: any) {
       console.error("Ошибка бронирования:", error);
-      alert("Произошла ошибка при бронировании. Пожалуйста, попробуйте снова.");
+      // Показываем детали ошибки
+      setErrorMessage(
+        error.message ||
+          error.response?.data?.message ||
+          "Произошла ошибка при бронировании. Пожалуйста, попробуйте снова."
+      );
     }
   };
 
@@ -108,11 +146,9 @@ const Rentalcomponent: FC = () => {
   useEffect(() => {
     if (!isModalOpen) {
       reset();
-      setSelectedPlan("");
-    } else if (selectedPlan) {
-      setValue("sessionType", selectedPlan);
+      setErrorMessage(""); // Сбрасываем ошибку при закрытии модального окна
     }
-  }, [isModalOpen, reset, selectedPlan, setValue]);
+  }, [isModalOpen, reset]);
 
   const textVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -129,13 +165,8 @@ const Rentalcomponent: FC = () => {
 
   return (
     <section className="py-20 bg-gradient-to-b from-blue-50 to-blue-100 relative overflow-hidden">
-      {/* Пузырьки фона */}
-      <BubbleComponent
-        count={120}
-        speed={3}
-        color="#8E2DE2"
-        size={{ base: 15, sm: 25, md: 35 }}
-      />
+      {/* Пузырьки */}
+      {bubbles}
 
       <div className="absolute inset-0 bg-grid-white/[0.03] bg-[length:40px_40px] z-0" />
 
@@ -244,6 +275,13 @@ const Rentalcomponent: FC = () => {
 
         {/* Контент */}
         <div className="p-5">
+          {/* Отображение ошибки */}
+          {errorMessage && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+              {errorMessage}
+            </div>
+          )}
+
           {isSubmitted ? (
             <div className="text-center py-5">
               <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -271,10 +309,6 @@ const Rentalcomponent: FC = () => {
                   <Controller
                     name="name"
                     control={control}
-                    rules={{
-                      required: "ФИО обязательно",
-                      minLength: { value: 2, message: "Минимум 2 символа" },
-                    }}
                     render={({ field }) => (
                       <input
                         {...field}
@@ -291,7 +325,7 @@ const Rentalcomponent: FC = () => {
                 )}
               </div>
 
-              {/* Поле телефона (только Россия) */}
+              {/* Поле телефона */}
               <div>
                 <div className="relative">
                   <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
@@ -299,14 +333,6 @@ const Rentalcomponent: FC = () => {
                     name="phone"
                     control={control}
                     render={({ field }) => (
-                      // <PhoneInput
-                      //   country={"ru"}
-                      //   value={field.value}
-                      //   onChange={(phone) => field.onChange(phone)}
-                      //   inputClass="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      //   containerClass="relative"
-                      //   buttonClass="absolute left-3 top-3.5 text-blue-500"
-                      // />
                       <input
                         {...field}
                         type="tel"
@@ -316,13 +342,14 @@ const Rentalcomponent: FC = () => {
                       />
                     )}
                   />
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.phone.message}
-                    </p>
-                  )}
                 </div>
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.phone.message}
+                  </p>
+                )}
               </div>
+
               {/* поле email */}
               <div>
                 <div className="relative">
@@ -347,32 +374,28 @@ const Rentalcomponent: FC = () => {
                 )}
               </div>
 
-              {/* Дата и время */}
-              <div className="grid grid-cols-2 gap-3">
-                {/* Дата */}
-                <div>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="date"
-                      control={control}
-                      rules={{ required: "Дата обязательна" }}
-                      render={({ field }) => (
-                        <input
-                          type="date"
-                          {...field}
-                          min={format(new Date(), "yyyy-MM-dd")}
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      )}
-                    />
-                  </div>
-                  {errors.date && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.date.message}
-                    </p>
-                  )}
+              {/* Дата */}
+              <div>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                  <Controller
+                    name="date"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        type="date"
+                        {...field}
+                        min={format(new Date(), "yyyy-MM-dd")}
+                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    )}
+                  />
                 </div>
+                {errors.date && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.date.message}
+                  </p>
+                )}
               </div>
 
               {/* Кнопки */}
@@ -399,7 +422,10 @@ const Rentalcomponent: FC = () => {
         {/* Футер */}
         <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
           Нажимая кнопку, вы соглашаетесь с{" "}
-          <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
+          <Link
+            to={RouteNames.OFFERTA}
+            className="text-blue-600 hover:underline"
+          >
             политикой конфиденциальности
           </Link>
         </div>

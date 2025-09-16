@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Shield, Heart, Clock, Star, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -14,6 +14,31 @@ import BubbleComponent from "./ui/Buble";
 const images = [photo2, photo3];
 
 const SaltCaveComponent: FC = () => {
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
   // Анимация текста
   const textVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
@@ -29,12 +54,8 @@ const SaltCaveComponent: FC = () => {
 
   return (
     <section className="py-20 bg-gradient-to-b from-blue-50 to-blue-100 relative overflow-hidden">
-      <BubbleComponent
-        count={80}
-        speed={2}
-        color="#9F1EEB"
-        size={{ base: 20, sm: 30, md: 40 }}
-      />
+      {/* Пузырьки */}
+      {bubbles}
       <LiquidGlass
         glassColor="#ffffff"
         opacity={0.15}

@@ -37,6 +37,8 @@ export interface BookingSaltCaveData {
   sessionType: string;
   date: string;
   time: string;
+  paid: boolean;
+  price: string;
   type: "saltacave";
 }
 //интерфейс для поста на сервер для записи в на первое занятие
@@ -45,7 +47,7 @@ export interface BookingFirstData {
   phone: string;
   email: string;
   date: string;
-  type: "firstsession";
+   type: "firstsession";
 }
 //интерфейс для поста на сервер для записи на аренду в про
 export interface BookingProData {
@@ -53,6 +55,7 @@ export interface BookingProData {
   phone: string;
   email: string;
   date: string;
+  time: string;
   type: "rentalpro";
 }
 //интерфейс для ответа с сервер для формирования страницы оплаты

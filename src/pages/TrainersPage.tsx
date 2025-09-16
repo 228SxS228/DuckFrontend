@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import { useState, FC, useMemo, useEffect } from "react";
 import Modal from "../components/Modal";
 import {
   GraduationCap,
@@ -36,6 +36,31 @@ const TrainersPage: FC = () => {
   const [selectedTrainer, setSelectedTrainer] = useState<Trainer | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedTrainer(null);
@@ -64,12 +89,8 @@ const TrainersPage: FC = () => {
 
   return (
     <section className="min-h-screen overflow-hidden bg-gradient-to-b from-[#301EEB] to-[#9F1EEB]  py-12">
-      <BubbleComponent
-        count={80}
-        speed={1}
-        color="#ffff"
-        size={{ base: 15, sm: 25, md: 35 }}
-      />
+      {/* Пузырьки */}
+      {bubbles}
       <div className="container overflow-hidden mx-auto px-4">
         {/* Header */}
         <div className="text-center  mb-16">

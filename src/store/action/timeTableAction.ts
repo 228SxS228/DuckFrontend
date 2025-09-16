@@ -1,4 +1,4 @@
-import { baseAPI } from "../../axios/index";
+import { workerAPI } from "../../axios/index";
 import {
   TimeTableItem,
   BookingData,
@@ -9,20 +9,49 @@ import {
 } from "../../model/model";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+// export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
+//   "timeTable/fetchAll",
+//   async () => {
+//     const response = await baseAPI.get<TimeTableItem[]>("get-time-table");
+
+//     return response.data;
+//   }
+// );
+// export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
+//   "timeTablePro/fetchAll",
+//   async () => {
+//     const response = await baseAPI.get<TimeTableItem[]>("get-time-table-pro");
+
+//     return response.data;
+//   }
+// );
 export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
   "timeTable/fetchAll",
-  async () => {
-    const response = await baseAPI.get<TimeTableItem[]>("get-time-table");
-
-    return response.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await workerAPI.get<TimeTableItem[]>(
+        "/get-time-table"
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching time table:", error);
+      return rejectWithValue("Failed to fetch time table");
+    }
   }
 );
+
 export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
   "timeTablePro/fetchAll",
-  async () => {
-    const response = await baseAPI.get<TimeTableItem[]>("get-time-table-pro");
-
-    return response.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await workerAPI.get<TimeTableItem[]>(
+        "/get-time-table-pro"
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching pro time table:", error);
+      return rejectWithValue("Failed to fetch pro time table");
+    }
   }
 );
 //Post запрос на апи
@@ -30,7 +59,7 @@ export const bookSession = createAsyncThunk<ApplicationResponse, BookingData>(
   "timeTable/bookSession",
   async (bookingData) => {
     try {
-      const response = await baseAPI.post<any>(
+      const response = await workerAPI.post<any>(
         "/create-application",
         bookingData
       );
@@ -49,7 +78,7 @@ export const bookSaltCaveSession = createAsyncThunk<
   BookingSaltCaveData
 >("saltCave/bookSession", async (bookingData) => {
   try {
-    const response = await baseAPI.post<any>(
+    const response = await workerAPI.post<any>(
       "/create-application",
       bookingData
     );
@@ -64,7 +93,7 @@ export const bookFirstSession = createAsyncThunk<
   BookingFirstData
 >("firstSession/bookSession", async (bookingData) => {
   try {
-    const response = await baseAPI.post<any>(
+    const response = await workerAPI.post<any>(
       "/create-application",
       bookingData
     );
@@ -80,7 +109,7 @@ export const bookProSession = createAsyncThunk<
   BookingProData
 >("rentalPro/bookSession", async (bookingData) => {
   try {
-    const response = await baseAPI.post<any>(
+    const response = await workerAPI.post<any>(
       "/create-application",
       bookingData
     );

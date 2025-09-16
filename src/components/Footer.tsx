@@ -178,8 +178,10 @@ const Footer: FC = () => {
           >
             <h3 className="mb-4 text-lg font-bold text-blue-200">Контакты</h3>
             <address className="not-italic text-blue-200">
-              <p className="not-italic text-blue-200">г.Томск</p>
-              <p className="not-italic text-blue-200">ул. Суворова, 11/1</p>
+              <p className="not-italic text-blue-200">
+                г.Томск, ул. Суворова, 11/1
+              </p>
+
               <p className="mt-2 text-blue-200">Телефон: +7 (3822) 68-28-00</p>
               <p className="not-italic text-blue-200">
                 Email: utenoktomsk@yandex.ru
@@ -188,6 +190,7 @@ const Footer: FC = () => {
               <p className="not-italic text-blue-200">
                 ИП: Кочкуров Вадим Алексеевич
               </p>
+              <Link to={RouteNames.OFFERTA} className="not-italic text-blue-200">Публичная офферта</Link>
             </address>
           </motion.div>
 

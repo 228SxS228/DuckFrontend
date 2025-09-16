@@ -1,6 +1,6 @@
 import { RouteNames } from "@/router";
 import { ArrowRight, Check, Waves, Users, Calendar, Heart } from "lucide-react";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import photo2 from "@/static/interior/SSV_8967.jpg";
@@ -8,7 +8,8 @@ import photo3 from "@/static/interior/SSV_8975.jpg";
 import photo4 from "@/static/interior/SSV_8910.jpg";
 import ImageGalleryBanner from "./ui/ImageGalleryBanner";
 import { motion, Variants } from "framer-motion";
-import BubleComponent from "./ui/Buble";
+
+import BubbleComponent from "./ui/Buble";
 
 const AnimatedCounter: FC<{ value: number | string; suffix?: string }> = ({
   value,
@@ -45,6 +46,18 @@ const AnimatedCounter: FC<{ value: number | string; suffix?: string }> = ({
 };
 
 const BenefitsComponent: FC = () => {
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   const images = [photo2, photo3, photo4];
   const benefits = [
     "2 бассейна по 12 метров и комфортной глубиной",
@@ -105,16 +118,22 @@ const BenefitsComponent: FC = () => {
       },
     },
   };
-
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
   return (
     <section className="bg-gradient-to-b from-blue-50 to-blue-100 relative overflow-hidden py-20">
       {/* Пузырьки фона */}
-      <BubleComponent
-        count={80}
-        speed={2}
-        color="#9F1EEB"
-        size={{ base: 20, sm: 30, md: 40 }}
-      />
+      {bubbles}
 
       {/* Секция статистики */}
       <div className="py-14 relative z-10">

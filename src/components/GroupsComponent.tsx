@@ -8,7 +8,7 @@ import {
   Calendar,
   Thermometer,
 } from "lucide-react";
-import { FC, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Button } from "./ui/button";
 import { Program } from "@/model/model";
 import Modal from "./Modal";
@@ -24,6 +24,32 @@ import photo4 from "@/static//utenok_g4.jpg";
 const GroupsComponent: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
+
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleProgramClick = (program: Program) => {
@@ -61,13 +87,8 @@ const GroupsComponent: FC = () => {
 
   return (
     <section className="py-20 bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] relative overflow-hidden">
-      {/* Пузырьки фона */}
-      <BubbleComponent
-        count={80}
-        speed={2}
-        color="#9F1EEB"
-        size={{ base: 20, sm: 30, md: 40 }}
-      />
+      {/* Пузырьки */}
+      {bubbles}
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div

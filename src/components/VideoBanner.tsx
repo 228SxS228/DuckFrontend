@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
 
+// Упрощенная схема валидации (без sessionType и time)
 const schema = yup.object().shape({
   name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
   phone: yup
@@ -27,19 +28,15 @@ const schema = yup.object().shape({
     .string()
     .email("Введите корректный email")
     .required("Введите email"),
-  sessionType: yup.string().required("Выберите тип сеанса"),
   date: yup.string().required("Выберите дату"),
-  time: yup.string().required("Выберите время"),
 });
 
-// Тип формы
+// Упрощенный тип формы
 type FormValues = {
   name: string;
   phone: string;
   email: string;
-  sessionType: string;
   date: string;
-  time: string;
 };
 
 const VideoBanner: FC = () => {
@@ -47,15 +44,18 @@ const VideoBanner: FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedPlan, setSelectedPlan] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const handleCloseModal = () => setIsModalOpen(false);
-  const handleOpenClick = () => setIsModalOpen(true);
+  const handleOpenClick = () => {
+    setIsModalOpen(true);
+    setErrorMessage(""); // Сбрасываем ошибку при открытии модального окна
+  };
+
   // Отправка формы
   const {
     control,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
@@ -63,30 +63,42 @@ const VideoBanner: FC = () => {
       name: "",
       phone: "",
       email: "",
-      sessionType: "",
       date: "",
-      time: "",
     },
   });
 
-  //  обработчик отправки формы
-  const onSubmit: any = async (formData: FormValues) => {
+  // Обработчик отправки формы
+  const onSubmit = async (formData: FormValues) => {
     try {
+      setErrorMessage(""); // Сбрасываем ошибку перед отправкой
+
       const bookingData: BookingFirstData = {
         ...formData,
+       
         type: "firstsession",
       };
 
-      await dispatch(bookFirstSession(bookingData)).unwrap();
-      setIsSubmitted(true);
+      const result = await dispatch(bookFirstSession(bookingData)).unwrap();
 
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setIsSubmitted(false);
-      }, 2000);
-    } catch (error) {
+      if (result.success) {
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setIsSubmitted(false);
+          reset();
+        }, 2000);
+      } else {
+        // Показываем сообщение об ошибке от сервера
+        setErrorMessage(result.message || "Произошла ошибка при бронировании");
+      }
+    } catch (error: any) {
       console.error("Ошибка бронирования:", error);
-      alert("Произошла ошибка при бронировании. Пожалуйста, попробуйте снова.");
+      // Показываем детали ошибки
+      setErrorMessage(
+        error.message ||
+          error.response?.data?.message ||
+          "Произошла ошибка при бронировании. Пожалуйста, попробуйте снова."
+      );
     }
   };
 
@@ -94,11 +106,10 @@ const VideoBanner: FC = () => {
   useEffect(() => {
     if (!isModalOpen) {
       reset();
-      setSelectedPlan("");
-    } else if (selectedPlan) {
-      setValue("sessionType", selectedPlan);
+      setErrorMessage(""); // Сбрасываем ошибку при закрытии модального окна
     }
-  }, [isModalOpen, reset, selectedPlan, setValue]);
+  }, [isModalOpen, reset]);
+
   return (
     <section className="relative overflow-hidden">
       {/* Основной контент баннера */}
@@ -131,7 +142,7 @@ const VideoBanner: FC = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <h1 className="font-bold text-4xl md:text-5xl lg:text-6xl text-white mb-4 leading-tight">
+                  <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-4 leading-tight">
                     Плавательный Центр
                     <motion.span
                       className="block mt-2 bg-gradient-to-r from-[#EBA31E] via-[#ff8c00] to-[#EBA31E] bg-clip-text text-transparent"
@@ -145,7 +156,7 @@ const VideoBanner: FC = () => {
                 </motion.div>
 
                 <motion.p
-                  className="text-xl text-blue-100 mb-8 max-w-xl mx-auto md:mx-0"
+                  className="text-lg sm:text-xl text-blue-100 mb-6 md:mb-8 max-w-xl mx-auto md:mx-0"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
@@ -162,9 +173,12 @@ const VideoBanner: FC = () => {
                   <Button
                     size="lg"
                     onClick={handleOpenClick}
-                    className="rounded-full px-8 py-7 text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                    className="rounded-full px-4 py-4 text-sm sm:text-base md:px-8 md:py-7 md:text-lg font-bold bg-gradient-to-r from-[#EBA31E] to-[#d6940c] hover:from-[#f0b84d] hover:to-[#EBA31E] text-black shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 w-full md:w-auto"
                   >
-                    Записаться на первое бесплатное занятие
+                    <span className="hidden md:inline">
+                      Записаться на первое бесплатное занятие
+                    </span>
+                    <span className="md:hidden">Бесплатное занятие</span>
                   </Button>
                 </motion.div>
               </motion.div>
@@ -172,25 +186,25 @@ const VideoBanner: FC = () => {
 
             {/* Кнопка воспроизведения видео */}
             <motion.div
-              className="flex justify-center"
+              className="flex justify-center mt-8 md:mt-0"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.6 }}
             >
               <div className="flex flex-col items-center">
                 <motion.div
-                  className="mb-6 px-6 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] rounded-full backdrop-blur-sm border border-white/20 shadow-lg"
+                  className="mb-4 md:mb-6 px-4 py-2 md:px-6 md:py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] rounded-full backdrop-blur-sm border border-white/20 shadow-lg"
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <p className="text-white font-bold text-center text-lg md:text-xl">
+                  <p className="text-white font-bold text-center text-base md:text-xl">
                     Посмотрите как у нас круто!
                   </p>
                 </motion.div>
 
                 <motion.button
                   onClick={() => setIsVideoOpen(true)}
-                  className="group w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center transition-all relative overflow-hidden"
+                  className="group w-24 h-24 sm:w-28 sm:h-28 md:w-40 md:h-40 rounded-full flex items-center justify-center transition-all relative overflow-hidden"
                   aria-label="Посмотреть видео"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -202,7 +216,7 @@ const VideoBanner: FC = () => {
 
                   <div className="absolute inset-0 bg-gradient-to-r from-[#301EEB]/40 to-[#9F1EEB]/40"></div>
 
-                  <div className="relative z-10 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white/30 backdrop-blur-sm">
+                  <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-white/30 backdrop-blur-sm">
                     <img
                       src={bgimg}
                       alt="Интерьер бассейна"
@@ -212,7 +226,7 @@ const VideoBanner: FC = () => {
 
                   <div className="absolute z-20 inset-0 flex items-center justify-center">
                     <motion.div
-                      className="bg-gradient-to-r from-[#EBA31E] to-[#d6940c] w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center"
+                      className="bg-gradient-to-r from-[#EBA31E] to-[#d6940c] w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center"
                       animate={{
                         scale: [1, 1.1, 1],
                         opacity: [0.8, 1, 0.8],
@@ -222,7 +236,7 @@ const VideoBanner: FC = () => {
                         repeat: Infinity,
                       }}
                     >
-                      <Play className="text-white fill-current ml-1 w-8 h-8 md:w-10 md:h-10" />
+                      <Play className="text-white fill-current ml-1 w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10" />
                     </motion.div>
                   </div>
                 </motion.button>
@@ -249,6 +263,13 @@ const VideoBanner: FC = () => {
 
         {/* Контент */}
         <div className="p-5">
+          {/* Отображение ошибки */}
+          {errorMessage && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+              {errorMessage}
+            </div>
+          )}
+
           {isSubmitted ? (
             <div className="text-center py-5">
               <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -276,10 +297,6 @@ const VideoBanner: FC = () => {
                   <Controller
                     name="name"
                     control={control}
-                    rules={{
-                      required: "ФИО обязательно",
-                      minLength: { value: 2, message: "Минимум 2 символа" },
-                    }}
                     render={({ field }) => (
                       <input
                         {...field}
@@ -296,7 +313,7 @@ const VideoBanner: FC = () => {
                 )}
               </div>
 
-              {/* Поле телефона (только Россия) */}
+              {/* Поле телефона */}
               <div>
                 <div className="relative">
                   <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
@@ -304,14 +321,6 @@ const VideoBanner: FC = () => {
                     name="phone"
                     control={control}
                     render={({ field }) => (
-                      // <PhoneInput
-                      //   country={"ru"}
-                      //   value={field.value}
-                      //   onChange={(phone) => field.onChange(phone)}
-                      //   inputClass="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      //   containerClass="relative"
-                      //   buttonClass="absolute left-3 top-3.5 text-blue-500"
-                      // />
                       <input
                         {...field}
                         type="tel"
@@ -321,13 +330,14 @@ const VideoBanner: FC = () => {
                       />
                     )}
                   />
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.phone.message}
-                    </p>
-                  )}
                 </div>
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.phone.message}
+                  </p>
+                )}
               </div>
+
               {/* поле email */}
               <div>
                 <div className="relative">
@@ -352,32 +362,28 @@ const VideoBanner: FC = () => {
                 )}
               </div>
 
-              {/* Дата и время */}
-              <div className="grid grid-cols-2 gap-3">
-                {/* Дата */}
-                <div>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="date"
-                      control={control}
-                      rules={{ required: "Дата обязательна" }}
-                      render={({ field }) => (
-                        <input
-                          type="date"
-                          {...field}
-                          min={format(new Date(), "yyyy-MM-dd")}
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      )}
-                    />
-                  </div>
-                  {errors.date && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.date.message}
-                    </p>
-                  )}
+              {/* Дата */}
+              <div>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                  <Controller
+                    name="date"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        type="date"
+                        {...field}
+                        min={format(new Date(), "yyyy-MM-dd")}
+                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    )}
+                  />
                 </div>
+                {errors.date && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.date.message}
+                  </p>
+                )}
               </div>
 
               {/* Кнопки */}
@@ -404,7 +410,10 @@ const VideoBanner: FC = () => {
         {/* Футер */}
         <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
           Нажимая кнопку, вы соглашаетесь с{" "}
-          <Link to={RouteNames.OFFERTA} className="text-blue-600 hover:underline">
+          <Link
+            to={RouteNames.OFFERTA}
+            className="text-blue-600 hover:underline"
+          >
             политикой конфиденциальности
           </Link>
         </div>

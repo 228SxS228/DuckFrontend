@@ -859,16 +859,16 @@ const TimeTablePage: FC = () => {
           </div>
 
           <button
-            onClick={() => {
-              if (applicationData?.onlinePayLink) {
-                // Редирект на страницу оплаты Робокассы
-                window.location.href = applicationData.onlinePayLink;
-              }
-            }}
+            // onClick={() => {
+            //   if (applicationData?.onlinePayLink) {
+            //     // Редирект на страницу оплаты Робокассы
+            //     window.location.href = applicationData.onlinePayLink;
+            //   }
+            // }}
             disabled={!applicationData?.onlinePayLink}
             className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50 mb-4"
           >
-            Перейти к оплате
+            Скоро появится!!!
           </button>
 
           <div className="text-center text-sm text-gray-500 mb-2">

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Award, Calendar, Clock, MapPin, Trophy, Users } from "lucide-react";
 import { motion } from "framer-motion";
 import BubbleComponent from "@/components/ui/Buble";
@@ -15,6 +15,32 @@ import photo9 from "@/static/DSC_2379.jpg";
 
 
 const CompetitionsPage: FC = () => {
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
+
   // Анимация для карточек
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -23,12 +49,14 @@ const CompetitionsPage: FC = () => {
 
   return (
     <section className="min-h-screen bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] pt-15">
-      <BubbleComponent
+      {/* Пузырьки */}
+      {bubbles}
+      {/* <BubbleComponent
         count={80}
         speed={1}
         color="#ffff"
         size={{ base: 15, sm: 25, md: 35 }}
-      />
+      /> */}
       <section className="container overflow-hidden mx-auto px-4">
         <div className="container px-4">
           <div className="text-center max-w-2x">
