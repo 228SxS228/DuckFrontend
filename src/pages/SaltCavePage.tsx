@@ -1,5 +1,5 @@
 import { motion, Variants } from "framer-motion";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import Modal from "@/components/Modal";
 import { bookSaltCaveSession } from "@/store/action/timeTableAction";
 import { ApplicationResponse, BookingSaltCaveData } from "@/model/model";
@@ -97,7 +97,31 @@ export default function SaltCavePage() {
     useState<ApplicationResponse | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
   // Генерация временных слотов
   const times = Array.from({ length: 11 }, (_, i) => {
     const hour = 10 + i;
@@ -186,13 +210,8 @@ export default function SaltCavePage() {
 
   return (
     <section className="min-h-screen overflow-hidden bg-gradient-to-b from-blue-50 to-blue-100 py-12 relative">
-      <BubbleComponent
-        count={80}
-        speed={2}
-        color="#9F1EEB"
-        size={{ base: 20, sm: 30, md: 40 }}
-      />
-
+      {/* Пузырьки */}
+      {bubbles}
       {/* Основной контент */}
       <div className="container mx-auto px-4 relative z-10">
         {/* Заголовок страницы */}

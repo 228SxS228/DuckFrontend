@@ -18,7 +18,7 @@ export interface Trainer {
 //интерфейс для поста на сервер для записи
 export interface BookingData {
   sessionId: number;
-  trainer: string;
+  trainer?: string | undefined | null;
   name: string;
   phone: string;
   day: string;
@@ -47,7 +47,7 @@ export interface BookingFirstData {
   phone: string;
   email: string;
   date: string;
-   type: "firstsession";
+  type: "firstsession";
 }
 //интерфейс для поста на сервер для записи на аренду в про
 export interface BookingProData {

@@ -1,18 +1,38 @@
 import { Badge, Calendar, Clock, Tag, Users } from "lucide-react";
-import { FC } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import BubbleComponent from "@/components/ui/Buble";
 
 const PromotionPage: FC = () => {
+    // Определяем, является ли устройство мобильным
+    const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      checkMobile();
+      window.addEventListener("resize", checkMobile);
+  
+      return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+    // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+    const bubbles = useMemo(
+      () => (
+        <BubbleComponent
+          count={isMobile ? 20 : 80}
+          speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+          color="#ffff"
+          size={{ base: 20, sm: 30, md: 40 }}
+        />
+      ),
+      [isMobile]
+    ); // Перерисовываем только при изменении isMobile
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#301EEB] to-[#9F1EEB]">
-      {/* Header */}
-      <BubbleComponent
-        count={80}
-        speed={1}
-        color="#ffff"
-        size={{ base: 15, sm: 25, md: 35 }}
-      />
+      {/* Пузырьки */}
+      {bubbles}
       <section className="grid grid-flow-col justify-items-center  items-center py-16 md:py-24">
         <div className="container px-4 ">
           <div className="text-center max-w-2x">

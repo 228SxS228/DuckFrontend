@@ -12,10 +12,8 @@ import photo6 from "@/static/kybok_ytenka2.jpg";
 import photo7 from "@/static/ng_ytenok.jpg";
 import photo8 from "@/static/DSC_1425.jpg";
 import photo9 from "@/static/DSC_2379.jpg";
-
-
+import bgimg from "@/static/DSC_6754.jpg";
 const CompetitionsPage: FC = () => {
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -222,15 +220,30 @@ const CompetitionsPage: FC = () => {
                 </Link> */}
               </div>
               <div className="relative rounded-xl overflow-hidden border-2 border-sky-100 bg-gradient-to-r from-sky-100 to-blue-100 flex items-center justify-center">
-                <div className="text-center p-6">
+                <div
+                  className="text-center p-6 bai"
+                  style={{
+                    backgroundImage: `url(${bgimg})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat", // Добавили это свойство
+                    minWidth: "800px", // Добавьте минимальную высоту при необходимости
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <div className="bg-sky-200 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="h-8 w-8 text-sky-700" />
+                    <Calendar className="h-8 w-8 text-[#301EEB]" />
                   </div>
-                  <h3 className="text-xl font-bold text-sky-800 mb-2">
+                  <h3 className="text-xl font-bold text-[#301EEB] mb-2">
                     Регистрация открыта
                   </h3>
-                  <p className="text-sky-700 mb-4">На ближайшие соревнования</p>
-                  <div className="inline-block bg-sky-600 text-white px-4 py-2 rounded-full text-sm font-medium">
+                  <p className="text-[#301EEB] mb-4">
+                    На ближайшие соревнования
+                  </p>
+                  <div className="inline-block bg-[#301EEB] text-white px-4 py-2 rounded-full text-sm font-medium">
                     Успейте записаться!
                   </div>
                 </div>
@@ -400,7 +413,7 @@ const pastCompetitions = [
     location: 'Бассейн "Утенок"',
     results:
       "Каждый год наша команда грандиозно отмечает День Рождения «Утенка», дарит множество подарков, проводит розыгрышы для взрослых, устраивает развлекательные программы для деток разных возрастов на суше и в воде.",
-    image: photo9, 
+    image: photo9,
   },
 ];
 
@@ -413,7 +426,7 @@ const champions = [
   {
     title: "Наша гордость",
     description:
-      "Толстых Павел, Юрец Максим, Сильков Максим, Михалев Иван, Молокоедов Андрей, Тинтуи Сергей, Щадилов Мирон, Колесников Макар. ",
+      "Толстых Павел, Юрец Максим, Сальков Максим, Михалев Иван, Молокоедов Андрей, Топтун Сергей, Щадилов Мирон, Колесников Макар. ",
   },
 ];
 

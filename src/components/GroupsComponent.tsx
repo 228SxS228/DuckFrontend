@@ -143,7 +143,7 @@ const GroupsComponent: FC = () => {
                 hoverOpacity={0.9}
                 blurStrength={10}
                 borderRadius={24}
-                className="h-90  rounded-3xl p-6 transition-all"
+                className="h-90 rounded-3xl p-6 pr-5 transition-all"
               >
                 <div className="fixed ">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] flex items-center justify-center mb-6">

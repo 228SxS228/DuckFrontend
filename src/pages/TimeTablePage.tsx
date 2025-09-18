@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxe";
 import {
   bookSession,
@@ -25,6 +25,8 @@ import {
   Users,
   Plus,
   Calendar,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import BubbleComponent from "@/components/ui/Buble";
 import { useForm, Controller } from "react-hook-form";
@@ -36,23 +38,14 @@ import {
   startOfWeek,
   addDays,
   isSameDay,
-  endOfWeek,
   addWeeks,
+  isWithinInterval,
 } from "date-fns";
+import { ru } from "date-fns/locale";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
 
 // Схема валидации
-type FormValues = {
-  name: string;
-  phone: string;
-  email: string;
-  paid: boolean;
-  sessionType: string;
-  selectedPrice: string;
-  selectedTrainer: string;
-};
-
 const schema = yup.object().shape({
   name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
   phone: yup
@@ -66,8 +59,10 @@ const schema = yup.object().shape({
   paid: yup.boolean().default(false),
   sessionType: yup.string().required("Выберите тип сеанса"),
   selectedPrice: yup.string().required("Цена обязательна"),
-  selectedTrainer: yup.string().required("Выберите тренера"),
+  selectedTrainer: yup.string().notRequired(),
 });
+
+type FormValues = yup.InferType<typeof schema>;
 
 type ActiveTab = "pool" | "poolpro";
 
@@ -89,7 +84,33 @@ const TimeTablePage: FC = () => {
     useState<ApplicationResponse | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
-
+  const [hasNamedTrainers, setHasNamedTrainers] = useState(false);
+  const [currentWeekOffset, setCurrentWeekOffset] = useState(0);
+    // Определяем, является ли устройство мобильным
+    const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+  
+      checkMobile();
+      window.addEventListener("resize", checkMobile);
+  
+      return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+    // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+    const bubbles = useMemo(
+      () => (
+        <BubbleComponent
+          count={isMobile ? 20 : 80}
+          speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+          color="#ffff"
+          size={{ base: 20, sm: 30, md: 40 }}
+        />
+      ),
+      [isMobile]
+    ); // Перерисовываем только при изменении isMobile
   // Отправка формы
   const {
     control,
@@ -98,7 +119,7 @@ const TimeTablePage: FC = () => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues: {
       name: "",
       phone: "",
@@ -121,30 +142,27 @@ const TimeTablePage: FC = () => {
   }, [dispatch]);
 
   // Получение дат для текущей и следующей недели
-  const getTwoWeeksDates = () => {
+  const getWeekDates = (offset: number) => {
     const now = new Date();
     const startOfCurrentWeek = startOfWeek(now, { weekStartsOn: 1 });
-    const endOfNextWeek = addWeeks(endOfWeek(now, { weekStartsOn: 1 }), 1);
+    const startOfSelectedWeek = addWeeks(startOfCurrentWeek, offset);
 
     const dates = [];
-    let currentDate = startOfCurrentWeek;
-
-    while (currentDate <= endOfNextWeek) {
-      dates.push(new Date(currentDate));
-      currentDate = addDays(currentDate, 1);
+    for (let i = 0; i < 7; i++) {
+      dates.push(addDays(startOfSelectedWeek, i));
     }
 
     return dates;
   };
 
-  const twoWeeksDates = getTwoWeeksDates();
+  const selectedWeekDates = getWeekDates(currentWeekOffset);
 
-  // Фильтрация по типу занятия и дате
+  // Фильтрация по типу занятия и дате (используем selectedWeekDates вместо twoWeeksDates)
   const filteredItems = items.filter((item) => {
     const itemDate = new Date(item.day);
     return (
       item.type === activeTab &&
-      twoWeeksDates.some((date) => isSameDay(date, itemDate))
+      selectedWeekDates.some((date) => isSameDay(date, itemDate))
     );
   });
 
@@ -161,16 +179,51 @@ const TimeTablePage: FC = () => {
   const handleSessionClick = (session: TimeTableItem) => {
     const available = session.trainers.filter((trainer) => trainer.isFree);
 
+    // Проверяем, является ли занятие арендой (нет имен тренеров или имя "Аренда")
+    const isRental = available.every(
+      (trainer) =>
+        !trainer.trainerName ||
+        trainer.trainerName === "" ||
+        trainer.trainerName === "Аренда"
+    );
+
+    // Для аренды не показываем выбор тренера
+    const hasNamedTrainers =
+      !isRental &&
+      available.some(
+        (trainer) =>
+          trainer.trainerName &&
+          trainer.trainerName !== "" &&
+          trainer.trainerName !== "Аренда"
+      );
+
+    setHasNamedTrainers(hasNamedTrainers);
+
     if (available.length > 0) {
       setSelectedSession(session);
       setAvailableTrainers(available);
-      setValue("selectedTrainer", available[0].trainerName);
+
+      // Для аренды устанавливаем пустую строку, иначе первого доступного тренера
+      setValue(
+        "selectedTrainer",
+        hasNamedTrainers
+          ? available.find(
+              (t) =>
+                t.trainerName &&
+                t.trainerName !== "" &&
+                t.trainerName !== "Аренда"
+            )?.trainerName || ""
+          : ""
+      );
       setShowModal(true);
     }
   };
 
   const onSubmit = async (formData: FormValues) => {
     if (!selectedSession) return;
+
+    // Для аренды используем пустую строку, иначе выбранного тренера
+    const finalTrainer = hasNamedTrainers ? formData.selectedTrainer : "";
 
     try {
       const result = await dispatch(
@@ -180,7 +233,7 @@ const TimeTablePage: FC = () => {
           phone: formData.phone.replace(/\D/g, ""),
           email: formData.email,
           day: selectedSession.day,
-          trainer: formData.selectedTrainer,
+          trainer: finalTrainer,
           time: selectedSession.time,
           sessionType: formData.sessionType,
           price: formData.selectedPrice,
@@ -190,11 +243,9 @@ const TimeTablePage: FC = () => {
       ).unwrap();
 
       if (result.success) {
-        // Обновляем статус тренера
         dispatch(
           updateSessionStatus({
             sessionId: selectedSession.id!,
-            // trainerName: formData.selectedTrainer,
             isFree: false,
           })
         );
@@ -217,7 +268,6 @@ const TimeTablePage: FC = () => {
 
     if (method === "online") {
       setShowPaymentModal(true);
-      //ссылка на оплату
     } else {
       alert("Вы выбрали оплату в центре. Ждем вас!");
     }
@@ -281,12 +331,8 @@ const TimeTablePage: FC = () => {
 
   return (
     <section className="min-h-screen overflow-hidden bg-gradient-to-b from-[#301EEB] to-[#9F1EEB] py-12">
-      <BubbleComponent
-        count={80}
-        speed={1}
-        color="#ffff"
-        size={{ base: 15, sm: 25, md: 35 }}
-      />
+      {/* Пузырьки */}
+      {bubbles}
       {/* Верхний баннер */}
       <div className="text-center mb-8">
         <motion.h1
@@ -333,31 +379,59 @@ const TimeTablePage: FC = () => {
           </div>
         </div>
 
-        {/* Информация о периоде */}
-        <div className="flex justify-center items-center gap-2 mb-8">
+        {/* Переключатель недель */}
+        <div className="flex justify-center items-center gap-4 mb-8">
+          <button
+            onClick={() => setCurrentWeekOffset((prev) => prev - 1)}
+            disabled={currentWeekOffset === 0}
+            className="p-2 rounded-full bg-white/20 text-white disabled:opacity-30 hover:bg-white/30 transition-colors"
+          >
+            <ChevronLeft size={24} />
+          </button>
+
           <div className="flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">
             <Calendar className="text-white" size={20} />
             <span className="text-white font-medium">
-              Текущая и следующая неделя
+              {currentWeekOffset === 0
+                ? "Текущая неделя"
+                : currentWeekOffset === 1
+                ? "Следующая неделя"
+                : `${format(
+                    addWeeks(
+                      startOfWeek(new Date(), { weekStartsOn: 1 }),
+                      currentWeekOffset
+                    ),
+                    "d MMMM",
+                    { locale: ru }
+                  )}`}
             </span>
           </div>
+
+          <button
+            onClick={() => setCurrentWeekOffset((prev) => prev + 1)}
+            disabled={currentWeekOffset === 1} // Ограничиваем показ только текущей и следующей недели
+            className="p-2 rounded-full bg-white/20 text-white disabled:opacity-30 hover:bg-white/30 transition-colors"
+          >
+            <ChevronRight size={24} />
+          </button>
         </div>
       </div>
+
       {/* Основное расписание */}
       <section className="py-8 relative">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
-            {twoWeeksDates.map((date) => {
+            {selectedWeekDates.map((date) => {
+              // Используем selectedWeekDates вместо twoWeeksDates
               const dateKey = format(date, "yyyy-MM-dd");
               const daySessions = groupedSessions[dateKey] || {};
-              const dayName = date.toLocaleDateString("ru-RU", {
-                weekday: "long",
-              });
+              const dayName = format(date, "EEEE", { locale: ru });
               const dayNumber = format(date, "d");
-              const month = format(date, "MMM");
-              const isCurrentWeek =
-                date <=
-                addDays(startOfWeek(new Date(), { weekStartsOn: 1 }), 6);
+              const month = format(date, "MMMM", { locale: ru });
+              const isCurrentWeek = isWithinInterval(date, {
+                start: startOfWeek(new Date(), { weekStartsOn: 1 }),
+                end: addDays(startOfWeek(new Date(), { weekStartsOn: 1 }), 6),
+              });
 
               return (
                 <motion.div
@@ -374,10 +448,10 @@ const TimeTablePage: FC = () => {
                         : "bg-gradient-to-r from-purple-600 to-pink-700"
                     }`}
                   >
-                    <div className="text-white font-bold text-sm mb-1">
+                    <div className="text-white font-bold text-sm mb-1 capitalize">
                       {dayName}
                     </div>
-                    <div className="text-white text-xs">
+                    <div className="text-white text-xs capitalize">
                       {dayNumber} {month}
                     </div>
                     <div className="text-white text-xs mt-1">
@@ -387,10 +461,16 @@ const TimeTablePage: FC = () => {
                   <div className="p-3">
                     {Object.keys(daySessions).length > 0 ? (
                       Object.entries(daySessions).map(([time, sessions]) => {
-                        const session = sessions[0]; // Берем первую сессию этого времени
+                        const session = sessions[0];
                         const isAvailable = hasAvailableTrainers(session);
                         const availableCount =
                           getAvailableTrainersCount(session);
+                        const isRental = session.trainers.every(
+                          (trainer) =>
+                            !trainer.trainerName ||
+                            trainer.trainerName === "" ||
+                            trainer.trainerName === "Аренда"
+                        );
 
                         return (
                           <motion.div
@@ -413,11 +493,11 @@ const TimeTablePage: FC = () => {
                               </span>
                               {!isAvailable ? (
                                 <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
-                                  Занято
+                                  Нет записи
                                 </span>
                               ) : (
                                 <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                                  Свободно
+                                  {isRental ? "Доступно" : "Свободно"}
                                 </span>
                               )}
                             </div>
@@ -429,11 +509,14 @@ const TimeTablePage: FC = () => {
                                 <Users className="h-3 w-3 mr-1 text-sky-600 inline" />
                                 {isAvailable ? (
                                   <span>
-                                    {availableCount} тренер
-                                    {availableCount > 1 ? "а" : ""} доступно
+                                    {isRental
+                                      ? "Аренда доступна"
+                                      : `${availableCount} тренер${
+                                          availableCount > 1 ? "а" : ""
+                                        } доступно`}
                                   </span>
                                 ) : (
-                                  <span>Нет свободных тренеров</span>
+                                  <span>Нет свободных мест</span>
                                 )}
                               </div>
                             </div>
@@ -477,12 +560,12 @@ const TimeTablePage: FC = () => {
                   <div className="font-bold text-lg">
                     {selectedSession.time}
                   </div>
-                  <div className="text-gray-600">
-                    {new Date(selectedSession.day).toLocaleDateString("ru-RU", {
-                      weekday: "long",
-                      day: "numeric",
-                      month: "long",
-                    })}
+                  <div className="text-gray-600 capitalize">
+                    {format(
+                      new Date(selectedSession.day),
+                      "EEEE, d MMMM yyyy",
+                      { locale: ru }
+                    )}
                   </div>
                 </div>
               </div>
@@ -493,53 +576,8 @@ const TimeTablePage: FC = () => {
                   <div className="font-medium">{selectedSession.className}</div>
                 </div>
 
-                {/* Выбор тренера */}
-                {/* <div className="mt-4">
-                  <label className="block text-gray-500 mb-2">
-                    Выберите тренера:
-                  </label>
-                  <div className="space-y-2">
-                    {selectedSession.trainers.map((trainer) => (
-                      <div
-                        key={trainer.trainerName}
-                        className={`p-3 rounded-lg border cursor-pointer ${
-                          trainer.isFree
-                            ? "hover:bg-gray-50 border-gray-200"
-                            : "opacity-50 cursor-not-allowed border-gray-100"
-                        }`}
-                        onClick={() =>
-                          trainer.isFree &&
-                          setValue("selectedTrainer", trainer.trainerName)
-                        }
-                      >
-                        <div className="flex items-center">
-                          <div
-                            className={`h-4 w-4 rounded-full border mr-3 ${
-                              trainer.isFree &&
-                              trainer.trainerName ===
-                                control._formValues.selectedTrainer
-                                ? "border-blue-500 bg-blue-500"
-                                : trainer.isFree
-                                ? "border-gray-300"
-                                : "border-gray-300 bg-gray-300"
-                            }`}
-                          ></div>
-                          <div>
-                            <div className="font-medium">
-                              {trainer.trainerName}
-                            </div>
-                            {!trainer.isFree && (
-                              <div className="text-red-500 text-sm">Занято</div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div> */}
-
-                {/* Выбор конкретного тренера из доступных */}
-                {availableTrainers.length > 0 && (
+                {/* Выбор конкретного тренера из доступных только если есть тренеры с именами */}
+                {hasNamedTrainers && availableTrainers.length > 0 && (
                   <div className="mt-4">
                     <label className="block text-gray-500 mb-2">
                       Выберите конкретного тренера:
@@ -550,16 +588,24 @@ const TimeTablePage: FC = () => {
                       render={({ field }) => (
                         <select
                           {...field}
+                          value={field.value || ""}
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
-                          {availableTrainers.map((trainer) => (
-                            <option
-                              key={trainer.trainerName}
-                              value={trainer.trainerName}
-                            >
-                              {trainer.trainerName}
-                            </option>
-                          ))}
+                          {availableTrainers
+                            .filter(
+                              (trainer) =>
+                                trainer.trainerName &&
+                                trainer.trainerName !== "" &&
+                                trainer.trainerName !== "Аренда"
+                            )
+                            .map((trainer) => (
+                              <option
+                                key={trainer.trainerName}
+                                value={trainer.trainerName}
+                              >
+                                {trainer.trainerName}
+                              </option>
+                            ))}
                         </select>
                       )}
                     />
@@ -836,7 +882,6 @@ const TimeTablePage: FC = () => {
             <div className="flex justify-between mb-3">
               <span className="text-gray-600">Сумма к оплате:</span>
               <span className="font-bold text-green-600">
-                {/* Можно парсить сумму из ссылки или хранить отдельно */}
                 {applicationData?.onlinePayLink?.match(/OutSum=(\d+)/)?.[1] ||
                   ""}{" "}
                 руб.
@@ -859,12 +904,6 @@ const TimeTablePage: FC = () => {
           </div>
 
           <button
-            // onClick={() => {
-            //   if (applicationData?.onlinePayLink) {
-            //     // Редирект на страницу оплаты Робокассы
-            //     window.location.href = applicationData.onlinePayLink;
-            //   }
-            // }}
             disabled={!applicationData?.onlinePayLink}
             className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50 mb-4"
           >
