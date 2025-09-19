@@ -45,7 +45,6 @@ export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
       const response = await workerAPI.get<TimeTableItem[]>(
         "/get-time-table-pro"
       );
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching pro time table:", error);
@@ -62,7 +61,6 @@ export const bookSession = createAsyncThunk<ApplicationResponse, BookingData>(
         "/create-application",
         bookingData
       );
-
       return response.data;
     } catch (error) {
       console.error("Ошибка записи:", error);

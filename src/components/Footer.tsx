@@ -190,7 +190,12 @@ const Footer: FC = () => {
               <p className="not-italic text-blue-200">
                 ИП: Кочкуров Вадим Алексеевич
               </p>
-              <Link to={RouteNames.OFFERTA} className="not-italic text-blue-200">Публичная офферта</Link>
+              <Link
+                to={RouteNames.OFFERTA}
+                className="not-italic text-blue-200 text-decoration: underline"
+              >
+                Публичная офферта
+              </Link>
             </address>
           </motion.div>
 

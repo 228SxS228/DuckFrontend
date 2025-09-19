@@ -86,31 +86,31 @@ const TimeTablePage: FC = () => {
   const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
   const [hasNamedTrainers, setHasNamedTrainers] = useState(false);
   const [currentWeekOffset, setCurrentWeekOffset] = useState(0);
-    // Определяем, является ли устройство мобильным
-    const [isMobile, setIsMobile] = useState(false);
-  
-    useEffect(() => {
-      const checkMobile = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-  
-      checkMobile();
-      window.addEventListener("resize", checkMobile);
-  
-      return () => window.removeEventListener("resize", checkMobile);
-    }, []);
-    // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
-    const bubbles = useMemo(
-      () => (
-        <BubbleComponent
-          count={isMobile ? 20 : 80}
-          speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
-          color="#ffff"
-          size={{ base: 20, sm: 30, md: 40 }}
-        />
-      ),
-      [isMobile]
-    ); // Перерисовываем только при изменении isMobile
+  // Определяем, является ли устройство мобильным
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  // Мемоизируем пузырьки, чтобы они не перерисовывались при движении утки
+  const bubbles = useMemo(
+    () => (
+      <BubbleComponent
+        count={isMobile ? 20 : 80}
+        speed={isMobile ? 0.5 : 2} // Замедляем на мобильных устройствах
+        color="#ffff"
+        size={{ base: 20, sm: 30, md: 40 }}
+      />
+    ),
+    [isMobile]
+  ); // Перерисовываем только при изменении isMobile
   // Отправка формы
   const {
     control,
@@ -906,8 +906,14 @@ const TimeTablePage: FC = () => {
           <button
             disabled={!applicationData?.onlinePayLink}
             className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50 mb-4"
+            onClick={() => {
+              if (applicationData?.onlinePayLink) {
+                // Редирект на страницу оплаты Робокассы
+                window.location.href = applicationData.onlinePayLink;
+              }
+            }}
           >
-            Скоро появится!!!
+            Перейти на страницу оплаты
           </button>
 
           <div className="text-center text-sm text-gray-500 mb-2">

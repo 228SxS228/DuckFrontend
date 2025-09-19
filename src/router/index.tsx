@@ -8,6 +8,7 @@ import PromotionPage from "@/pages/PromotionPage";
 import CompetitionsPage from "@/pages/CompetitionsPage";
 import OffertaPage from "@/pages/OffertaPage";
 import Layout from "@/components/Layout";
+import PaidInfo from "@/components/PaidInfoComponent";
 
 export enum RouteNames {
   HOME = "/",
@@ -18,6 +19,7 @@ export enum RouteNames {
   PROMOTION = "/promotion",
   COMPETITION = "/competitions",
   OFFERTA = "/offerta",
+  PAIDINFO = "/paidinfo",
   ERROR = "*",
 }
 
@@ -33,6 +35,7 @@ const AppRoutes = () => {
         <Route path={RouteNames.PROMOTION} element={<PromotionPage />} />
         <Route path={RouteNames.SALTCAVE} element={<SaltCavePage />} />
         <Route path={RouteNames.OFFERTA} element={<OffertaPage />} />
+        <Route path={RouteNames.PAIDINFO} element={<PaidInfo />} />
       </Route>
       <Route path={RouteNames.ERROR} element={<ErrorPage />} />
     </Routes>
