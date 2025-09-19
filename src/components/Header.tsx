@@ -51,6 +51,7 @@ const Header: FC = () => {
     useState<ApplicationResponse | null>(null);
   const [activeItem, setActiveItem] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isSuccess, setIsSuccess] = useState<boolean>(false); // Новое состояние для отслеживания успеха
   const menuItems = useRef<(HTMLLIElement | null)[]>([]);
   const headerRef = useRef<HTMLElement>(null);
 
@@ -84,6 +85,13 @@ const Header: FC = () => {
   const handleOpenClick = () => {
     setIsModalOpen(true);
     setErrorMessage(""); // Сбрасываем ошибку при открытии модального окна
+    setIsSuccess(false); // Сбрасываем состояние успеха
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setApplicationData(null);
+    setIsSuccess(false); // Сбрасываем состояние успеха при закрытии
   };
 
   const {
@@ -114,8 +122,9 @@ const Header: FC = () => {
 
       if (result.success) {
         setApplicationData(result);
-        setIsModalOpen(false);
-        reset();
+        setIsSuccess(true); // Устанавливаем состояние успеха
+        reset(); // Сбрасываем форму
+        // Не закрываем модальное окно - setIsModalOpen(false) удалено
       } else {
         // Показываем сообщение об ошибке от сервера
         setErrorMessage(result.message || "Произошла ошибка при бронировании");
@@ -135,6 +144,7 @@ const Header: FC = () => {
     if (!isModalOpen) {
       reset();
       setErrorMessage(""); // Сбрасываем ошибку при закрытии модального окна
+      setIsSuccess(false); // Сбрасываем состояние успеха
     }
   }, [isModalOpen, reset]);
 
@@ -281,14 +291,14 @@ const Header: FC = () => {
 
           <Modal
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            onClose={handleCloseModal}
             className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
           >
             {/* Заголовок */}
             <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-white">
-                  Бронирование сеанса
+                  {isSuccess ? "Заявка отправлена!" : "Бронирование сеанса"}
                 </h3>
               </div>
             </div>
@@ -302,132 +312,174 @@ const Header: FC = () => {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                {/* Поле имени */}
-                <div>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="name"
-                      control={control}
-                      render={({ field }) => (
-                        <input
-                          {...field}
-                          placeholder="Иванов Иван Иванович"
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      )}
-                    />
+              {/* Сообщение об успехе */}
+              {isSuccess && applicationData && (
+                <div className="mb-6 text-center">
+                  <div className="mx-auto w-16 h-16 flex items-center justify-center bg-green-100 rounded-full mb-4">
+                    <svg
+                      className="w-10 h-10 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      ></path>
+                    </svg>
                   </div>
-                  {errors.name && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.name.message}
-                    </p>
-                  )}
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                    Спасибо за вашу заявку!
+                  </h4>
+                  <p className="text-gray-600">
+                    {applicationData.message ||
+                      "Мы свяжемся с вами в ближайшее время для подтверждения бронирования."}
+                  </p>
                 </div>
+              )}
 
-                {/* Поле телефона */}
-                <div>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="phone"
-                      control={control}
-                      render={({ field }) => (
-                        <input
-                          {...field}
-                          type="tel"
-                          placeholder="+7(999)-999-99-99"
-                          className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      )}
-                    />
+              {!isSuccess ? (
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                  {/* Поле имени */}
+                  <div>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                      <Controller
+                        name="name"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            placeholder="Иванов Иван Иванович"
+                            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                        )}
+                      />
+                    </div>
+                    {errors.name && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.phone.message}
-                    </p>
-                  )}
-                </div>
 
-                {/* поле email */}
-                <div>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="email"
-                      control={control}
-                      render={({ field }) => (
-                        <input
-                          {...field}
-                          type="email"
-                          placeholder="Email"
-                          className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      )}
-                    />
+                  {/* Поле телефона */}
+                  <div>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                      <Controller
+                        name="phone"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="tel"
+                            placeholder="+7(999)-999-99-99"
+                            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                        )}
+                      />
+                    </div>
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.phone.message}
+                      </p>
+                    )}
                   </div>
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
 
-                {/* Дата */}
-                <div>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                    <Controller
-                      name="date"
-                      control={control}
-                      render={({ field }) => (
-                        <input
-                          type="date"
-                          {...field}
-                          min={format(new Date(), "yyyy-MM-dd")}
-                          className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                      )}
-                    />
+                  {/* поле email */}
+                  <div>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                      <Controller
+                        name="email"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="email"
+                            placeholder="Email"
+                            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                        )}
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
-                  {errors.date && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.date.message}
-                    </p>
-                  )}
-                </div>
 
-                {/* Кнопки */}
-                <div className="flex gap-3 pt-2">
+                  {/* Дата */}
+                  <div>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
+                      <Controller
+                        name="date"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            type="date"
+                            {...field}
+                            min={format(new Date(), "yyyy-MM-dd")}
+                            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                        )}
+                      />
+                    </div>
+                    {errors.date && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.date.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Кнопки */}
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      type="button"
+                      onClick={handleCloseModal}
+                      className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    >
+                      Отмена
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Отправка..." : "Забронировать"}
+                    </Button>
+                  </div>
+                </form>
+              ) : (
+                <div className="flex justify-center pt-2">
                   <Button
-                    type="button"
-                    onClick={() => setIsModalOpen(false)}
-                    className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                    onClick={handleCloseModal}
+                    className="py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90"
                   >
-                    Отмена
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Отправка..." : "Забронировать"}
+                    Закрыть
                   </Button>
                 </div>
-              </form>
+              )}
             </div>
 
             {/* Футер */}
-            <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
-              Нажимая кнопку, вы соглашаетесь с{" "}
-              <Link
-                to={RouteNames.OFFERTA}
-                className="text-blue-600 hover:underline"
-              >
-                политикой конфиденциальности
-              </Link>
-            </div>
+            {!isSuccess && (
+              <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
+                Нажимая кнопку, вы соглашаетесь с{" "}
+                <Link
+                  to={RouteNames.OFFERTA}
+                  className="text-blue-600 hover:underline"
+                >
+                  политикой конфиденциальности
+                </Link>
+              </div>
+            )}
           </Modal>
 
           <Sheet>

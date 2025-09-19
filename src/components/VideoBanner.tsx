@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import bgimg from "@/static/SSV_1325.jpg";
-import { Calendar, Check, Mail, Phone, Play, User } from "lucide-react";
+import { Calendar, Check, Mail, Phone, Play, User} from "lucide-react";
 import Modal from "./Modal";
 import { motion } from "framer-motion";
 import { LiquidGlass } from "./ui/LiquidGlass";
@@ -15,7 +15,6 @@ import { bookFirstSession } from "@/store/action/timeTableAction";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
-
 
 const schema = yup.object().shape({
   name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
@@ -40,14 +39,21 @@ type FormValues = {
 
 const VideoBanner: FC = () => {
   const dispatch = useAppDispatch();
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsSuccess(false);
+    setErrorMessage("");
+  };
+
   const handleOpenClick = () => {
     setIsModalOpen(true);
-    setErrorMessage(""); // Сбрасываем ошибку при открытии модального окна
+    setErrorMessage("");
+    setIsSuccess(false);
   };
 
   // Отправка формы
@@ -69,30 +75,24 @@ const VideoBanner: FC = () => {
   // Обработчик отправки формы
   const onSubmit = async (formData: FormValues) => {
     try {
-      setErrorMessage(""); // Сбрасываем ошибку перед отправкой
+      setErrorMessage("");
 
       const bookingData: BookingFirstData = {
         ...formData,
-
         type: "firstsession",
       };
 
       const result = await dispatch(bookFirstSession(bookingData)).unwrap();
 
       if (result.success) {
-        setIsSubmitted(true);
-        setTimeout(() => {
-          setIsModalOpen(false);
-          setIsSubmitted(false);
-          reset();
-        }, 2000);
+        setIsSuccess(true);
+        reset();
+        // Убрано автоматическое закрытие модального окна
       } else {
-        // Показываем сообщение об ошибке от сервера
         setErrorMessage(result.message || "Произошла ошибка при бронировании");
       }
     } catch (error: any) {
       console.error("Ошибка бронирования:", error);
-      // Показываем детали ошибки
       setErrorMessage(
         error.message ||
           error.response?.data?.message ||
@@ -105,7 +105,8 @@ const VideoBanner: FC = () => {
   useEffect(() => {
     if (!isModalOpen) {
       reset();
-      setErrorMessage(""); // Сбрасываем ошибку при закрытии модального окна
+      setErrorMessage("");
+      setIsSuccess(false);
     }
   }, [isModalOpen, reset]);
 
@@ -269,7 +270,7 @@ const VideoBanner: FC = () => {
             </div>
           )}
 
-          {isSubmitted ? (
+          {isSuccess ? (
             <div className="text-center py-5">
               <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Check className="text-green-600" size={28} />
@@ -281,10 +282,10 @@ const VideoBanner: FC = () => {
                 Наш администратор свяжется с вами в течение 15 минут
               </p>
               <Button
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleCloseModal}
                 className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white px-6 py-3 rounded-lg w-full"
               >
-                Понятно
+                Закрыть
               </Button>
             </div>
           ) : (
@@ -389,7 +390,7 @@ const VideoBanner: FC = () => {
               <div className="flex gap-3 pt-2">
                 <Button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={handleCloseModal}
                   className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
                   Отмена
@@ -407,15 +408,17 @@ const VideoBanner: FC = () => {
         </div>
 
         {/* Футер */}
-        <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
-          Нажимая кнопку, вы соглашаетесь с{" "}
-          <Link
-            to={RouteNames.OFFERTA}
-            className="text-blue-600 hover:underline"
-          >
-            политикой конфиденциальности
-          </Link>
-        </div>
+        {!isSuccess && (
+          <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
+            Нажимая кнопку, вы соглашаетесь с{" "}
+            <Link
+              to={RouteNames.OFFERTA}
+              className="text-blue-600 hover:underline"
+            >
+              политикой конфиденциальности
+            </Link>
+          </div>
+        )}
       </Modal>
 
       {/* Модальное окно с видео */}
