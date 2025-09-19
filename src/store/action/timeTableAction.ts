@@ -9,22 +9,6 @@ import {
 } from "../../model/model";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
-//   "timeTable/fetchAll",
-//   async () => {
-//     const response = await baseAPI.get<TimeTableItem[]>("get-time-table");
-
-//     return response.data;
-//   }
-// );
-// export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
-//   "timeTablePro/fetchAll",
-//   async () => {
-//     const response = await baseAPI.get<TimeTableItem[]>("get-time-table-pro");
-
-//     return response.data;
-//   }
-// );
 export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
   "timeTable/fetchAll",
   async (_, { rejectWithValue }) => {

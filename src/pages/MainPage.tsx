@@ -26,7 +26,6 @@ const MainPage: FC = () => {
           src="https://swdgts.ru/45f3485d2e40f691e9c317aba0f62628"
           width="100%"
           height="700"
-   
         ></iframe>
       </main>
     </div>

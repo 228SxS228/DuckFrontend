@@ -78,3 +78,14 @@ export interface Program {
   duration: string;
   features: string[];
 }
+
+export interface PaymentData {
+  OutSum: string;
+  InvId: string;
+  SignatureValue: string;
+  IsTest: string;
+  Culture: string;
+  PaymentMethod?: string;
+  Commission?: string;
+  Shp_params?: Record<string, string>;
+}

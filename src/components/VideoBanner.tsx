@@ -5,7 +5,6 @@ import { Calendar, Check, Mail, Phone, Play, User } from "lucide-react";
 import Modal from "./Modal";
 import { motion } from "framer-motion";
 import { LiquidGlass } from "./ui/LiquidGlass";
-
 import Video from "@/static/videoplayback.mp4";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,7 +16,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
 
-// Упрощенная схема валидации (без sessionType и time)
+
 const schema = yup.object().shape({
   name: yup.string().required("Введите имя").min(2, "Имя слишком короткое"),
   phone: yup
@@ -74,7 +73,7 @@ const VideoBanner: FC = () => {
 
       const bookingData: BookingFirstData = {
         ...formData,
-       
+
         type: "firstsession",
       };
 

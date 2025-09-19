@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-
-interface PaymentData {
-  OutSum: string;
-  InvId: string;
-  SignatureValue: string;
-  IsTest: string;
-  Culture: string;
-  PaymentMethod?: string;
-  Commission?: string;
-  Shp_params?: Record<string, string>;
-}
+import { PaymentData } from "@/model/model";
 
 const PaidInfo: React.FC = () => {
   const location = useLocation();

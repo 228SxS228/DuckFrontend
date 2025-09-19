@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Outlet } from "react-router-dom";
 import { Button } from "./ui/button";
-import { ChevronUp } from "lucide-react"; 
+import { ChevronUp } from "lucide-react";
 
 const Layout: FC = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
