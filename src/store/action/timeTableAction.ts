@@ -14,6 +14,7 @@ export const fetchTimeTable = createAsyncThunk<TimeTableItem[]>(
   async (_, { rejectWithValue }) => {
     try {
       const response = await workerAPI.get<TimeTableItem[]>("/get-time-table");
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching time table:", error);
@@ -29,6 +30,7 @@ export const fetchTimeTablePro = createAsyncThunk<TimeTableItem[]>(
       const response = await workerAPI.get<TimeTableItem[]>(
         "/get-time-table-pro"
       );
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching pro time table:", error);

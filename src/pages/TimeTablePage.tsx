@@ -44,6 +44,7 @@ import {
 import { ru } from "date-fns/locale";
 import { Link } from "react-router-dom";
 import { RouteNames } from "@/router";
+import { LiquidGlass } from "@/components/ui/LiquidGlass";
 
 // Схема валидации
 const schema = yup.object().shape({
@@ -418,7 +419,14 @@ const TimeTablePage: FC = () => {
       </div>
 
       {/* Основное расписание */}
-      <section className="py-8 relative">
+      <LiquidGlass
+        glassColor="#ffffff"
+        opacity={0.15}
+        scaleOnHover={1.0}
+        blurStrength={10}
+        borderRadius={32}
+        className="container mx-auto px-4 relative z-10 py-8"
+      >
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
             {selectedWeekDates.map((date) => {
@@ -534,7 +542,7 @@ const TimeTablePage: FC = () => {
             })}
           </div>
         </div>
-      </section>
+      </LiquidGlass>
       {/* Модальное окно записи */}
       <Modal
         isOpen={showModal}
