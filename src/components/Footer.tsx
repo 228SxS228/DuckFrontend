@@ -1,286 +1,3 @@
-// import { FC } from "react";
-// import { RouteNames } from "../router/index";
-// import { NavLink } from "react-router-dom";
-// import { Send } from "lucide-react";
-// import { Icon20LogoVk } from "@vkontakte/icons";
-// import { Link } from "react-router-dom";
-// import { motion, Variants } from "framer-motion";
-
-// const Footer: FC = () => {
-//   const menuLinks = [
-//     { name: "Главная", path: RouteNames.HOME },
-//     { name: "Тренеры", path: RouteNames.TRAINERS },
-//     { name: "Расписание", path: RouteNames.SCHEDULE },
-//     { name: "Соревнования", path: RouteNames.COMPETITION },
-//     { name: "Акции", path: RouteNames.PROMOTION },
-//     { name: "Соляная пещера", path: RouteNames.SALTCAVE },
-//   ];
-
-//   // Улучшенная анимация волны
-//   const waveVariants: Variants = {
-//     animate: (delay: number = 0) => ({
-//       x: ["0%", "-50%"],
-//       transition: {
-//         x: {
-//           repeat: Infinity,
-//           repeatType: "loop",
-//           duration: 25,
-//           ease: "linear",
-//           delay: delay,
-//         },
-//       },
-//     }),
-//   };
-
-//   // Анимация пузырьков
-//   const bubbleVariants: Variants = {
-//     float: {
-//       y: [0, -30, 0],
-//       opacity: [0, 0.8, 0],
-//       transition: {
-//         duration: 3 + Math.random() * 4,
-//         repeat: Infinity,
-//         ease: "easeInOut",
-//       },
-//     },
-//   };
-
-//   // Создаем несколько пузырьков
-//   const bubbles = Array.from({ length: 15 }).map((_, i) => ({
-//     id: i,
-//     size: `${Math.random() * 12 + 5}px`,
-//     left: `${Math.random() * 100}%`,
-//     delay: Math.random() * 3,
-//     duration: 3 + Math.random() * 4,
-//   }));
-
-//   // Данные для волн
-//   const waves = [
-//     {
-//       className: "absolute bottom-0 w-[200%] h-full",
-//       bgImage:
-//         "bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCI+PHBhdGggZmlsbD0iIzA3NzViZSIgZD0iTTAsNjRDMjQwLDExMiA0ODAsMCA3MjAsNDhDOTYwLDk2IDEyMDAsMCAxMjAwLDQ4VjEyMEgwVjY0WiIvPjwvc3ZnPg==')]",
-//       delay: 0,
-//     },
-//     {
-//       className: "absolute bottom-4 w-[200%] h-full opacity-70",
-//       bgImage:
-//         "bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCI+PHBhdGggZmlsbD0iIzA4NjdhZSIgZD0iTTAsOTZDMTYwLDQ4IDMyMCwxMjAgNDgwLDcyQzY0MCwyNCA4MDAsOTYgOTYwLDQ4QzExMjAsMCAxMjAwLDQ4IDEyMDAsOTZWMTIwSDBWOTZaIi8+PC9zdmc+')]",
-//       delay: 12.5, // Смещение фазы на половину длительности
-//     },
-//   ];
-
-//   return (
-//     <footer className="bg-blue-950 text-white relative overflow-hidden">
-//       {/* Волны */}
-//       <div className="absolute bottom-0 left-0 w-full h-40 overflow-hidden">
-//         {waves.map((wave, index) => (
-//           <motion.div
-//             key={index}
-//             className={`${wave.className} ${wave.bgImage} bg-repeat-x`}
-//             custom={wave.delay}
-//             variants={waveVariants}
-//             animate="animate"
-//           />
-//         ))}
-//       </div>
-
-//       {/* Пузырьки */}
-//       {bubbles.map((bubble) => (
-//         <motion.div
-//           key={bubble.id}
-//           className="absolute rounded-full bg-blue-300 opacity-60"
-//           style={{
-//             width: bubble.size,
-//             height: bubble.size,
-//             left: bubble.left,
-//             bottom: "10%",
-//           }}
-//           variants={bubbleVariants}
-//           animate="float"
-//           initial={{ opacity: 0, y: 0 }}
-//           transition={{
-//             delay: bubble.delay,
-//             duration: bubble.duration,
-//           }}
-//         />
-//       ))}
-
-//       {/* Содержимое футера */}
-//       <div className="container mx-auto px-4 py-16 relative z-10">
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-//           <div>
-//             <motion.div
-//               className="flex items-center gap-2 mb-6"
-//               initial={{ opacity: 0, y: 20 }}
-//               whileInView={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5 }}
-//               viewport={{ once: true, margin: "-50px" }}
-//             >
-//               <span className="font-bold text-xl text-blue-200">
-//                 Плавательный центр "Утенок"
-//               </span>
-//             </motion.div>
-//             <motion.p
-//               className="text-blue-200 mb-6"
-//               initial={{ opacity: 0, y: 20 }}
-//               whileInView={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5, delay: 0.1 }}
-//               viewport={{ once: true, margin: "-50px" }}
-//             >
-//               Профессиональное обучение детей плаванию от 3 месяцев до 10 лет в
-//               современном бассейне
-//             </motion.p>
-//             <motion.div
-//               className="flex space-x-4"
-//               initial={{ opacity: 0, y: 20 }}
-//               whileInView={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5, delay: 0.2 }}
-//               viewport={{ once: true, margin: "-50px" }}
-//             >
-//               <a
-//                 href="https://vk.com/utenok_tomsk"
-//                 target="_blank"
-//                 rel="noopener noreferrer"
-//                 className="w-9 h-9 rounded-full bg-blue-900 flex items-center justify-center hover:bg-blue-800 transition-colors"
-//               >
-//                 <Icon20LogoVk className="h-5 w-5 text-blue-200" />
-//                 <span className="sr-only">VK</span>
-//               </a>
-//               <a
-//                 href="https://t.me/utenok_tomsk"
-//                 target="_blank"
-//                 rel="noopener noreferrer"
-//                 className="w-9 h-9 rounded-full bg-blue-900 flex items-center justify-center hover:bg-blue-800 transition-colors"
-//               >
-//                 <Send className="h-5 w-5 text-blue-200" />
-//                 <span className="sr-only">Telegram</span>
-//               </a>
-//             </motion.div>
-//           </div>
-
-//           <motion.div
-//             initial={{ opacity: 0, y: 20 }}
-//             whileInView={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.5, delay: 0.3 }}
-//             viewport={{ once: true, margin: "-50px" }}
-//           >
-//             <h3 className="mb-4 text-lg font-bold text-blue-200">Навигация</h3>
-//             <ul className="space-y-2">
-//               {menuLinks.map((link, index) => (
-//                 <motion.li
-//                   key={index}
-//                   whileHover={{ x: 5 }}
-//                   transition={{ type: "spring", stiffness: 300 }}
-//                 >
-//                   <NavLink
-//                     to={link.path}
-//                     className={({ isActive }) =>
-//                       `text-blue-200 hover:text-yellow-400 transition-colors ${
-//                         isActive ? "text-yellow-400" : ""
-//                       }`
-//                     }
-//                   >
-//                     {link.name}
-//                   </NavLink>
-//                 </motion.li>
-//               ))}
-//             </ul>
-//           </motion.div>
-
-//           <motion.div
-//             initial={{ opacity: 0, y: 20 }}
-//             whileInView={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.5, delay: 0.4 }}
-//             viewport={{ once: true, margin: "-50px" }}
-//           >
-//             <h3 className="mb-4 text-lg font-bold text-blue-200">Контакты</h3>
-//             <address className="not-italic text-blue-200 space-y-2">
-//               <p>
-//                 <a
-//                   href="https://yandex.ru/maps/-/CDbQjN~G"
-//                   target="_blank"
-//                   rel="noopener noreferrer"
-//                   className="hover:text-yellow-400 transition-colors"
-//                 >
-//                   г.Томск, ул. Суворова, 11/1
-//                 </a>
-//               </p>
-
-//               <p>
-//                 <a
-//                   href="tel:+73822682800"
-//                   className="hover:text-yellow-400 transition-colors"
-//                 >
-//                   Телефон: +7 (3822) 68-28-00
-//                 </a>
-//               </p>
-//               <p>
-//                 <a
-//                   href="mailto:utenoktomsk@yandex.ru"
-//                   className="hover:text-yellow-400 transition-colors"
-//                 >
-//                   Email: utenoktomsk@yandex.ru
-//                 </a>
-//               </p>
-//               <p>ИНН: 700703987421</p>
-//               <p>ИП: Кочкуров Вадим Алексеевич</p>
-//               <Link
-//                 to={RouteNames.OFFERTA}
-//                 className="text-blue-200 hover:text-yellow-400 transition-colors underline"
-//               >
-//                 Публичная офферта
-//               </Link>
-//             </address>
-//           </motion.div>
-
-//           <motion.div
-//             initial={{ opacity: 0, y: 20 }}
-//             whileInView={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.5, delay: 0.5 }}
-//             viewport={{ once: true, margin: "-50px" }}
-//           >
-//             <h3 className="text-lg font-bold mb-6 text-blue-200">
-//               Часы работы
-//             </h3>
-//             <ul className="space-y-3">
-//               <li className="flex justify-between">
-//                 <span className="text-blue-200">
-//                   Понедельник - Воскресенье:
-//                 </span>
-//                 <span className="text-blue-200">9:00 - 21:00</span>
-//               </li>
-//             </ul>
-//           </motion.div>
-//         </div>
-
-//         <motion.div
-//           className="border-t border-blue-900 mt-12 pt-8 text-center"
-//           initial={{ opacity: 0 }}
-//           whileInView={{ opacity: 1 }}
-//           transition={{ duration: 0.5, delay: 0.6 }}
-//           viewport={{ once: true, margin: "-50px" }}
-//         >
-//           <p className="text-blue-300 text-sm">
-//             © {new Date().getFullYear()} Разработано
-//             <span> </span>
-//             <a
-//               className="text-lime-500 hover:text-lime-400 transition-colors"
-//               href="https://dev.ultimate-sib.ru/"
-//               target="_blank"
-//               rel="noopener noreferrer"
-//             >
-//               dev.ultimate-sib
-//             </a>
-//             . Все права защищены.
-//           </p>
-//         </motion.div>
-//       </div>
-//     </footer>
-//   );
-// };
-
-// export default Footer;
 import { FC } from "react";
 import { RouteNames } from "../router/index";
 import { NavLink } from "react-router-dom";
@@ -336,7 +53,6 @@ const Footer: FC = () => {
 
   return (
     <footer className="bg-blue-950 text-white relative overflow-hidden">
-      {/* Волны - улучшенная анимация */}
       <div className="absolute bottom-0 left-0 w-full h-40 overflow-hidden">
         <motion.div
           className="absolute bottom-0 w-[2000px] h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDEyMCI+PHBhdGggZmlsbD0iIzA3NzViZSIgZD0iTTAsNjRDMjQwLDExMiA0ODAsMCA3MjAsNDhDOTYwLDk2IDEyMDAsMCAxMjAwLDQ4VjEyMEgwVjY0WiIvPjwvc3ZnPg==')] bg-repeat-x"
@@ -464,7 +180,7 @@ const Footer: FC = () => {
                   href="https://yandex.ru/maps/-/CDbQjN~G"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-yellow-400 transition-colors"
+                  className="hover:text-yellow-400 text-blue-200 transition-colors"
                 >
                   г.Томск, ул. Суворова, 11/1
                 </a>
@@ -473,7 +189,7 @@ const Footer: FC = () => {
               <p>
                 <a
                   href="tel:+73822682800"
-                  className="hover:text-yellow-400 transition-colors"
+                  className=" text-blue-200 hover:text-yellow-400 transition-colors"
                 >
                   Телефон: +7 (3822) 68-28-00
                 </a>
@@ -481,13 +197,13 @@ const Footer: FC = () => {
               <p>
                 <a
                   href="mailto:utenoktomsk@yandex.ru"
-                  className="hover:text-yellow-400 transition-colors"
+                  className=" text-blue-200 hover:text-yellow-400 transition-colors"
                 >
                   Email: utenoktomsk@yandex.ru
                 </a>
               </p>
-              <p>ИНН: 700703987421</p>
-              <p>ИП: Кочкуров Вадим Алексеевич</p>
+              <p className="text-blue-200">ИНН: 700703987421</p>
+              <p className="text-blue-200">ИП: Кочкуров Вадим Алексеевич</p>
               <Link
                 to={RouteNames.OFFERTA}
                 className="text-blue-200 hover:text-yellow-400 transition-colors underline"

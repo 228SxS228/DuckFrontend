@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 
 import { LiquidGlass } from "./ui/LiquidGlass";
 import BubbleComponent from "./ui/Buble";
+import { PRICING } from "@/consts/const";
 
 const ProgramsComponent: FC = () => {
   // Определяем, является ли устройство мобильным
@@ -177,28 +178,17 @@ const ProgramsComponent: FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">Разовое посещение</span>
-                    <span className="font-bold text-[#EBA31E] text-lg">
-                      850 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (4 занятия)
-                    </span>
-                    <span className="font-bold text-[#EBA31E] text-lg">
-                      3140 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (8 занятий)
-                    </span>
-                    <span className="font-bold text-[#EBA31E] text-lg">
-                      5960 ₽
-                    </span>
-                  </div>
+                  {PRICING.pool.group.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-2 border-b border-[#8968A4]/50"
+                    >
+                      <span className="text-[#EACBBE]">{item.title}</span>
+                      <span className="font-bold text-[#EBA31E] text-lg">
+                        {item.price} ₽
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -212,36 +202,17 @@ const ProgramsComponent: FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">Разовое занятие</span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      1600 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (4 занятия)
-                    </span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      5950 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (8 занятий)
-                    </span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      10900 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (12 занятий)
-                    </span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      15900 ₽
-                    </span>
-                  </div>
+                  {PRICING.pool.individual.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-2 border-b border-[#8968A4]/50"
+                    >
+                      <span className="text-[#EACBBE]">{item.title}</span>
+                      <span className="font-bold text-[#9F1EEB] text-lg">
+                        {item.price} ₽
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -308,28 +279,17 @@ const ProgramsComponent: FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">Разовое посещение</span>
-                    <span className="font-bold text-[#EBA31E] text-lg">
-                      1 080 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (4 занятия)
-                    </span>
-                    <span className="font-bold text-[#EBA31E] text-lg">
-                      3940 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (8 занятий)
-                    </span>
-                    <span className="font-bold text-[#EBA31E] text-lg">
-                      7560 ₽
-                    </span>
-                  </div>
+                  {PRICING.poolpro.group.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-2 border-b border-[#8968A4]/50"
+                    >
+                      <span className="text-[#EACBBE]">{item.title}</span>
+                      <span className="font-bold text-[#EBA31E] text-lg">
+                        {item.price} ₽
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -343,36 +303,17 @@ const ProgramsComponent: FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">Разовое занятие</span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      1750 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (4 занятия)
-                    </span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      6400 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-[#8968A4]/50">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (8 занятия)
-                    </span>
-                    <span className="font-bold text-[#9F1EEB] text-lg">
-                      11720 ₽
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-[#EACBBE]">
-                      Абонемент (12 занятий)
-                    </span>
-                    <span className="font-bold text-[#EBA31E] text-lg">
-                      17200 ₽
-                    </span>
-                  </div>
+                  {PRICING.poolpro.individual.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-center py-2 border-b border-[#8968A4]/50"
+                    >
+                      <span className="text-[#EACBBE]">{item.title}</span>
+                      <span className="font-bold text-[#9F1EEB] text-lg">
+                        {item.price} ₽
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

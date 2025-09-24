@@ -11,28 +11,11 @@ import {
 } from "../store/slices/timeTableSlice";
 import { ApplicationResponse, TimeTableItem, Trainer } from "../model/model";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Clock,
-  User,
-  X,
-  Check,
-  Phone,
-  Mail,
-  CreditCard,
-  Store,
-  ExternalLink,
-  Users,
-  Plus,
-  Calendar,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react";
+import { Users, Calendar, ChevronRight, ChevronLeft } from "lucide-react";
 import BubbleComponent from "@/components/ui/Buble";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Modal from "@/components/Modal";
 import {
   format,
   startOfWeek,
@@ -42,9 +25,11 @@ import {
   isWithinInterval,
 } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Link } from "react-router-dom";
-import { RouteNames } from "@/router";
 import { LiquidGlass } from "@/components/ui/LiquidGlass";
+import { getPricingPlans } from "@/consts/const";
+import { BookingModal } from "@/components/BookingModal";
+import { PaymentMethodModal } from "@/components/PaymentMethodModal";
+import { PaymentModal } from "@/components/PaymentModal";
 
 // Схема валидации
 const schema = yup.object().shape({
@@ -69,6 +54,11 @@ type ActiveTab = "pool" | "poolpro";
 
 type GroupedSessions = {
   [key: string]: TimeTableItem[];
+};
+
+const pricingPlans = {
+  pool: getPricingPlans("pool"),
+  poolpro: getPricingPlans("poolpro"),
 };
 
 const TimeTablePage: FC = () => {
@@ -543,461 +533,36 @@ const TimeTablePage: FC = () => {
           </div>
         </div>
       </LiquidGlass>
-      {/* Модальное окно записи */}
-      <Modal
+      {/* модальное окно бронирования */}
+      <BookingModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
-      >
-        {selectedSession && (
-          <>
-            <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-white">
-                  Запись на занятие
-                </h3>
-              </div>
-            </div>
-
-            <div className="p-5 border-b border-gray-100">
-              <div className="flex items-center mb-4">
-                <div className="bg-sky-100 text-sky-800 rounded-lg p-3 mr-4">
-                  <Clock className="h-8 w-8" />
-                </div>
-                <div>
-                  <div className="font-bold text-lg">
-                    {selectedSession.time}
-                  </div>
-                  <div className="text-gray-600 capitalize">
-                    {format(
-                      new Date(selectedSession.day),
-                      "EEEE, d MMMM yyyy",
-                      { locale: ru }
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <div className="text-gray-500 w-28">Тип занятия:</div>
-                  <div className="font-medium">{selectedSession.className}</div>
-                </div>
-
-                {/* Выбор конкретного тренера из доступных только если есть тренеры с именами */}
-                {hasNamedTrainers && availableTrainers.length > 0 && (
-                  <div className="mt-4">
-                    <label className="block text-gray-500 mb-2">
-                      Выберите конкретного тренера:
-                    </label>
-                    <Controller
-                      name="selectedTrainer"
-                      control={control}
-                      render={({ field }) => (
-                        <select
-                          {...field}
-                          value={field.value || ""}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                          {availableTrainers
-                            .filter(
-                              (trainer) =>
-                                trainer.trainerName &&
-                                trainer.trainerName !== "" &&
-                                trainer.trainerName !== "Аренда"
-                            )
-                            .map((trainer) => (
-                              <option
-                                key={trainer.trainerName}
-                                value={trainer.trainerName}
-                              >
-                                {trainer.trainerName}
-                              </option>
-                            ))}
-                        </select>
-                      )}
-                    />
-                    {errors.selectedTrainer && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.selectedTrainer.message}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Форма */}
-            <form onSubmit={handleSubmit(onSubmit)} className="p-5 space-y-4">
-              {/* Поле имени */}
-              <div>
-                <div className="relative">
-                  <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                  <Controller
-                    name="name"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        placeholder="Ваше имя"
-                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    )}
-                  />
-                </div>
-                {errors.name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Поле телефона с маской */}
-              <div>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                  <Controller
-                    name="phone"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        placeholder="+7 (___) ___-__-__"
-                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    )}
-                  />
-                </div>
-                {errors.phone && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.phone.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Поле email */}
-              <div>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                  <Controller
-                    name="email"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="email"
-                        placeholder="Email"
-                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    )}
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Тип сеанса */}
-              <div>
-                <div className="relative">
-                  <Plus className="absolute left-3 top-3.5 h-5 w-5 text-blue-500" />
-                  <Controller
-                    name="sessionType"
-                    control={control}
-                    rules={{ required: "Тип сеанса обязателен" }}
-                    render={({ field }) => (
-                      <select
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          const selectedPlan = pricingPlans[activeTab].find(
-                            (plan) => plan.title === e.target.value
-                          );
-                          if (selectedPlan) {
-                            setValue("selectedPrice", selectedPlan.price);
-                          }
-                        }}
-                        className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      >
-                        <option value="">Тип сеанса</option>
-                        {pricingPlans[activeTab].map((plan) => (
-                          <option key={plan.title} value={plan.title}>
-                            {plan.title} - {plan.price} руб.
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                  />
-                </div>
-                {errors.sessionType && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.sessionType.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Скрытое поле для цены */}
-              <Controller
-                name="selectedPrice"
-                control={control}
-                render={({ field }) => <input type="hidden" {...field} />}
-              />
-
-              {/* Кнопки */}
-              <div className="flex gap-3 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  Отмена
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting || availableTrainers.length === 0}
-                  className="flex-1 py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
-                >
-                  {isSubmitting ? "Отправка..." : "Записаться"}
-                </button>
-              </div>
-            </form>
-
-            <div className="bg-gray-50 px-6 py-4 text-center text-sm text-gray-500 border-t border-gray-100 rounded-b-2xl">
-              Нажимая кнопку, вы соглашаетесь с{" "}
-              <Link
-                to={RouteNames.OFFERTA}
-                className="text-blue-600 hover:underline"
-              >
-                политикой конфиденциальности
-              </Link>
-            </div>
-          </>
-        )}
-      </Modal>
-      {/* Остальные модальные окна (оплаты) */}
-      <Modal
+        control={control}
+        errors={errors}
+        setValue={setValue}
+        onSubmit={handleSubmit(onSubmit)}
+        isSubmitting={isSubmitting}
+        selectedSession={selectedSession}
+        availableTrainers={availableTrainers}
+        hasNamedTrainers={hasNamedTrainers}
+        pricingPlans={pricingPlans}
+        activeTab={activeTab}
+      />
+      {/* модальное окно выбора оплаты */}
+      <PaymentMethodModal
         isOpen={showPaymentMethodModal}
         onClose={() => setShowPaymentMethodModal(false)}
-        className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
-      >
-        <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
-          <div className="flex justify-between items-center">
-            <h3 className="text-xl font-bold text-white">Выбор оплаты</h3>
-            <button
-              onClick={() => setShowPaymentMethodModal(false)}
-              className="text-white/80 hover:text-white"
-            >
-              <X size={24} />
-            </button>
-          </div>
-        </div>
-
-        <div className="p-5">
-          <div className="text-center mb-6">
-            <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Check className="text-green-600" size={28} />
-            </div>
-            <h4 className="text-lg font-bold text-blue-900 mb-2">
-              Заявка #{applicationData?.applicationId} принята!
-            </h4>
-            <p className="text-gray-600 mb-4">
-              Выберите способ оплаты для подтверждения записи
-            </p>
-
-            <div className="bg-blue-50 rounded-lg p-3 mb-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-blue-800">
-                  Номер заявки: {applicationData?.applicationId}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <button
-              onClick={() => handlePaymentMethodSelect("online")}
-              className="w-full p-4 border-2 border-blue-200 rounded-xl flex items-center justify-between hover:bg-blue-50 transition-colors"
-            >
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                  <CreditCard className="text-blue-600" size={20} />
-                </div>
-                <div className="text-left">
-                  <div className="font-bold text-blue-900">Оплата онлайн</div>
-                  <div className="text-sm text-gray-600">Банковской картой</div>
-                </div>
-              </div>
-              <ExternalLink className="text-blue-600" size={20} />
-            </button>
-
-            <button
-              onClick={() => handlePaymentMethodSelect("in_center")}
-              className="w-full p-4 border-2 border-gray-200 rounded-xl flex items-center justify-between hover:bg-gray-50 transition-colors"
-            >
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-3">
-                  <Store className="text-gray-600" size={20} />
-                </div>
-                <div className="text-left">
-                  <div className="font-bold text-gray-900">Оплата в центре</div>
-                  <div className="text-sm text-gray-600">При посещении</div>
-                </div>
-              </div>
-              <ArrowRight className="text-gray-600" size={20} />
-            </button>
-          </div>
-
-          <div className="mt-6 text-center text-sm text-gray-500">
-            <p>
-              Вы можете оплатить позже, но не позднее чем за 2 часа до занятия
-            </p>
-          </div>
-        </div>
-      </Modal>
-      <Modal
+        applicationData={applicationData}
+        onPaymentMethodSelect={handlePaymentMethodSelect}
+      />
+      {/* модальное окно онлайн оплаты */}
+      <PaymentModal
         isOpen={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
-        className="rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 ease-out scale-[0.98] hover:scale-100"
-      >
-        <div className="bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] p-5">
-          <div className="flex justify-between items-center">
-            <h3 className="text-xl font-bold text-white">Оплата онлайн</h3>
-            <button
-              onClick={() => setShowPaymentModal(false)}
-              className="text-white/80 hover:text-white"
-            >
-              <X size={24} />
-            </button>
-          </div>
-        </div>
-
-        <div className="p-5">
-          <div className="text-center mb-6">
-            <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CreditCard className="text-blue-600" size={28} />
-            </div>
-            <h4 className="text-lg font-bold text-blue-900 mb-2">
-              Оплата заявки #{applicationData?.applicationId}
-            </h4>
-            <p className="text-gray-600 mb-4">
-              Вы будете перенаправлены на безопасную страницу оплаты Робокассы
-            </p>
-          </div>
-
-          <div className="bg-gray-100 p-4 rounded-lg mb-6">
-            <div className="flex justify-between mb-3">
-              <span className="text-gray-600">Сумма к оплате:</span>
-              <span className="font-bold text-green-600">
-                {applicationData?.onlinePayLink?.match(/OutSum=(\d+)/)?.[1] ||
-                  ""}{" "}
-                руб.
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Описание:</span>
-              <span className="font-medium text-sm text-right max-w-xs">
-                {applicationData?.onlinePayLink?.match(
-                  /Description=([^&]+)/
-                )?.[1]
-                  ? decodeURIComponent(
-                      applicationData.onlinePayLink.match(
-                        /Description=([^&]+)/
-                      )?.[1] || ""
-                    )
-                  : "Оплата занятия"}
-              </span>
-            </div>
-          </div>
-
-          <button
-            disabled={!applicationData?.onlinePayLink}
-            className="w-full py-3 bg-gradient-to-r from-[#301EEB] to-[#9F1EEB] text-white font-medium rounded-lg hover:opacity-90 disabled:opacity-50 mb-4"
-            onClick={() => {
-              if (applicationData?.onlinePayLink) {
-                // Редирект на страницу оплаты Робокассы
-                window.location.href = applicationData.onlinePayLink;
-              }
-            }}
-          >
-            Перейти на страницу оплаты
-          </button>
-
-          <div className="text-center text-sm text-gray-500 mb-2">
-            <p>Оплата защищена по стандарту PCI DSS</p>
-          </div>
-
-          <div className="text-center text-xs text-gray-400">
-            <p>Платежная система Робокасса</p>
-          </div>
-        </div>
-      </Modal>
+        applicationData={applicationData}
+      />
     </section>
   );
-};
-
-const pricingPlans = {
-  pool: [
-    {
-      title: "Разовое групповое занятие",
-      price: "850",
-    },
-    {
-      title: "Абонемент на 4 групповых занятий",
-      price: "3140",
-    },
-    {
-      title: "Абонемент на 8 групповых занятий",
-      price: "5960",
-    },
-    {
-      title: "Разовое занятие индивидуальное",
-      price: "1600",
-    },
-    {
-      title: "Абонемент на 4 индивидуальных занятий",
-      price: "5960",
-    },
-    {
-      title: "Абонемент на 8 индивидуальных занятий",
-      price: "10900",
-    },
-    {
-      title: "Абонемент на 12 индивидуальных занятий",
-      price: "15900",
-    },
-  ],
-  poolpro: [
-    {
-      title: "Разовое групповое занятие",
-      price: "850",
-    },
-    {
-      title: "Абонемент на 4 групповых занятий",
-      price: "3140",
-    },
-    {
-      title: "Абонемент на 8 групповых занятий",
-      price: "5960",
-    },
-    {
-      title: "Разовое занятие индивидуальное",
-      price: "1600",
-    },
-    {
-      title: "Абонемент на 4 индивидуальных занятий",
-      price: "5960",
-    },
-    {
-      title: "Абонемент на 8 индивидуальных занятий",
-      price: "10900",
-    },
-    {
-      title: "Абонемент на 12 индивидуальных занятий",
-      price: "15900",
-    },
-  ],
 };
 
 export default TimeTablePage;
